@@ -1,3 +1,5 @@
+<img src="brand/mark.svg" width="72" height="72" alt="" align="left">
+
 # MarkupMe
 
 Markdown processing and document engineering: a standards-first engine, one CLI for the whole workflow, diagrams as code, safe HTML by default, and editor integrations.
@@ -57,7 +59,7 @@ Status as reported by `markupme capabilities`. Work in progress is listed as pla
 | Tools | Live preview server with a render API | built |
 | Tools | Structural diff | built |
 | Editor | Web studio (CodeMirror 6, split preview) | built |
-| Editor | VS Code extension (`.vsix`; Marketplace listing planned) | built |
+| Editor | VS Code extension on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=yarlis.markupme-vscode) and [Open VSX](https://open-vsx.org/extension/yarlis/markupme-vscode) | built |
 | Editor | Rich-text (WYSIWYG) editing | planned |
 
 ## Install
@@ -542,11 +544,10 @@ Both are built and covered by tests.
   bun run build                                   # builds apps/studio/dist (a static site)
   cd apps/studio && bun run preview               # http://127.0.0.1:4322
   ```
-- **VS Code extension** (`packages/vscode`): live preview beside the editor (diagrams included, strict CSP), **MarkupMe: Export to HTML**, **MarkupMe: Insert/Update Table of Contents**, **MarkupMe: Format Document** (opt-in as the default formatter with `markupme.format.enable`) and lint diagnostics in the Problems panel, configured with `markupme.*` settings. A Marketplace listing is planned for Phase 2; until then install the `.vsix` from a GitHub release or build it:
+- **VS Code extension** (`packages/vscode`, `yarlis.markupme-vscode`): live preview beside the editor (diagrams included, strict CSP), **Export to HTML**, **Insert/Update Table of Contents**, **Format Document** (opt-in as the default formatter with `markupme.format.enable`), lint diagnostics in the Problems panel, bold/italic/strikethrough/code toggles, snippets, a Get Started walkthrough and a JSON schema for `markupme.config.json`. Restricted Mode keeps rendering sanitized and Kroki off. Install it from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=yarlis.markupme-vscode) or, for Cursor, VSCodium and Windsurf, [Open VSX](https://open-vsx.org/extension/yarlis/markupme-vscode):
 
   ```bash
-  cd packages/vscode && bun run build && bun run package
-  code --install-extension markupme-vscode-0.1.0.vsix
+  code --install-extension yarlis.markupme-vscode
   ```
 
 Until they land, `markupme serve` plus its playground is the live preview.
@@ -622,8 +623,9 @@ markupme-qa also runs the suites on its own pull requests and nightly.
 | Phase 1, PR#1 | Core, highlight, diagrams, themes, CLI, serve API, CI; SDODS api and ui suites | Merged |
 | Phase 1, PR#2 | SDLC docs, guides, this README | Merged |
 | Phase 1, PR#3 | VS Code extension; React component; static-site SDODS scenarios | Merged |
-| Phase 1, PR#4 | Web studio; SDODS studio scenarios | Built |
-| Phase 2 | PDF, DOCX, MDX output; rich-text editing; VS Code Marketplace | Planned |
+| Phase 1, PR#4 | Web studio; SDODS studio scenarios | Merged |
+| Phase 1 | VS Code extension on the VS Code Marketplace and Open VSX | Published |
+| Phase 2 | PDF, DOCX, MDX output; rich-text editing | Planned |
 
 Full plan: [docs/implementation/implementation-plan.md](docs/implementation/implementation-plan.md). The first npm publish waits on rotating the npm token (SDO-48); the release workflow only runs when the repository variable `RELEASE_ENABLED` is `true`.
 

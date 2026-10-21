@@ -2,10 +2,12 @@ import { dirname } from 'node:path'
 import { type MarkupMeDocument, stats } from '@markupme/core'
 import * as vscode from 'vscode'
 import { diagnosticRange, fileExistsFrom, severityIndex } from './diagnostics.js'
+import { type Emphasis, MARKERS, toggleEmphasis } from './emphasis.js'
 import { ASSETS_DIR, exportPage } from './export.js'
+import { greeting, LAST_VERSION_KEY, WALKTHROUGH_ID } from './onboarding.js'
 import { createPipeline, formatMarkdown, type Pipeline } from './pipeline.js'
 import { isMarkdown, PreviewManager } from './preview.js'
-import { readSettings, tocOptions } from './settings.js'
+import { applyTrust, readSettings, tocOptions } from './settings.js'
 import { computeTocEdit } from './toc.js'
 
 const VALIDATE_DEBOUNCE_MS = 300
@@ -20,7 +22,10 @@ function colorTheme(): 'light' | 'dark' {
 function buildPipeline(): Pipeline {
   const config = vscode.workspace.getConfiguration('markupme')
   return createPipeline(
-    readSettings((key) => config.get(key)),
+    applyTrust(
+      readSettings((key) => config.get(key)),
+      vscode.workspace.isTrusted,
+    ),
     colorTheme(),
   )
 }
@@ -130,7 +135,46 @@ export function activate(context: vscode.ExtensionContext): void {
     return undefined
   }
 
+  const toggle = async (kind: Emphasis) => {
+    const e = activeMarkdown()
+    if (!e) return
+    const d = e.document
+    const text = d.getText()
+    const results = e.selections.map((sel) =>
+      toggleEmphasis(text, d.offsetAt(sel.start), d.offsetAt(sel.end), kind),
+    )
+    // Apply from the end so earlier offsets stay valid, then map the selections into the new text.
+    const ok = await e.edit((b) => {
+      for (const r of [...results].sort((a, z) => z.start - a.start))
+        b.replace(new vscode.Range(d.positionAt(r.start), d.positionAt(r.end)), r.text)
+    })
+    if (!ok) return
+    const shiftBefore = (pos: number) =>
+      results.reduce((n, r) => (r.end <= pos ? n + r.text.length - (r.end - r.start) : n), 0)
+    e.selections = results.map((r) => {
+      const shift = shiftBefore(r.start)
+      return new vscode.Selection(
+        d.positionAt(r.selectionStart + shift),
+        d.positionAt(r.selectionEnd + shift),
+      )
+    })
+  }
+
+  const commandName = (kind: Emphasis) =>
+    `markupme.toggle${kind.charAt(0).toUpperCase()}${kind.slice(1)}`
+
   context.subscriptions.push(
+    ...(Object.keys(MARKERS) as Emphasis[]).map((kind) =>
+      vscode.commands.registerCommand(commandName(kind), () => toggle(kind)),
+    ),
+    vscode.workspace.onDidGrantWorkspaceTrust(() => {
+      pipeline = buildPipeline()
+      parsed.clear()
+      void preview.refresh()
+    }),
+    vscode.commands.registerCommand('markupme.showWalkthrough', () =>
+      vscode.commands.executeCommand('workbench.action.openWalkthrough', WALKTHROUGH_ID, false),
+    ),
     vscode.commands.registerCommand('markupme.openPreview', () => preview.show(false)),
     vscode.commands.registerCommand('markupme.openPreviewToSide', () => preview.show(true)),
     // Not contributed to the palette: lets tests read what the preview rendered.
@@ -246,6 +290,34 @@ export function activate(context: vscode.ExtensionContext): void {
 
   for (const d of vscode.workspace.textDocuments) validate(d)
   updateStatus()
+  void greet(context)
+}
+
+/** Opens the walkthrough on the first run and mentions feature releases once. */
+async function greet(context: vscode.ExtensionContext): Promise<void> {
+  if (context.extensionMode === vscode.ExtensionMode.Test) return
+  const current = String(context.extension.packageJSON.version ?? '')
+  const previous = context.globalState.get<string>(LAST_VERSION_KEY)
+  const whatsNew = vscode.workspace
+    .getConfiguration('markupme')
+    .get<boolean>('notifications.whatsNew', true)
+  const kind = greeting(previous, current, whatsNew)
+  await context.globalState.update(LAST_VERSION_KEY, current)
+  if (kind === 'welcome') {
+    await vscode.commands.executeCommand('workbench.action.openWalkthrough', WALKTHROUGH_ID, false)
+  } else if (kind === 'whatsNew') {
+    const notes = 'Release Notes'
+    const pick = await vscode.window.showInformationMessage(
+      `MarkupMe ${current} is installed. See what's new.`,
+      notes,
+    )
+    if (pick === notes)
+      await vscode.env.openExternal(
+        vscode.Uri.parse(
+          'https://github.com/YarlisAISolutions/markupme/blob/main/packages/vscode/CHANGELOG.md',
+        ),
+      )
+  }
 }
 
 export function deactivate(): void {}

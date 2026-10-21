@@ -60,7 +60,7 @@ MarkupMe is a standards-first Markdown engine with one CLI, plus editor integrat
 | Phase 1, PR#1 | `@markupme/core`, `highlight`, `diagrams`, `themes`, `cli` (all commands, serve API), CI, SDODS api and ui suites in markupme-qa | Merged to `main`; 71 unit tests; SDODS api 17/17 and ui 10/10 pass in CI |
 | Phase 1, PR#4 | `apps/studio` (Vite + CodeMirror 6), SDODS Studio scenarios | Built |
 | Phase 1, PR#3 | `packages/vscode`, `packages/react` | In progress (`feat/vscode`) |
-| Phase 2 | PDF, DOCX, MDX output; rich-text editing; VS Code Marketplace listing | Planned |
+| Phase 2 | PDF, DOCX, MDX output; rich-text editing | Planned |
 
 ## Success metrics
 

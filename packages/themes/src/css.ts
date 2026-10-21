@@ -13,6 +13,7 @@ export const markupmeCss = `
   --mm-accent: #8250df;
   --mm-mark: #fff8c5;
   --mm-line-hl: rgba(84, 174, 255, 0.15);
+  --mm-diagram-paper: #ffffff;
   --mm-note: #0969da;
   --mm-tip: #1a7f37;
   --mm-important: #8250df;
@@ -33,6 +34,7 @@ export const markupmeCss = `
     --mm-accent: #ab7df8;
     --mm-mark: #bb800926;
     --mm-line-hl: rgba(56, 139, 253, 0.2);
+    --mm-diagram-paper: #ffffff;
     --mm-note: #4493f8;
     --mm-tip: #3fb950;
     --mm-important: #ab7df8;
@@ -51,6 +53,7 @@ export const markupmeCss = `
   --mm-accent: #ab7df8;
   --mm-mark: #bb800926;
   --mm-line-hl: rgba(56, 139, 253, 0.2);
+  --mm-diagram-paper: #ffffff;
   --mm-note: #4493f8;
   --mm-tip: #3fb950;
   --mm-important: #ab7df8;
@@ -140,6 +143,8 @@ body.mm-page { margin: 0; background: var(--mm-bg); color: var(--mm-fg); font-fa
 .markupme .mm-toc ul { margin: 0; padding-left: 1.2em; }
 .markupme .mm-diagram { margin: 0 0 16px; padding: 12px; overflow: auto; text-align: center; border: 1px solid var(--mm-border); border-radius: 6px; background: var(--mm-bg); }
 .markupme .mm-diagram svg { max-width: 100%; height: auto; }
+/* Graphviz and Blueprint draw dark ink on white, so in dark mode they sit on a light paper card. */
+.markupme .mm-diagram-graphviz, .markupme .mm-diagram-blueprint { background: var(--mm-diagram-paper); }
 .markupme .mm-diagram pre.mermaid { background: transparent; text-align: left; }
 .markupme .mm-diagram pre.mermaid[data-processed] { text-align: center; }
 .markupme .mm-diagram-error { border: 1px solid var(--mm-caution); border-radius: 6px; padding: 8px 16px; margin: 0 0 16px; color: var(--mm-caution); }

@@ -11,6 +11,7 @@ First version. Not yet published to npm.
 - `@markupme/core`: CommonMark and GFM parsing on unified/remark; YAML and TOML frontmatter; GitHub alerts; directives (callouts, `details`, `figure`, `columns`, `kbd`, `abbr`, `mark`, `sub`, `sup`, `badge`, `toc`, `br`); GitHub-style heading ids with `{#custom-id}`; TOC markers; opt-in math (KaTeX) and emoji.
 - Document model `MarkupMeDocument` with `schemaVersion: 1`, positions and diagnostics.
 - HTML rendering sanitized by default, with trusted code block output inserted after sanitizing; Markdown, JSON AST and plain-text output.
+- Themes: Graphviz and Blueprint diagrams sit on a white paper card in dark mode (`--mm-diagram-paper`).
 - `validate` with ten lint rules (MM001, MM002, MM004, MM005, MM006, MM008, MM012, MM013, MM015, MM016), plugin rules and severity overrides.
 - `transform`, `serialize`, `roundTrip`, `query`, `outline`, `diff`, `stats`.
 - `@markupme/highlight`: Shiki highlighting with dual themes, titles, line numbers, line highlights and copy buttons.

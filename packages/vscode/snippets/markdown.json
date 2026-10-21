@@ -1,0 +1,77 @@
+{
+  "Alert: note": {
+    "prefix": ["alert-note", "!note"],
+    "body": ["> [!NOTE]", "> ${1:Text}"],
+    "description": "GitHub alert (NOTE)"
+  },
+  "Alert: tip": {
+    "prefix": ["alert-tip", "!tip"],
+    "body": ["> [!TIP]", "> ${1:Text}"],
+    "description": "GitHub alert (TIP)"
+  },
+  "Alert: important": {
+    "prefix": ["alert-important", "!important"],
+    "body": ["> [!IMPORTANT]", "> ${1:Text}"],
+    "description": "GitHub alert (IMPORTANT)"
+  },
+  "Alert: warning": {
+    "prefix": ["alert-warning", "!warning"],
+    "body": ["> [!WARNING]", "> ${1:Text}"],
+    "description": "GitHub alert (WARNING)"
+  },
+  "Alert: caution": {
+    "prefix": ["alert-caution", "!caution"],
+    "body": ["> [!CAUTION]", "> ${1:Text}"],
+    "description": "GitHub alert (CAUTION)"
+  },
+  "Mermaid diagram": {
+    "prefix": ["mermaid", "diagram-mermaid"],
+    "body": ["```mermaid", "${1:flowchart LR}", "  ${2:A[Start] --> B[Done]}", "```"],
+    "description": "Mermaid diagram (rendered in the preview)"
+  },
+  "Graphviz diagram": {
+    "prefix": ["dot", "graphviz", "diagram-graphviz"],
+    "body": ["```dot", "digraph ${1:G} {", "  ${2:a -> b}", "}", "```"],
+    "description": "Graphviz diagram (rendered to SVG in VS Code)"
+  },
+  "Blueprint diagram": {
+    "prefix": ["ybp", "blueprint", "diagram-blueprint"],
+    "body": ["```ybp", "${1:title: Diagram}", "$0", "```"],
+    "description": "Yarlis Blueprint diagram (rendered to SVG in VS Code)"
+  },
+  "Table of contents marker": {
+    "prefix": ["toc", "[[toc]]"],
+    "body": ["<!-- toc -->", "<!-- tocstop -->"],
+    "description": "Region filled by MarkupMe: Insert/Update Table of Contents"
+  },
+  "Note container": {
+    "prefix": [":::note", "container"],
+    "body": [":::${1|note,tip,warning,danger,info|}", "${2:Text}", ":::"],
+    "description": "Directive container (callout)"
+  },
+  "Table": {
+    "prefix": ["table"],
+    "body": ["| ${1:Column} | ${2:Column} |", "| --- | --- |", "| ${3:Cell} | ${4:Cell} |"],
+    "description": "GitHub-flavored Markdown table"
+  },
+  "Task list": {
+    "prefix": ["task", "todo"],
+    "body": ["- [ ] ${1:Task}"],
+    "description": "Task list item"
+  },
+  "Footnote": {
+    "prefix": ["footnote"],
+    "body": ["[^${1:1}]", "", "[^${1:1}]: ${2:Note}"],
+    "description": "Footnote reference and definition"
+  },
+  "Collapsible section": {
+    "prefix": ["details"],
+    "body": ["<details>", "<summary>${1:Summary}</summary>", "", "${2:Content}", "", "</details>"],
+    "description": "Collapsible section"
+  },
+  "Math block": {
+    "prefix": ["math", "$$"],
+    "body": ["$$", "${1:E = mc^2}", "$$"],
+    "description": "KaTeX block (turn on markupme.markdown.math)"
+  }
+}
