@@ -15,7 +15,9 @@ Rules for agents (and people) working in this repository. Read [README.md](READM
 | `packages/diagrams` | `@markupme/diagrams`: diagram providers, SVG sanitizer |
 | `packages/themes` | `@markupme/themes`: CSS, runtime, `wrapDocument` |
 | `packages/cli` | `@markupme/cli`: the `markupme` command and preview server |
-| `apps/studio`, `packages/vscode`, `packages/react` | In progress (Phase 1) |
+| `packages/react` | `@markupme/react`: `<Markdown>`, `useMarkdown`, `renderToReact` |
+| `packages/vscode` | `markupme-vscode` (private): preview, export, TOC, formatter, diagnostics; packaged as a `.vsix` |
+| `apps/studio` | MarkupMe Studio (private): Vite + CodeMirror 6 browser editor, served at `/studio/` in the e2e run |
 
 ## Rules
 
