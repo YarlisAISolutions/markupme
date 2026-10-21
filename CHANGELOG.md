@@ -25,6 +25,8 @@ First version. Not yet published to npm.
 
 ### Changed
 
-- `markupme capabilities` lists the web studio, the VS Code extension and React elements as planned (in progress, Phase 1) until they merge.
+- VS Code extension (`markupme-vscode`): live preview with diagrams under a strict CSP, export HTML, insert/update TOC, opt-in formatter, diagnostics in the Problems panel.
+- `@markupme/react`: `<Markdown>`, `useMarkdown` and `renderToReact`, sanitized like the HTML output.
+- `markupme capabilities` lists the web studio as planned (in progress) until it merges.
 - Plugin `rehype` hooks run on the hast tree before sanitizing.
 - The `TocOptions.title` doc comment now says it sets the TOC's `aria-label` (default "Table of contents").

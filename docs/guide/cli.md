@@ -444,8 +444,8 @@ Current status of the larger items, as tracked in the [implementation plan](../i
 | Mermaid (browser), Blueprint, Graphviz | built |
 | PlantUML, C4, Structurizr, D2 via Kroki | built, opt-in |
 | Web studio (`apps/studio`) | planned (in progress, Phase 1, branch `feat/studio`) |
-| VS Code extension (`packages/vscode`) | planned (in progress, Phase 1, branch `feat/vscode`) |
-| React component (`@markupme/react`) | planned (in progress, Phase 1) |
+| VS Code extension (`packages/vscode`) | built |
+| React component (`@markupme/react`) | built |
 | PDF, DOCX, MDX output; rich-text editing; Marketplace listing | planned, Phase 2 |
 
 The three in-progress items appear as `planned` with the note `in progress, Phase 1` until their pull requests merge. The SDODS scenario `Preview server health › Capabilities list built and planned features honestly` checks this table over the API.

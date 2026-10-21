@@ -31,8 +31,8 @@ MarkupMe is a standards-first Markdown engine with one CLI, plus editor integrat
 | Developer writing docs in a repo | Preview, lint in CI, keep TOCs fresh, diagrams next to text | CLI: `serve`, `validate`, `toc --check` |
 | Platform team rendering user content | Safe HTML from untrusted Markdown, stable API | `@markupme/core` `render()` |
 | Tech writer | A clean editor with live preview and export | Studio (in progress) |
-| VS Code user | Preview with diagrams, diagnostics in the editor | VS Code extension (in progress) |
-| React app developer | Render Markdown as components | `@markupme/react` (in progress) |
+| VS Code user | Preview with diagrams, diagnostics in the editor | VS Code extension (built) |
+| React app developer | Render Markdown as components | `@markupme/react` (built) |
 | Yarlis product teams | One shared Markdown engine across products | All of the above |
 
 ## Goals

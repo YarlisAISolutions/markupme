@@ -65,7 +65,7 @@ Each row links a requirement to the code that implements it, the vitest test tha
 | FR-C08 | themes `src/index.ts`, `src/css.ts`, `src/runtime.ts` | `themes/test/themes.test.ts::wrapDocument › builds an accessible standalone page`; `::wrapDocument › renders site navigation and escapes the Mermaid URL`; `::ships light, dark and print styles` | Playground › The theme toggle switches to dark mode; Rendered pages › The page structure is accessible | verified |
 | FR-C09 | core `src/processor.ts` (`titleOf`) | `core.test.ts::other formats › takes the title from frontmatter, then the first h1` | Render API › GitHub Flavored Markdown renders tables, task lists and strikethrough (`title` = "Report") | verified |
 | FR-C10 | core `src/render/html.ts` | `core.test.ts::render html › is deterministic` | none; CI `ci.yml` step "rendering is deterministic" | built |
-| FR-C11 | `packages/react` | none yet | none (planned) | in progress |
+| FR-C11 | `packages/react` | `packages/react/test/render.test.ts`, `hook.test.ts` | none (library) | built |
 | FR-C12 | cli `src/commands/render.ts` (exit 64 stub), serve (501) | `cli/test/cli.test.ts::render › reports planned formats with exit 64 and unknown ones as usage errors` | Render API › Planned formats answer 501 instead of pretending | planned (refusal verified) |
 | FR-C13 | cli `src/commands/render.ts` (exit 64 stub) | none for docx | none | planned |
 | FR-C14 | cli `src/commands/render.ts` (exit 64 stub) | none for mdx | none | planned |
@@ -82,9 +82,9 @@ Each row links a requirement to the code that implements it, the vitest test tha
 | FR-D05 | `apps/studio` | none yet | Studio (planned) | in progress |
 | FR-D06 | `apps/studio` | none yet | Studio (planned) | in progress |
 | FR-D07 | `apps/studio` | none yet | Studio (planned) | in progress |
-| FR-D08 | `packages/vscode` | none yet | none (planned) | in progress |
-| FR-D09 | `packages/vscode` | none yet | none (planned) | in progress |
-| FR-D10 | `packages/vscode` | none yet | none (planned) | in progress |
+| FR-D08 | `packages/vscode` | `packages/vscode/test/html.test.ts`, `lines.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
+| FR-D09 | `packages/vscode` | `packages/vscode/test/toc.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
+| FR-D10 | `packages/vscode` | `packages/vscode/test/diagnostics.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
 | FR-D11 | none | none | none | planned |
 | FR-D12 | none | none | none | planned |
 

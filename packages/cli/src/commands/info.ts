@@ -186,8 +186,7 @@ export const CAPABILITIES: { area: string; feature: string; status: Status; note
   {
     area: 'output',
     feature: 'React elements (@markupme/react)',
-    status: 'planned',
-    note: 'in progress, Phase 1',
+    status: 'built',
   },
   { area: 'output', feature: 'Static documentation site (markupme build)', status: 'built' },
   {
@@ -223,7 +222,7 @@ export const CAPABILITIES: { area: string; feature: string; status: Status; note
     status: 'planned',
     note: 'in progress, Phase 1',
   },
-  { area: 'editor', feature: 'VS Code extension', status: 'planned', note: 'in progress, Phase 1' },
+  { area: 'editor', feature: 'VS Code extension', status: 'built' },
   { area: 'editor', feature: 'Rich-text (WYSIWYG) editing', status: 'planned' },
 ]
 
