@@ -291,3 +291,16 @@ it('labels task list checkboxes for screen readers', async () => {
   expect(out).toContain('aria-label="Completed task: Ship it"')
   expect(out).toContain('aria-label="Open task: Test it"')
 })
+
+it('runs plugin rehype hooks before sanitizing', async () => {
+  const plugin: MarkupMePlugin = {
+    name: 'mark-paragraphs',
+    rehype(tree) {
+      for (const node of tree.children)
+        if (node.type === 'element' && node.tagName === 'p')
+          node.properties.className = ['mm-note', 'evil-class']
+    },
+  }
+  const out = (await createProcessor({ plugins: [plugin] }).render('Hello')).output
+  expect(out).toBe('<p class="mm-note">Hello</p>')
+})

@@ -183,7 +183,12 @@ export const CAPABILITIES: { area: string; feature: string; status: Status; note
   { area: 'output', feature: 'Markdown (normalized, round-trip checked)', status: 'built' },
   { area: 'output', feature: 'JSON AST (mdast + schemaVersion)', status: 'built' },
   { area: 'output', feature: 'Plain text', status: 'built' },
-  { area: 'output', feature: 'React elements (@markupme/react)', status: 'built' },
+  {
+    area: 'output',
+    feature: 'React elements (@markupme/react)',
+    status: 'planned',
+    note: 'in progress, Phase 1',
+  },
   { area: 'output', feature: 'Static documentation site (markupme build)', status: 'built' },
   {
     area: 'output',
@@ -212,8 +217,13 @@ export const CAPABILITIES: { area: string; feature: string; status: Status; note
   { area: 'tools', feature: 'TOC insert / refresh', status: 'built' },
   { area: 'tools', feature: 'Live preview server with render API', status: 'built' },
   { area: 'tools', feature: 'Structural diff', status: 'built' },
-  { area: 'editor', feature: 'Web studio (CodeMirror 6, split preview)', status: 'built' },
-  { area: 'editor', feature: 'VS Code extension', status: 'built' },
+  {
+    area: 'editor',
+    feature: 'Web studio (CodeMirror 6, split preview)',
+    status: 'planned',
+    note: 'in progress, Phase 1',
+  },
+  { area: 'editor', feature: 'VS Code extension', status: 'planned', note: 'in progress, Phase 1' },
   { area: 'editor', feature: 'Rich-text (WYSIWYG) editing', status: 'planned' },
 ]
 

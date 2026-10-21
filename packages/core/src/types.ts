@@ -58,7 +58,7 @@ export interface TocOptions {
   maxDepth?: number
   /** Where to put it when the document has no `[[toc]]` / `<!-- toc -->` marker. Default 'marker-only'. */
   position?: 'marker-only' | 'top' | 'after-title'
-  /** Heading text above the list in HTML output. Default 'Contents'. */
+  /** Accessible name (`aria-label`) of the TOC `<nav>`. Default 'Table of contents'. */
   title?: string
 }
 

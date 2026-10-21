@@ -147,6 +147,8 @@ export async function renderHtml(
   })
   await Promise.all(jobs)
 
+  for (const p of opts.plugins ?? []) await p.rehype?.(hast, ctx)
+
   // parse5 foster-parents whitespace text out of tables; drop it first.
   visit(hast, 'element', (el: Element) => {
     if (['table', 'thead', 'tbody', 'tfoot', 'tr'].includes(el.tagName))
