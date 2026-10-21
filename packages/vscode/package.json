@@ -1,0 +1,226 @@
+{
+  "name": "markupme-vscode",
+  "displayName": "MarkupMe",
+  "description": "Standards-first Markdown for VS Code: a live preview with Blueprint, Graphviz and Mermaid diagrams and syntax highlighting, HTML export, a table of contents, formatting and lint diagnostics.",
+  "version": "0.1.0",
+  "private": true,
+  "publisher": "yarlis",
+  "license": "MIT",
+  "author": "Yarlis AI Solutions",
+  "homepage": "https://github.com/YarlisAISolutions/markupme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarlisAISolutions/markupme.git",
+    "directory": "packages/vscode"
+  },
+  "bugs": "https://github.com/YarlisAISolutions/markupme/issues",
+  "icon": "icon.png",
+  "keywords": [
+    "markdown",
+    "preview",
+    "mermaid",
+    "graphviz",
+    "diagrams",
+    "toc",
+    "lint",
+    "markupme"
+  ],
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters",
+    "Visualization"
+  ],
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "markupme.openPreview",
+        "title": "Open Preview",
+        "category": "MarkupMe",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "markupme.openPreviewToSide",
+        "title": "Open Preview to the Side",
+        "category": "MarkupMe",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "markupme.exportHtml",
+        "title": "Export to HTML",
+        "category": "MarkupMe"
+      },
+      {
+        "command": "markupme.insertToc",
+        "title": "Insert/Update Table of Contents",
+        "category": "MarkupMe"
+      },
+      {
+        "command": "markupme.formatDocument",
+        "title": "Format Document",
+        "category": "MarkupMe"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "markupme.openPreviewToSide",
+          "when": "editorLangId == markdown",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "markupme.openPreview",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.openPreviewToSide",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.exportHtml",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.insertToc",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.formatDocument",
+          "when": "editorLangId == markdown"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MarkupMe",
+      "properties": {
+        "markupme.preview.theme": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "light",
+            "dark"
+          ],
+          "enumDescriptions": [
+            "Follow the VS Code color theme.",
+            "Always light.",
+            "Always dark."
+          ],
+          "default": "auto",
+          "description": "Color theme of the MarkupMe preview and of exported HTML."
+        },
+        "markupme.preview.sanitize": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Sanitize the rendered HTML (GitHub's schema). **Warning:** turning this off lets raw HTML in a document through unchanged. Turn it off only for documents you trust."
+        },
+        "markupme.preview.lineNumbers": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show line numbers on every code block."
+        },
+        "markupme.markdown.math": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Render `$inline$` and `$$block$$` math with KaTeX."
+        },
+        "markupme.markdown.emoji": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Turn `:shortcode:` emoji into emoji characters."
+        },
+        "markupme.diagrams.providers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "blueprint",
+              "graphviz",
+              "mermaid"
+            ]
+          },
+          "default": [
+            "blueprint",
+            "graphviz",
+            "mermaid"
+          ],
+          "description": "Diagram renderers to use. Blueprint and Graphviz render in VS Code; Mermaid renders in the preview."
+        },
+        "markupme.diagrams.server": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Kroki server URL (for example `https://kroki.io` or a self-hosted `http://localhost:8000`) for PlantUML, C4, Structurizr, D2 and more. **This sends the diagram source to that server.** Empty turns Kroki off."
+        },
+        "markupme.toc.minDepth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 2,
+          "description": "Shallowest heading level in a generated table of contents."
+        },
+        "markupme.toc.maxDepth": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "default": 3,
+          "description": "Deepest heading level in a generated table of contents."
+        },
+        "markupme.format.enable": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Register MarkupMe as a formatter for Markdown (**Format Document**). Off by default so it does not replace your formatter. The `MarkupMe: Format Document` command works either way."
+        },
+        "markupme.validate.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show MarkupMe lint diagnostics in the Problems panel."
+        },
+        "markupme.validate.rules": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": {
+            "type": "string",
+            "enum": [
+              "off",
+              "info",
+              "warning",
+              "error"
+            ]
+          },
+          "markdownDescription": "Override rule severities by rule name or code, for example `{ \"single-h1\": \"off\", \"MM005\": \"error\" }`."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "icon": "node scripts/icon.mjs",
+    "package": "vsce package --no-dependencies",
+    "vscode:prepublish": "bun run build",
+    "test:e2e": "node scripts/e2e.mjs"
+  },
+  "devDependencies": {
+    "@markupme/core": "0.1.0",
+    "@markupme/diagrams": "0.1.0",
+    "@markupme/highlight": "0.1.0",
+    "@markupme/themes": "0.1.0",
+    "@resvg/resvg-js": "2.6.2",
+    "@types/mdast": "4.0.4",
+    "@types/vscode": "1.95.0",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "4.0.0",
+    "esbuild": "0.28.2",
+    "katex": "0.16.47",
+    "mermaid": "12.2.0"
+  }
+}

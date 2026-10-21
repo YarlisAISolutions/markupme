@@ -60,7 +60,7 @@ Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B doc
 | FR-C08 | `wrapDocument` shall produce a complete HTML5 page with `lang`, viewport, title, optional description, light/dark/auto theme, print styles, a theme toggle, optional navigation, and the runtime script unless `runtime: false`. | built |
 | FR-C09 | `render` shall return the document title (frontmatter `title`, else the first h1). | built |
 | FR-C10 | Rendering the same input with the same options shall produce identical output. | built |
-| FR-C11 | A React component (`@markupme/react`) shall render a document as React elements with the same sanitizing rules. | in progress |
+| FR-C11 | A React component (`@markupme/react`) shall render a document as React elements with the same sanitizing rules. | built |
 | FR-C12 | PDF output. | planned |
 | FR-C13 | DOCX output. | planned |
 | FR-C14 | MDX output, with execution disabled for untrusted documents. | planned |
@@ -77,9 +77,9 @@ Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B doc
 | FR-D05 | The studio shall have a command palette. | in progress |
 | FR-D06 | The studio shall autosave to local browser storage and restore on reload. | in progress |
 | FR-D07 | The studio shall export HTML and Markdown. | in progress |
-| FR-D08 | The VS Code extension shall show a preview in a webview rendered with `@markupme/core`, including diagrams. | in progress |
-| FR-D09 | The VS Code extension shall offer commands to export HTML, insert a TOC and format the document. | in progress |
-| FR-D10 | The VS Code extension shall publish `validate` diagnostics to the Problems panel. | in progress |
+| FR-D08 | The VS Code extension shall show a preview in a webview rendered with `@markupme/core`, including diagrams. | built |
+| FR-D09 | The VS Code extension shall offer commands to export HTML, insert a TOC and format the document. | built |
+| FR-D10 | The VS Code extension shall publish `validate` diagnostics to the Problems panel. | built |
 | FR-D11 | Rich-text (WYSIWYG) editing, chosen by the criteria in ADR 0007. | planned |
 | FR-D12 | VS Code Marketplace listing. | planned |
 

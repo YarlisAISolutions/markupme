@@ -84,3 +84,36 @@ jobs:
           tag="${{ matrix.package }}-v${{ steps.check.outputs.version }}"
           git tag "$tag"
           git push origin "$tag"
+
+  # The VS Code extension is not on npm: each new version becomes a GitHub release with the .vsix.
+  vscode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.4.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 22
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./packages/vscode/package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if gh release view "vscode-v$version" >/dev/null 2>&1; then
+            echo "release=false" >> "$GITHUB_OUTPUT"; echo "vscode-v$version already released"
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.release == 'true'
+        run: bun install --frozen-lockfile && bunx turbo run build test && cd packages/vscode && bun run package
+      - if: steps.check.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v=${{ steps.check.outputs.version }}
+          gh release create "vscode-v$v" "packages/vscode/markupme-vscode-$v.vsix" \
+            --title "MarkupMe for VS Code $v" \
+            --notes "Install: code --install-extension markupme-vscode-$v.vsix"

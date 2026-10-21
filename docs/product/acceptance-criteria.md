@@ -113,9 +113,9 @@ No criterion here is met yet. The studio criteria will be verified by a new SDOD
 | AC-092 | The command palette opens with a keyboard shortcut and runs "Insert TOC". | FR-D05 | SDODS `Studio` (planned) | in progress |
 | AC-093 | After a reload, the last edited text is restored from local storage. | FR-D06 | SDODS `Studio` (planned) | in progress |
 | AC-094 | Export HTML downloads a file that passes `markupme validate` with exit 0 for a clean input. | FR-D07 | SDODS `Studio` (planned) | in progress |
-| AC-095 | The VS Code preview shows a Graphviz diagram from the open file. | FR-D08 | Extension tests (PR#3) | in progress |
+| AC-095 | The VS Code preview shows a Graphviz diagram from the open file. | FR-D08 | `packages/vscode` live test `scripts/e2e.mjs` (preview draws Graphviz SVG, Mermaid under CSP) | met |
 | AC-096 | A broken fragment link appears in the Problems panel as `MM004`. | FR-D10 | Extension tests (PR#3) | in progress |
-| AC-097 | `@markupme/react` renders the kitchen sink with no `<script>` in the DOM. | FR-C11 | vitest in `packages/react` (PR#3) | in progress |
+| AC-097 | `@markupme/react` renders the kitchen sink with no `<script>` in the DOM. | FR-C11 | vitest `packages/react/test/render.test.ts` | met |
 
 ## Done definition for a release
 

@@ -45,7 +45,7 @@ Status as reported by `markupme capabilities`. Work in progress is listed as pla
 | Output | JSON AST (mdast + schemaVersion) | built |
 | Output | Plain text | built |
 | Output | Static documentation site (`markupme build`) | built |
-| Output | React elements (`@markupme/react`) | planned (in progress, Phase 1) |
+| Output | React elements (`@markupme/react`) | built |
 | Output | PDF, DOCX, MDX | planned (CLI exits 64) |
 | Diagrams | Mermaid (flowchart, sequence, state, class, ER, Gantt, C4 …), rendered in the browser | built |
 | Diagrams | Yarlis Blueprint (`ybp`) | built |
@@ -57,7 +57,7 @@ Status as reported by `markupme capabilities`. Work in progress is listed as pla
 | Tools | Live preview server with a render API | built |
 | Tools | Structural diff | built |
 | Editor | Web studio (CodeMirror 6, split preview) | planned (in progress, Phase 1) |
-| Editor | VS Code extension | planned (in progress, Phase 1) |
+| Editor | VS Code extension (`.vsix`; Marketplace listing planned) | built |
 | Editor | Rich-text (WYSIWYG) editing | planned |
 
 ## Install
@@ -516,8 +516,8 @@ const page = wrapDocument({ body: result.output, title: result.title, theme: 'au
 | [`@markupme/themes`](packages/themes) | CSS (light, dark, print), page runtime, `wrapDocument` | built |
 | [`@markupme/cli`](packages/cli) | The `markupme` command and preview server | built |
 | `apps/studio` | Web studio (Vite + CodeMirror 6) | planned (in progress on `feat/studio`) |
-| `packages/vscode` | VS Code extension | planned (in progress on `feat/vscode`) |
-| `@markupme/react` | React component | planned (in progress, Phase 1) |
+| `packages/vscode` | VS Code extension (`markupme-vscode-0.1.0.vsix`, attached to GitHub releases) | built |
+| `@markupme/react` | `<Markdown>`, `useMarkdown`, `renderToReact` | built |
 
 All packages are version 0.1.0, ESM-only, MIT, and publishable on their own.
 
@@ -534,10 +534,15 @@ Details: [docs/guide/security.md](docs/guide/security.md). Report vulnerabilitie
 
 ## Editors
 
-Both are being built now in Phase 1, on the branches `feat/studio` and `feat/vscode`. Until they merge, `markupme capabilities` lists them as planned (in progress).
+The VS Code extension is built; the Studio is being built on `feat/studio` and stays listed as planned (in progress) until it merges.
 
 - **Studio** (`apps/studio`): a browser editor built with Vite and CodeMirror 6. Source, split and preview modes, an outline, a command palette, local autosave and export. It renders with `@markupme/core`, so output matches the CLI. Rich-text editing is planned for Phase 2 ([ADR 0007](docs/architecture/architecture-decision-records/0007-codemirror-studio-editor.md)).
-- **VS Code extension** (`packages/vscode`): preview in a webview, export HTML, insert TOC, format, and diagnostics in the Problems panel. A Marketplace listing is planned for Phase 2.
+- **VS Code extension** (`packages/vscode`): live preview beside the editor (diagrams included, strict CSP), **MarkupMe: Export to HTML**, **MarkupMe: Insert/Update Table of Contents**, **MarkupMe: Format Document** (opt-in as the default formatter with `markupme.format.enable`) and lint diagnostics in the Problems panel, configured with `markupme.*` settings. A Marketplace listing is planned for Phase 2; until then install the `.vsix` from a GitHub release or build it:
+
+  ```bash
+  cd packages/vscode && bun run build && bun run package
+  code --install-extension markupme-vscode-0.1.0.vsix
+  ```
 
 Until they land, `markupme serve` plus its playground is the live preview.
 
@@ -611,7 +616,7 @@ markupme-qa also runs the suites on its own pull requests and nightly.
 | ----- | ----- | ------ |
 | Phase 1, PR#1 | Core, highlight, diagrams, themes, CLI, serve API, CI; SDODS api and ui suites | Merged |
 | Phase 1, PR#2 | Web studio; SDODS studio scenarios | In progress (`feat/studio`) |
-| Phase 1, PR#3 | VS Code extension; React component | In progress (`feat/vscode`) |
+| Phase 1, PR#3 | VS Code extension; React component | Built |
 | Phase 2 | PDF, DOCX, MDX output; rich-text editing; VS Code Marketplace | Planned |
 
 Full plan: [docs/implementation/implementation-plan.md](docs/implementation/implementation-plan.md). The first npm publish waits on rotating the npm token.
