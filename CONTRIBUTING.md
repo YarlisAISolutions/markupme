@@ -62,7 +62,17 @@ Every pull request runs `.github/workflows/ci.yml`:
 - `e2e`: starts `markupme serve examples --port 4321` and runs the SDODS api and ui suites from markupme-qa, with a minimum of 15 api and 10 ui scenarios.
 - `gitleaks`: secret scan.
 
-`security.yml` runs the org security suite. `release.yml` publishes packages when versions bump; do not bump versions in a feature pull request unless you are cutting a release.
+`security.yml` runs OSV-Scanner on the dependencies. `release.yml` publishes the npm packages and creates the `.vsix` GitHub release when versions bump, but only while the repository variable `RELEASE_ENABLED` is `true`; do not bump versions in a feature pull request unless you are cutting a release.
+
+### Publishing the VS Code extension
+
+`vscode-publish.yml` publishes `yarlis.markupme-vscode` to the VS Code Marketplace and Open VSX. It never runs on merge; a maintainer starts it from the Actions tab.
+
+1. Bump `version` in `packages/vscode/package.json` and add a section to `packages/vscode/CHANGELOG.md`.
+2. Run **Publish VS Code extension** with `dry_run` on. It builds, tests and packages the `.vsix` and checks that `VSCE_PAT` and `OVSX_PAT` can publish for `yarlis`.
+3. Run it again with `dry_run` off. A version already on a registry is skipped.
+
+The tokens are repository secrets managed by Yarlis Keep (`VSCE_PAT`: Azure DevOps, Marketplace (Manage) scope; `OVSX_PAT`: Open VSX). Rotate them with `pbpaste | ykeep rotate <NAME>`.
 
 ## End-to-end tests
 
