@@ -65,13 +65,13 @@ jobs:
           set -eu
           if [ "$MARKETPLACE" = true ]; then
             [ -n "$VSCE_PAT" ] || { echo "::error::VSCE_PAT is not set (pbpaste | ykeep set VSCE_PAT --repo YarlisAISolutions/markupme)"; exit 1; }
-            npx vsce verify-pat yarlis
+            bun run vsce verify-pat yarlis
           fi
           if [ "$OPEN_VSX" = true ]; then
             [ -n "$OVSX_PAT" ] || { echo "::error::OVSX_PAT is not set (pbpaste | ykeep set OVSX_PAT --repo YarlisAISolutions/markupme)"; exit 1; }
             # The namespace must exist before the first publish; creating it again just fails.
-            npx ovsx create-namespace yarlis || echo "namespace yarlis already exists"
-            npx ovsx verify-pat yarlis
+            bun run ovsx create-namespace yarlis || echo "namespace yarlis already exists"
+            bun run ovsx verify-pat yarlis
           fi
 
       - name: Publish to the VS Code Marketplace
@@ -79,11 +79,11 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
         working-directory: packages/vscode
-        run: npx vsce publish --packagePath "${{ steps.pkg.outputs.vsix }}" --skip-duplicate
+        run: bun run vsce publish --packagePath "${{ steps.pkg.outputs.vsix }}" --skip-duplicate
 
       - name: Publish to Open VSX
         if: ${{ !inputs.dry_run && (inputs.target == 'both' || inputs.target == 'open-vsx') }}
         env:
           OVSX_PAT: ${{ secrets.OVSX_PAT }}
         working-directory: packages/vscode
-        run: npx ovsx publish "${{ steps.pkg.outputs.vsix }}" --skip-duplicate
+        run: bun run ovsx publish "${{ steps.pkg.outputs.vsix }}" --skip-duplicate
