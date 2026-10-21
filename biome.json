@@ -11,6 +11,7 @@
       "!**/site",
       "!**/__snapshots__",
       "!**/test/fixtures",
+      "!packages/vscode/media",
       "!.playwright-mcp"
     ]
   },

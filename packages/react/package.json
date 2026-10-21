@@ -1,0 +1,65 @@
+{
+  "name": "@markupme/react",
+  "version": "0.1.0",
+  "description": "MarkupMe for React: a <Markdown> component, a useMarkdown hook and renderToReact for SSR and Server Components, with safe HTML, component overrides, highlighting and diagrams.",
+  "license": "MIT",
+  "author": "Yarlis AI Solutions",
+  "homepage": "https://github.com/YarlisAISolutions/markupme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarlisAISolutions/markupme.git",
+    "directory": "packages/react"
+  },
+  "bugs": "https://github.com/YarlisAISolutions/markupme/issues",
+  "keywords": [
+    "markdown",
+    "react",
+    "jsx",
+    "ssr",
+    "server-components",
+    "gfm",
+    "markupme"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@markupme/core": "0.1.0",
+    "@types/hast": "3.0.5",
+    "hast-util-from-html": "2.0.3",
+    "hast-util-to-jsx-runtime": "2.3.6"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@markupme/diagrams": "0.1.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "happy-dom": "21.0.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
