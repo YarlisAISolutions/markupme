@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=yarlis.markupme-vscode"><img src="https://img.shields.io/visual-studio-marketplace/v/yarlis.markupme-vscode?label=VS%20Marketplace&color=1F5A9E" alt="VS Marketplace version"></a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=yarlis.markupme-vscode"><img src="https://img.shields.io/visual-studio-marketplace/i/yarlis.markupme-vscode?color=1F5A9E" alt="Installs"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=yarlis.markupme-vscode"><img src="https://vsmarketplacebadges.dev/version-short/yarlis.markupme-vscode.svg?label=VS%20Marketplace&color=1F5A9E" alt="VS Marketplace version"></a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=yarlis.markupme-vscode"><img src="https://vsmarketplacebadges.dev/installs-short/yarlis.markupme-vscode.svg?color=1F5A9E" alt="Installs"></a>
   <a href="https://open-vsx.org/extension/yarlis/markupme-vscode"><img src="https://img.shields.io/open-vsx/v/yarlis/markupme-vscode?label=Open%20VSX&color=2AA3DD" alt="Open VSX version"></a>
   <a href="https://github.com/YarlisAISolutions/markupme/blob/main/LICENSE"><img src="https://img.shields.io/github/license/YarlisAISolutions/markupme?color=1F5A9E" alt="MIT licence"></a>
 </p>

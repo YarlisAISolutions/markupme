@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Marketplace page: the version and install badges come from vsmarketplacebadges.dev, because shields.io retired its Marketplace badges.
+
 ## 0.2.0
 
 - New MarkupMe mark and Marketplace page: icon, banner colour, badges and screenshots.
