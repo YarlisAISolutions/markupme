@@ -1,0 +1,49 @@
+{
+  "name": "@markupme/highlight",
+  "version": "0.1.0",
+  "description": "MarkupMe syntax highlighting: Shiki with light/dark themes, titles, line numbers, line highlights and copy buttons as a MarkupMe code block handler.",
+  "license": "MIT",
+  "author": "Yarlis AI Solutions",
+  "homepage": "https://github.com/YarlisAISolutions/markupme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarlisAISolutions/markupme.git",
+    "directory": "packages/highlight"
+  },
+  "bugs": "https://github.com/YarlisAISolutions/markupme/issues",
+  "keywords": [
+    "markdown",
+    "syntax-highlighting",
+    "shiki",
+    "markupme"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@markupme/core": "0.1.0",
+    "shiki": "4.5.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
