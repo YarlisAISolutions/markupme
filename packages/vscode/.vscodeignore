@@ -6,3 +6,6 @@
 !LICENSE
 !CHANGELOG.md
 !package.json
+!snippets/**
+!schemas/**
+!walkthrough/**

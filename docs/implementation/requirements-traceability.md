@@ -86,7 +86,7 @@ Each row links a requirement to the code that implements it, the vitest test tha
 | FR-D09 | `packages/vscode` | `packages/vscode/test/toc.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
 | FR-D10 | `packages/vscode` | `packages/vscode/test/diagnostics.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
 | FR-D11 | none | none | none | planned |
-| FR-D12 | none | none | none | planned |
+| FR-D12 | `packages/vscode/package.json`, `.github/workflows/vscode-publish.yml` | `packages/vscode/test/e2e/suite.cjs` (manifest checks) | none (registry) | built: `yarlis.markupme-vscode` on the VS Code Marketplace and Open VSX |
 
 ## E. Diagrams
 

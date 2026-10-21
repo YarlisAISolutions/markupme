@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="t d" style="color:#1F5A9E">
+  <title id="t">MarkupMe</title>
+  <desc id="d">The MarkupMe mark: a page with a folded corner, an M and a down arrow, the Markdown mark set on a document.</desc>
+  <!-- Tile mark (a filled app-icon square). Yarlis blue tile, a white page with a sky fold; the
+       M is ink on the page and the arrow is the only sky element, so it still reads at 16px.
+       Flat, no gradients. -->
+  <rect width="128" height="128" rx="28" fill="currentColor"/>
+  <path d="M30 22h50l22 22v62a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6V28a6 6 0 0 1 6-6z" fill="#FFFFFF"/>
+  <path d="M80 22l22 22H86a6 6 0 0 1-6-6z" fill="#2AA3DD"/>
+  <path d="M36 92V54h10l10 13 10-13h10v38H66V71l-10 12-10-12v21z" fill="#1F5A9E"/>
+  <path d="M84 72h7V58h8v14h7L95.5 88z" fill="#2AA3DD"/>
+</svg>

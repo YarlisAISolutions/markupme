@@ -80,6 +80,15 @@ export function readSettings(get: SettingGetter): MarkupMeSettings {
   }
 }
 
+/**
+ * Settings that are safe in an untrusted workspace (VS Code Workspace Trust). A workspace could
+ * set these to turn sanitizing off or send diagram source to a server of its choosing, so until
+ * the user trusts it, rendering stays sanitized and Kroki stays off.
+ */
+export function applyTrust(s: MarkupMeSettings, trusted: boolean): MarkupMeSettings {
+  return trusted ? s : { ...s, sanitize: true, server: '' }
+}
+
 export function tocOptions(s: MarkupMeSettings): TocOptions {
   return { minDepth: s.toc.minDepth, maxDepth: s.toc.maxDepth }
 }

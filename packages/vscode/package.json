@@ -1,8 +1,8 @@
 {
   "name": "markupme-vscode",
   "displayName": "MarkupMe",
-  "description": "Standards-first Markdown for VS Code: a live preview with Blueprint, Graphviz and Mermaid diagrams and syntax highlighting, HTML export, a table of contents, formatting and lint diagnostics.",
-  "version": "0.1.0",
+  "description": "Markdown preview with Mermaid, Graphviz and Blueprint diagrams, syntax highlighting, lint diagnostics, a table of contents, formatting and HTML export. Safe by default.",
+  "version": "0.2.0",
   "private": true,
   "publisher": "yarlis",
   "license": "MIT",
@@ -17,19 +17,27 @@
   "icon": "icon.png",
   "keywords": [
     "markdown",
+    "markdown preview",
     "preview",
     "mermaid",
     "graphviz",
     "diagrams",
+    "table of contents",
     "toc",
+    "markdown lint",
     "lint",
-    "markupme"
+    "formatter",
+    "github alerts",
+    "html export",
+    "katex",
+    "math"
   ],
   "categories": [
     "Programming Languages",
     "Formatters",
     "Linters",
-    "Visualization"
+    "Visualization",
+    "Snippets"
   ],
   "engines": {
     "vscode": "^1.95.0"
@@ -66,6 +74,34 @@
         "command": "markupme.formatDocument",
         "title": "Format Document",
         "category": "MarkupMe"
+      },
+      {
+        "command": "markupme.toggleBold",
+        "title": "Toggle Bold",
+        "category": "MarkupMe",
+        "icon": "$(bold)"
+      },
+      {
+        "command": "markupme.toggleItalic",
+        "title": "Toggle Italic",
+        "category": "MarkupMe",
+        "icon": "$(italic)"
+      },
+      {
+        "command": "markupme.toggleStrikethrough",
+        "title": "Toggle Strikethrough",
+        "category": "MarkupMe"
+      },
+      {
+        "command": "markupme.toggleCode",
+        "title": "Toggle Inline Code",
+        "category": "MarkupMe",
+        "icon": "$(code)"
+      },
+      {
+        "command": "markupme.showWalkthrough",
+        "title": "Get Started",
+        "category": "MarkupMe"
       }
     ],
     "menus": {
@@ -96,6 +132,46 @@
         {
           "command": "markupme.formatDocument",
           "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.toggleBold",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.toggleItalic",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.toggleStrikethrough",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markupme.toggleCode",
+          "when": "editorLangId == markdown"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "markupme.openPreviewToSide",
+          "when": "editorLangId == markdown",
+          "group": "markupme@1"
+        },
+        {
+          "command": "markupme.insertToc",
+          "when": "editorLangId == markdown && !editorReadonly",
+          "group": "markupme@2"
+        },
+        {
+          "command": "markupme.exportHtml",
+          "when": "editorLangId == markdown",
+          "group": "markupme@3"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "markupme.openPreview",
+          "when": "resourceLangId == markdown",
+          "group": "navigation@50"
         }
       ]
     },
@@ -196,16 +272,150 @@
             ]
           },
           "markdownDescription": "Override rule severities by rule name or code, for example `{ \"single-h1\": \"off\", \"MM005\": \"error\" }`."
+        },
+        "markupme.editor.shortcuts": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Use **Ctrl/Cmd+B**, **Ctrl/Cmd+I** and **Alt+S** in Markdown files for bold, italic and strikethrough. Off by default because these keys already toggle the sidebar and open inline chat in VS Code and Cursor."
+        },
+        "markupme.notifications.whatsNew": {
+          "type": "boolean",
+          "default": true,
+          "description": "After an update that adds features, show a short notice with a link to the release notes."
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "command": "markupme.openPreviewToSide",
+        "key": "ctrl+alt+m",
+        "mac": "cmd+alt+m",
+        "when": "editorLangId == markdown"
+      },
+      {
+        "command": "markupme.toggleBold",
+        "key": "ctrl+b",
+        "mac": "cmd+b",
+        "when": "editorTextFocus && editorLangId == markdown && !editorReadonly && config.markupme.editor.shortcuts"
+      },
+      {
+        "command": "markupme.toggleItalic",
+        "key": "ctrl+i",
+        "mac": "cmd+i",
+        "when": "editorTextFocus && editorLangId == markdown && !editorReadonly && config.markupme.editor.shortcuts"
+      },
+      {
+        "command": "markupme.toggleStrikethrough",
+        "key": "alt+s",
+        "when": "editorTextFocus && editorLangId == markdown && !editorReadonly && config.markupme.editor.shortcuts"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "markdown",
+        "path": "./snippets/markdown.json"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": "markupme.config.json",
+        "url": "./schemas/markupme.config.schema.json"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "markupme.gettingStarted",
+        "title": "Get started with MarkupMe",
+        "description": "Preview, diagrams, problems, a table of contents, export and shortcuts in seven short steps.",
+        "when": "true",
+        "steps": [
+          {
+            "id": "preview",
+            "title": "Open the live preview",
+            "description": "Open any Markdown file and select **Open Preview to the Side** in the editor title bar, or press **Ctrl+Alt+M** (**Cmd+Alt+M** on macOS). The preview follows the editor as you type and scroll.\n[Open Preview](command:markupme.openPreviewToSide)",
+            "media": {
+              "markdown": "walkthrough/preview.md"
+            },
+            "completionEvents": [
+              "onCommand:markupme.openPreviewToSide"
+            ]
+          },
+          {
+            "id": "diagrams",
+            "title": "Draw diagrams as code",
+            "description": "Type `mermaid`, `dot` or `ybp` and pick the snippet. Mermaid, Graphviz and Yarlis Blueprint diagrams render in the preview, with no CDN and no account.",
+            "media": {
+              "markdown": "walkthrough/diagrams.md"
+            },
+            "completionEvents": [
+              "onCommand:markupme.openPreview"
+            ]
+          },
+          {
+            "id": "problems",
+            "title": "Fix problems as you write",
+            "description": "Broken links, skipped heading levels, missing alt text and more show in the Problems panel with a rule code. Tune them with `markupme.validate.rules`.\n[Show Problems](command:workbench.actions.view.problems)",
+            "media": {
+              "markdown": "walkthrough/problems.md"
+            },
+            "completionEvents": [
+              "onCommand:workbench.actions.view.problems"
+            ]
+          },
+          {
+            "id": "toc",
+            "title": "Add a table of contents",
+            "description": "Run **MarkupMe: Insert/Update Table of Contents**. Run it again after editing headings; only the TOC region changes.\n[Insert Table of Contents](command:markupme.insertToc)",
+            "media": {
+              "markdown": "walkthrough/toc.md"
+            },
+            "completionEvents": [
+              "onCommand:markupme.insertToc"
+            ]
+          },
+          {
+            "id": "export",
+            "title": "Share it as a web page",
+            "description": "**MarkupMe: Export to HTML** writes a standalone page with diagrams and highlighting, ready to send or host.\n[Export to HTML](command:markupme.exportHtml)",
+            "media": {
+              "markdown": "walkthrough/export.md"
+            },
+            "completionEvents": [
+              "onCommand:markupme.exportHtml"
+            ]
+          },
+          {
+            "id": "shortcuts",
+            "title": "Format with the keyboard",
+            "description": "Turn on **Ctrl/Cmd+B**, **Ctrl/Cmd+I** and **Alt+S** for bold, italic and strikethrough in Markdown files. They are off by default because VS Code and Cursor already use some of these keys.\n[Turn on shortcuts](command:workbench.action.openSettings?%5B%22markupme.editor.shortcuts%22%5D)",
+            "media": {
+              "markdown": "walkthrough/shortcuts.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:markupme.editor.shortcuts"
+            ]
+          },
+          {
+            "id": "settings",
+            "title": "Make it yours",
+            "description": "Pick the preview theme, turn on math or emoji, choose diagram renderers, or let MarkupMe format on save.\n[Open MarkupMe settings](command:workbench.action.openSettings?%5B%22markupme%22%5D)",
+            "media": {
+              "markdown": "walkthrough/settings.md"
+            },
+            "completionEvents": [
+              "onSettingChanged:markupme"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "build": "node scripts/build.mjs",
     "type-check": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "icon": "node scripts/icon.mjs",
-    "package": "vsce package --no-dependencies",
+    "package": "vsce package --no-dependencies --baseContentUrl https://github.com/YarlisAISolutions/markupme/blob/HEAD/packages/vscode --baseImagesUrl https://github.com/YarlisAISolutions/markupme/raw/HEAD/packages/vscode",
     "vscode:prepublish": "bun run build",
     "test:e2e": "node scripts/e2e.mjs"
   },
@@ -223,5 +433,25 @@
     "katex": "0.16.47",
     "mermaid": "12.2.0",
     "ovsx": "1.3.0"
+  },
+  "galleryBanner": {
+    "color": "#1F5A9E",
+    "theme": "dark"
+  },
+  "pricing": "Free",
+  "qna": "marketplace",
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "In an untrusted workspace, rendering stays sanitized and Kroki stays off, whatever the workspace settings say.",
+      "restrictedConfigurations": [
+        "markupme.preview.sanitize",
+        "markupme.diagrams.server"
+      ]
+    },
+    "virtualWorkspaces": {
+      "supported": "limited",
+      "description": "In virtual workspaces, the check for missing local files (MM012) is skipped."
+    }
   }
 }

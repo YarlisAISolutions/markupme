@@ -446,7 +446,7 @@ Current status of the larger items, as tracked in the [implementation plan](../i
 | Web studio (`apps/studio`) | built |
 | VS Code extension (`packages/vscode`) | built |
 | React component (`@markupme/react`) | built |
-| PDF, DOCX, MDX output; rich-text editing; Marketplace listing | planned, Phase 2 |
+| PDF, DOCX, MDX output; rich-text editing | planned, Phase 2 |
 
 The three in-progress items appear as `planned` with the note `in progress, Phase 1` until their pull requests merge. The SDODS scenario `Preview server health › Capabilities list built and planned features honestly` checks this table over the API.
 

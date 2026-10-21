@@ -30,3 +30,10 @@ it('ships light, dark and print styles', () => {
   expect(markupmeCss).toContain(":root[data-theme='dark']")
   expect(markupmeCss).toContain('@media print')
 })
+
+it('puts Graphviz and Blueprint on a light paper card in both dark modes', () => {
+  expect(markupmeCss.match(/--mm-diagram-paper: #ffffff;/g)).toHaveLength(3)
+  expect(markupmeCss).toContain(
+    '.markupme .mm-diagram-graphviz, .markupme .mm-diagram-blueprint { background: var(--mm-diagram-paper); }',
+  )
+})

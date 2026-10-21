@@ -81,7 +81,7 @@ Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B doc
 | FR-D09 | The VS Code extension shall offer commands to export HTML, insert a TOC and format the document. | built |
 | FR-D10 | The VS Code extension shall publish `validate` diagnostics to the Problems panel. | built |
 | FR-D11 | Rich-text (WYSIWYG) editing, chosen by the criteria in ADR 0007. | planned |
-| FR-D12 | VS Code Marketplace listing. | planned |
+| FR-D12 | VS Code Marketplace listing. | built |
 
 ## E. Diagrams
 

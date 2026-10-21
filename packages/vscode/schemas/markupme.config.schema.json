@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/YarlisAISolutions/markupme/blob/main/packages/vscode/schemas/markupme.config.schema.json",
+  "title": "MarkupMe configuration",
+  "description": "markupme.config.json, read by the markupme CLI. Every field is optional; command-line flags win over the file.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "gfm": {
+      "type": "boolean",
+      "default": true,
+      "description": "GitHub-flavored Markdown: tables, task lists, strikethrough, autolinks and footnotes."
+    },
+    "frontmatter": {
+      "type": "boolean",
+      "default": true,
+      "description": "YAML and TOML front matter."
+    },
+    "directives": {
+      "type": "boolean",
+      "default": true,
+      "description": "Directives and ::: containers."
+    },
+    "alerts": {
+      "type": "boolean",
+      "default": true,
+      "description": "GitHub alerts (> [!NOTE])."
+    },
+    "math": {
+      "type": "boolean",
+      "default": false,
+      "description": "$inline$ and $$block$$ math with KaTeX."
+    },
+    "emoji": {
+      "type": "boolean",
+      "default": false,
+      "description": ":shortcode: emoji."
+    },
+    "headingIds": {
+      "type": "boolean",
+      "default": true,
+      "description": "GitHub-style heading ids and {#custom-id}."
+    },
+    "toc": {
+      "description": "Table of contents for [[toc]] and <!-- toc --> regions. false turns it off.",
+      "default": {
+        "minDepth": 2,
+        "maxDepth": 3
+      },
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "minDepth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            },
+            "maxDepth": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 6
+            }
+          }
+        }
+      ]
+    },
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sanitize": {
+          "type": "boolean",
+          "default": true,
+          "description": "Sanitize HTML with GitHub's schema. Turn off only for documents you trust."
+        },
+        "allowHtml": {
+          "type": "boolean",
+          "description": "Keep raw HTML from the document (still sanitized unless sanitize is false)."
+        },
+        "anchors": {
+          "type": "boolean",
+          "default": true,
+          "description": "Anchor links on headings."
+        },
+        "highlight": {
+          "type": "boolean",
+          "default": true,
+          "description": "Syntax highlighting with Shiki."
+        },
+        "lineNumbers": {
+          "type": "boolean",
+          "default": false,
+          "description": "Line numbers on every code block."
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["light", "dark", "auto"],
+          "default": "auto"
+        },
+        "baseUrl": {
+          "type": "string",
+          "description": "Base URL for relative links and images."
+        },
+        "externalLinksNewTab": {
+          "type": "boolean",
+          "description": "Open external links in a new tab."
+        }
+      }
+    },
+    "diagrams": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "providers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["blueprint", "graphviz", "mermaid", "kroki"]
+          },
+          "uniqueItems": true,
+          "default": ["blueprint", "graphviz", "mermaid"]
+        },
+        "server": {
+          "type": "string",
+          "format": "uri",
+          "description": "Kroki server for PlantUML, C4, Structurizr, D2 and more. Sends the diagram source to that server. Off by default."
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "description": "Rule severities by rule name or code, for example { \"single-h1\": \"off\", \"MM005\": \"error\" }.",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["off", "info", "warning", "error"]
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Site name for markupme build."
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns markupme build skips."
+        }
+      }
+    }
+  }
+}

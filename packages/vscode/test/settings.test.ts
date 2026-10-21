@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  applyTrust,
   DEFAULT_SETTINGS,
   formatOptions,
   processorOptions,
@@ -51,5 +52,14 @@ describe('settings', () => {
       anchors: true,
       baseUrl: 'https://x/',
     })
+  })
+
+  it('keeps an untrusted workspace sanitized and off Kroki', () => {
+    const s = from({ 'preview.sanitize': false, 'diagrams.server': 'https://kroki.example' })
+    expect(applyTrust(s, true)).toEqual(s)
+    const safe = applyTrust(s, false)
+    expect(safe.sanitize).toBe(true)
+    expect(safe.server).toBe('')
+    expect(renderOptions(safe).sanitize).toBe(true)
   })
 })

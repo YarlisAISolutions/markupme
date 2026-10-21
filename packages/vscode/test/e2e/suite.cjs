@@ -68,6 +68,11 @@ exports.run = async () => {
       'markupme.exportHtml',
       'markupme.insertToc',
       'markupme.formatDocument',
+      'markupme.toggleBold',
+      'markupme.toggleItalic',
+      'markupme.toggleStrikethrough',
+      'markupme.toggleCode',
+      'markupme.showWalkthrough',
     ])
       assert.ok(all.includes(c), c)
   })
@@ -137,6 +142,37 @@ exports.run = async () => {
     await vscode.commands.executeCommand('undo')
     assert.equal(doc.getText(), SOURCE)
     await config.update('format.enable', undefined, vscode.ConfigurationTarget.Global)
+  })
+
+  await test('toggle bold wraps the word under the cursor and toggles back', async () => {
+    const scratch = await vscode.workspace.openTextDocument({
+      language: 'markdown',
+      content: 'make this bold\n',
+    })
+    const editor = await vscode.window.showTextDocument(scratch)
+    editor.selection = new vscode.Selection(0, 6, 0, 6)
+    await vscode.commands.executeCommand('markupme.toggleBold')
+    assert.equal(scratch.getText(), 'make **this** bold\n')
+    assert.equal(scratch.getText(editor.selection), 'this')
+    await vscode.commands.executeCommand('markupme.toggleBold')
+    assert.equal(scratch.getText(), 'make this bold\n')
+    await vscode.commands.executeCommand('workbench.action.closeActiveEditor')
+  })
+
+  await test('manifest contributes snippets, a walkthrough, a config schema and trust limits', async () => {
+    const pkg = ext.packageJSON
+    assert.equal(pkg.contributes.walkthroughs[0].id, 'markupme.gettingStarted')
+    for (const step of pkg.contributes.walkthroughs[0].steps)
+      assert.ok(existsSync(join(ext.extensionPath, step.media.markdown)), step.media.markdown)
+    const snippets = JSON.parse(
+      readFileSync(join(ext.extensionPath, pkg.contributes.snippets[0].path), 'utf8'),
+    )
+    assert.ok(snippets['Mermaid diagram'])
+    assert.ok(existsSync(join(ext.extensionPath, pkg.contributes.jsonValidation[0].url)))
+    assert.deepEqual(pkg.capabilities.untrustedWorkspaces.restrictedConfigurations, [
+      'markupme.preview.sanitize',
+      'markupme.diagrams.server',
+    ])
   })
 
   await test('export writes a standalone page and copies Mermaid', async () => {
