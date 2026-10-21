@@ -101,6 +101,36 @@ jobs:
           path: qa/.sdods/runs
           retention-days: 14
 
+  # The extension in a real VS Code: the oldest version `engines.vscode` allows and the latest
+  # stable, so a manifest floor that an API or runtime (Node 18 before 1.90) cannot meet fails here.
+  vscode-compat:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        vscode: [minimum, stable]
+    name: vscode (${{ matrix.vscode }})
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.4.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run build --filter=markupme-vscode...
+      - name: end-to-end in VS Code
+        working-directory: packages/vscode
+        run: |
+          if [ "${{ matrix.vscode }}" = minimum ]; then
+            VSCODE_VERSION=$(node -p "require('./package.json').engines.vscode.replace(/^[^0-9]*/, '')")
+          else
+            VSCODE_VERSION=stable
+          fi
+          echo "VS Code $VSCODE_VERSION"
+          VSCODE_VERSION=$VSCODE_VERSION xvfb-run -a bun run test:e2e
+
   gitleaks:
     runs-on: ubuntu-latest
     env:

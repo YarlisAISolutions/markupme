@@ -36,6 +36,10 @@ MarkupMe uses the same engine as the [`markupme` command line](https://github.co
 | Table of contents, formatter, HTML export | not included | yes |
 | Untrusted workspaces | | sanitizing forced on, diagram servers forced off |
 
+## Requirements
+
+VS Code 1.82 (September 2023) or later, or an editor built on it: Cursor, VSCodium, Windsurf. Every pull request runs the extension's end-to-end tests in VS Code 1.82 and in the latest stable release.
+
 ## Get started
 
 1. Install MarkupMe. The **Get started with MarkupMe** walkthrough opens once, with seven short steps. Open it again any time with **MarkupMe: Get Started**.

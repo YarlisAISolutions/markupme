@@ -1,5 +1,6 @@
 // Runs the end-to-end suite inside a real VS Code extension host (needs a display).
-// Set VSCODE_EXECUTABLE to use an installed VS Code (or a fork); otherwise one is downloaded.
+// Set VSCODE_EXECUTABLE to use an installed VS Code (or a fork); otherwise one is downloaded:
+// VSCODE_VERSION picks it (for example 1.82.2, the oldest supported, or stable).
 // Run `bun run build` first.
 import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
@@ -13,6 +14,7 @@ const code = await runTests({
   extensionDevelopmentPath: root,
   extensionTestsPath: join(root, 'test/e2e/suite.cjs'),
   ...(process.env.VSCODE_EXECUTABLE ? { vscodeExecutablePath: process.env.VSCODE_EXECUTABLE } : {}),
+  ...(process.env.VSCODE_VERSION ? { version: process.env.VSCODE_VERSION } : {}),
   launchArgs: [
     '--disable-extensions',
     `--user-data-dir=${join(scratch, 'user')}`,

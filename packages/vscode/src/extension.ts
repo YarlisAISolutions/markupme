@@ -1,3 +1,4 @@
+import { webcrypto } from 'node:crypto'
 import { dirname } from 'node:path'
 import { type MarkupMeDocument, stats } from '@markupme/core'
 import * as vscode from 'vscode'
@@ -9,6 +10,10 @@ import { createPipeline, formatMarkdown, type Pipeline } from './pipeline.js'
 import { isMarkdown, PreviewManager } from './preview.js'
 import { applyTrust, readSettings, tocOptions } from './settings.js'
 import { computeTocEdit } from './toc.js'
+
+// VS Code before 1.90 runs extensions on Node 18, which has no global Web Crypto; the browser-safe
+// packages (nonces, diagram cache keys) use it.
+if (!globalThis.crypto) Object.defineProperty(globalThis, 'crypto', { value: webcrypto })
 
 const VALIDATE_DEBOUNCE_MS = 300
 

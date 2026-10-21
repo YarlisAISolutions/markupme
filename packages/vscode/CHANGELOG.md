@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Installs on VS Code 1.82 and later (was 1.95). Older VS Code runs extensions on Node 18, so the extension supplies the Web Crypto global there. CI now runs the end-to-end tests in the oldest supported VS Code and the latest stable.
+
 ## 0.2.1
 
 - Marketplace page: the version and install badges come from vsmarketplacebadges.dev, because shields.io retired its Marketplace badges.
