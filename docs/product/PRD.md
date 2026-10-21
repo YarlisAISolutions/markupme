@@ -22,7 +22,7 @@ MarkupMe is a standards-first Markdown engine with one CLI, plus editor integrat
 - Safe HTML by default, with highlighting and diagrams inserted after sanitizing.
 - Diagrams as code: Yarlis Blueprint, Graphviz, Mermaid, and PlantUML/C4/Structurizr/D2 through an opt-in Kroki server.
 - One CLI for render, lint, format, TOC, static site, live preview with a JSON API, diagram export, AST, stats, diff and capabilities.
-- A web studio, a VS Code extension and a React component (in progress, Phase 1).
+- A web studio, a VS Code extension and a React component.
 
 ## Users
 
@@ -44,7 +44,7 @@ MarkupMe is a standards-first Markdown engine with one CLI, plus editor integrat
 | G3 | No lock-in, no hidden network | Default render makes no network request; Kroki only when configured ([NFR-005](NFR.md)). |
 | G4 | Honest capabilities | Every planned feature exits 64 or returns 501; `capabilities` matches reality ([AC-061](acceptance-criteria.md)), checked end to end by SDODS. |
 | G5 | Source fidelity | Kitchen-sink document round-trips without loss ([AC-020](acceptance-criteria.md)). |
-| G6 | Usable from editors | Studio and VS Code extension render the same HTML as the CLI (Phase 1, PR#2 and PR#3). |
+| G6 | Usable from editors | Studio and VS Code extension render the same HTML as the CLI (Phase 1, PR#3 and PR#4). |
 
 ## Non-goals (for now)
 
@@ -58,7 +58,7 @@ MarkupMe is a standards-first Markdown engine with one CLI, plus editor integrat
 | Phase | Scope | Status |
 | ----- | ----- | ------ |
 | Phase 1, PR#1 | `@markupme/core`, `highlight`, `diagrams`, `themes`, `cli` (all commands, serve API), CI, SDODS api and ui suites in markupme-qa | Merged to `main`; 71 unit tests; SDODS api 17/17 and ui 10/10 pass in CI |
-| Phase 1, PR#2 | `apps/studio` (Vite + CodeMirror 6), SDODS Studio scenarios | In progress (`feat/studio`) |
+| Phase 1, PR#4 | `apps/studio` (Vite + CodeMirror 6), SDODS Studio scenarios | Built |
 | Phase 1, PR#3 | `packages/vscode`, `packages/react` | In progress (`feat/vscode`) |
 | Phase 2 | PDF, DOCX, MDX output; rich-text editing; VS Code Marketplace listing | Planned |
 

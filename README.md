@@ -56,7 +56,7 @@ Status as reported by `markupme capabilities`. Work in progress is listed as pla
 | Tools | TOC insert / refresh | built |
 | Tools | Live preview server with a render API | built |
 | Tools | Structural diff | built |
-| Editor | Web studio (CodeMirror 6, split preview) | planned (in progress, Phase 1) |
+| Editor | Web studio (CodeMirror 6, split preview) | built |
 | Editor | VS Code extension (`.vsix`; Marketplace listing planned) | built |
 | Editor | Rich-text (WYSIWYG) editing | planned |
 
@@ -515,7 +515,7 @@ const page = wrapDocument({ body: result.output, title: result.title, theme: 'au
 | [`@markupme/diagrams`](packages/diagrams) | Diagram providers (Blueprint, Graphviz, Mermaid, Kroki), SVG sanitizer, cache | built |
 | [`@markupme/themes`](packages/themes) | CSS (light, dark, print), page runtime, `wrapDocument` | built |
 | [`@markupme/cli`](packages/cli) | The `markupme` command and preview server | built |
-| `apps/studio` | Web studio (Vite + CodeMirror 6) | planned (in progress on `feat/studio`) |
+| `apps/studio` | Web studio (Vite + CodeMirror 6), a static app | built |
 | `packages/vscode` | VS Code extension (`markupme-vscode-0.1.0.vsix`, attached to GitHub releases) | built |
 | `@markupme/react` | `<Markdown>`, `useMarkdown`, `renderToReact` | built |
 
@@ -534,9 +534,14 @@ Details: [docs/guide/security.md](docs/guide/security.md). Report vulnerabilitie
 
 ## Editors
 
-The VS Code extension is built; the Studio is being built on `feat/studio` and stays listed as planned (in progress) until it merges.
+Both are built and covered by tests.
 
-- **Studio** (`apps/studio`): a browser editor built with Vite and CodeMirror 6. Source, split and preview modes, an outline, a command palette, local autosave and export. It renders with `@markupme/core`, so output matches the CLI. Rich-text editing is planned for Phase 2 ([ADR 0007](docs/architecture/architecture-decision-records/0007-codemirror-studio-editor.md)).
+- **Studio** (`apps/studio`): a browser editor built with Vite and CodeMirror 6 that renders entirely in the browser (nothing is sent to a server). Source, Split, Preview and Read-only modes; live preview with scroll sync; outline navigation; a problems panel that jumps to the line; toolbar and command palette (Ctrl/Cmd-K); autosave; open or drag-and-drop a file; export Markdown, standalone HTML (diagrams kept as SVG) or copy HTML; focus mode; light, dark and auto themes; feature switches (GFM, math, emoji, TOC, line numbers, anchors, diagrams). It uses `@markupme/core`, so output matches the CLI. Rich-text editing is planned for Phase 2 ([ADR 0007](docs/architecture/architecture-decision-records/0007-codemirror-studio-editor.md)).
+
+  ```bash
+  bun run build                                   # builds apps/studio/dist (a static site)
+  cd apps/studio && bun run preview               # http://127.0.0.1:4322
+  ```
 - **VS Code extension** (`packages/vscode`): live preview beside the editor (diagrams included, strict CSP), **MarkupMe: Export to HTML**, **MarkupMe: Insert/Update Table of Contents**, **MarkupMe: Format Document** (opt-in as the default formatter with `markupme.format.enable`) and lint diagnostics in the Problems panel, configured with `markupme.*` settings. A Marketplace listing is planned for Phase 2; until then install the `.vsix` from a GitHub release or build it:
 
   ```bash
@@ -564,7 +569,7 @@ End-to-end tests use [SDODS](https://github.com/YarlisAISolutions/sdods) in a se
 | Playground | ui | 5: loads with Mermaid, typing updates preview, diagnostics, accessibility (axe-core), dark mode |
 | Rendered pages | ui | 5: kitchen sink, server and browser diagrams, sanitizing, accessibility, in-page links |
 
-Last results: api 17/17 and ui 10/10, locally and in GitHub Actions; `sdods lint --strict` is clean. Studio scenarios come with the studio.
+Last results: api 17/17 and ui 23/23 (playground, rendered pages, static site, studio), locally and in GitHub Actions; `sdods lint --strict` is clean.
 
 ```bash
 # terminal 1, in this repo
@@ -615,11 +620,12 @@ markupme-qa also runs the suites on its own pull requests and nightly.
 | Phase | Scope | Status |
 | ----- | ----- | ------ |
 | Phase 1, PR#1 | Core, highlight, diagrams, themes, CLI, serve API, CI; SDODS api and ui suites | Merged |
-| Phase 1, PR#2 | Web studio; SDODS studio scenarios | In progress (`feat/studio`) |
-| Phase 1, PR#3 | VS Code extension; React component | Built |
+| Phase 1, PR#2 | SDLC docs, guides, this README | Merged |
+| Phase 1, PR#3 | VS Code extension; React component; static-site SDODS scenarios | Merged |
+| Phase 1, PR#4 | Web studio; SDODS studio scenarios | Built |
 | Phase 2 | PDF, DOCX, MDX output; rich-text editing; VS Code Marketplace | Planned |
 
-Full plan: [docs/implementation/implementation-plan.md](docs/implementation/implementation-plan.md). The first npm publish waits on rotating the npm token.
+Full plan: [docs/implementation/implementation-plan.md](docs/implementation/implementation-plan.md). The first npm publish waits on rotating the npm token (SDO-48); the release workflow only runs when the repository variable `RELEASE_ENABLED` is `true`.
 
 ## Contributing and licence
 

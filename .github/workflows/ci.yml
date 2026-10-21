@@ -78,6 +78,7 @@ jobs:
       - name: start markupme serve
         run: |
           node packages/cli/dist/bin.js build examples -o examples/site
+          cp -R apps/studio/dist examples/studio
           nohup node packages/cli/dist/bin.js serve examples --port 4321 --no-live-reload > serve.log 2>&1 &
           for _ in $(seq 1 30); do curl -sf http://127.0.0.1:4321/api/health && exit 0; sleep 1; done
           cat serve.log; exit 1
@@ -92,7 +93,7 @@ jobs:
         run: npx sdods run -p markupme -e local -l api --workers 2 && node scripts/qa-gate.mjs --suite api --min-scenarios 15
       - name: sdods ui
         working-directory: qa
-        run: npx sdods run -p markupme -e local -l ui -b chromium --workers 2 && node scripts/qa-gate.mjs --suite ui --min-scenarios 14
+        run: npx sdods run -p markupme -e local -l ui -b chromium --workers 2 && node scripts/qa-gate.mjs --suite ui --min-scenarios 23
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: always()
         with:

@@ -219,8 +219,7 @@ export const CAPABILITIES: { area: string; feature: string; status: Status; note
   {
     area: 'editor',
     feature: 'Web studio (CodeMirror 6, split preview)',
-    status: 'planned',
-    note: 'in progress, Phase 1',
+    status: 'built',
   },
   { area: 'editor', feature: 'VS Code extension', status: 'built' },
   { area: 'editor', feature: 'Rich-text (WYSIWYG) editing', status: 'planned' },
