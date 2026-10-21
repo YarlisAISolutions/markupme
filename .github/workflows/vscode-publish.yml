@@ -1,0 +1,89 @@
+# Publishes the VS Code extension to the VS Code Marketplace and Open VSX (Cursor, VSCodium,
+# Windsurf). Run by hand from the Actions tab: publishing is outward-facing, so it never runs on
+# merge. Start with dry_run (the default): it builds, tests and packages the .vsix and checks that
+# each token can publish for the `yarlis` publisher, without publishing anything (on the first
+# run it creates the `yarlis` namespace on Open VSX, which publishing needs anyway).
+#
+# Tokens come from Yarlis Keep (keep.yaml VSCE_PAT, OVSX_PAT) as repository secrets.
+# A version that is already on a registry is skipped, so re-running is safe.
+name: Publish VS Code extension
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Where to publish
+        type: choice
+        options: [both, marketplace, open-vsx]
+        default: both
+      dry_run:
+        description: Check the tokens and package only; publish nothing
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vscode-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      MARKETPLACE: ${{ inputs.target == 'both' || inputs.target == 'marketplace' }}
+      OPEN_VSX: ${{ inputs.target == 'both' || inputs.target == 'open-vsx' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.4.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - run: bunx turbo run build test --filter=markupme-vscode...
+      - id: pkg
+        working-directory: packages/vscode
+        run: |
+          bun run package
+          version=$(node -p "require('./package.json').version")
+          echo "vsix=markupme-vscode-$version.vsix" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: markupme-vscode-${{ steps.pkg.outputs.version }}
+          path: packages/vscode/${{ steps.pkg.outputs.vsix }}
+
+      - name: Check the tokens
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        working-directory: packages/vscode
+        run: |
+          set -eu
+          if [ "$MARKETPLACE" = true ]; then
+            [ -n "$VSCE_PAT" ] || { echo "::error::VSCE_PAT is not set (pbpaste | ykeep set VSCE_PAT --repo YarlisAISolutions/markupme)"; exit 1; }
+            npx vsce verify-pat yarlis
+          fi
+          if [ "$OPEN_VSX" = true ]; then
+            [ -n "$OVSX_PAT" ] || { echo "::error::OVSX_PAT is not set (pbpaste | ykeep set OVSX_PAT --repo YarlisAISolutions/markupme)"; exit 1; }
+            # The namespace must exist before the first publish; creating it again just fails.
+            npx ovsx create-namespace yarlis || echo "namespace yarlis already exists"
+            npx ovsx verify-pat yarlis
+          fi
+
+      - name: Publish to the VS Code Marketplace
+        if: ${{ !inputs.dry_run && (inputs.target == 'both' || inputs.target == 'marketplace') }}
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        working-directory: packages/vscode
+        run: npx vsce publish --packagePath "${{ steps.pkg.outputs.vsix }}" --skip-duplicate
+
+      - name: Publish to Open VSX
+        if: ${{ !inputs.dry_run && (inputs.target == 'both' || inputs.target == 'open-vsx') }}
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        working-directory: packages/vscode
+        run: npx ovsx publish "${{ steps.pkg.outputs.vsix }}" --skip-duplicate
