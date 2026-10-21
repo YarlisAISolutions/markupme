@@ -2,7 +2,7 @@
   "name": "markupme-vscode",
   "displayName": "MarkupMe",
   "description": "Markdown preview with Mermaid, Graphviz and Blueprint diagrams, syntax highlighting, lint diagnostics, a table of contents, formatting and HTML export. Safe by default.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "publisher": "yarlis",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "Snippets"
   ],
   "engines": {
-    "vscode": "^1.95.0"
+    "vscode": "^1.82.0"
   },
   "main": "./dist/extension.js",
   "activationEvents": [
@@ -426,7 +426,7 @@
     "@markupme/themes": "0.1.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/mdast": "4.0.4",
-    "@types/vscode": "1.95.0",
+    "@types/vscode": "1.82.0",
     "@vscode/test-electron": "3.1.0",
     "@vscode/vsce": "4.0.0",
     "esbuild": "0.28.2",
