@@ -1,0 +1,37 @@
+{
+  "name": "@markupme/studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MarkupMe Studio: a browser Markdown editor with live, sanitized preview, diagrams and export. Runs fully client-side.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4322 --strictPort --host 127.0.0.1",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "6.20.4",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-markdown": "6.5.2",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/search": "6.7.2",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.15",
+    "@lezer/highlight": "1.2.5",
+    "@markupme/core": "0.1.0",
+    "@markupme/diagrams": "0.1.0",
+    "@markupme/highlight": "0.1.0",
+    "@markupme/themes": "0.1.0",
+    "katex": "0.16.47",
+    "mermaid": "12.2.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

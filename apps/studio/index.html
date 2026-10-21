@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="MarkupMe Studio: write Markdown with a live, sanitized preview, diagrams and export. Runs entirely in your browser."
+    />
+    <title>MarkupMe Studio</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230969da'/%3E%3Cpath d='M3 11V5h1.6L6 7.2 7.4 5H9v6H7.6V7.6L6 10 4.4 7.6V11zM10 9l1.5 2L13 9h-1V5h-1v4z' fill='%23fff'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div class="studio" id="st-studio" data-testid="studio" data-mode="split" data-pane="editor">
+      <a class="skip-link" href="#st-editor-pane">Skip to editor</a>
+      <header class="toolbar" id="st-toolbar">
+        <h1 class="sr-only">MarkupMe Studio</h1>
+        <div class="brand" aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" focusable="false">
+            <rect width="16" height="16" rx="3" fill="currentColor" />
+            <path d="M3 11V5h1.6L6 7.2 7.4 5H9v6H7.6V7.6L6 10 4.4 7.6V11zM10 9l1.5 2L13 9h-1V5h-1v4z" fill="var(--st-bg)" />
+          </svg>
+          <span>MarkupMe <span class="brand-sub">Studio</span></span>
+        </div>
+
+        <div class="tool-group" role="toolbar" aria-label="File">
+          <button type="button" class="btn" data-testid="new-document" data-command="file.new">New</button>
+          <button type="button" class="btn" data-testid="open-document" data-command="file.open">Open</button>
+          <div class="menu-wrap">
+            <button
+              type="button"
+              class="btn"
+              id="st-export-button"
+              data-testid="export-menu"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="st-export-menu"
+            >
+              Export
+              <svg class="chev" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M4.4 6.2 8 9.8l3.6-3.6" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+            </button>
+            <div class="menu" id="st-export-menu" role="menu" aria-labelledby="st-export-button" hidden>
+              <button type="button" role="menuitem" tabindex="-1" data-testid="export-markdown" data-command="export.markdown">Download Markdown (.md)</button>
+              <button type="button" role="menuitem" tabindex="-1" data-testid="export-html" data-command="export.html">Download standalone HTML</button>
+              <button type="button" role="menuitem" tabindex="-1" data-testid="copy-html" data-command="export.copyHtml">Copy HTML to clipboard</button>
+            </div>
+          </div>
+          <input type="file" id="st-file-input" class="sr-only" accept=".md,.markdown,.txt,text/markdown,text/plain" tabindex="-1" aria-hidden="true" />
+        </div>
+
+        <div class="tool-group format-group" role="toolbar" aria-label="Formatting">
+          <button type="button" class="icon-btn" data-command="format.bold" aria-label="Bold" title="Bold"><b aria-hidden="true">B</b></button>
+          <button type="button" class="icon-btn" data-command="format.italic" aria-label="Italic" title="Italic"><i aria-hidden="true">I</i></button>
+          <button type="button" class="icon-btn" data-command="format.heading" aria-label="Heading" title="Heading"><span aria-hidden="true" class="glyph">H</span></button>
+          <button type="button" class="icon-btn" data-command="format.link" aria-label="Link" title="Link">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6.5 9.5a2.5 2.5 0 0 0 3.5 0l2.5-2.5a2.5 2.5 0 0 0-3.5-3.5l-.8.8M9.5 6.5a2.5 2.5 0 0 0-3.5 0L3.5 9a2.5 2.5 0 0 0 3.5 3.5l.8-.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+          </button>
+          <button type="button" class="icon-btn" data-command="insert.codeBlock" aria-label="Code block" title="Code block">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M5.5 4 1.8 8l3.7 4M10.5 4l3.7 4-3.7 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <button type="button" class="icon-btn" data-command="insert.table" aria-label="Insert table" title="Insert table">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><rect x="1.75" y="2.75" width="12.5" height="10.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M1.75 6.5h12.5M6 6.5v6.75" stroke="currentColor" stroke-width="1.5" /></svg>
+          </button>
+          <button type="button" class="icon-btn" data-command="format.taskList" aria-label="Task list" title="Task list">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><rect x="1.75" y="2.75" width="5" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="m2.9 5.2 1.1 1.1 1.7-2M9 5.25h5.25M9 11.25h5.25" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><rect x="1.75" y="8.75" width="5" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+          </button>
+          <button type="button" class="icon-btn" data-command="insert.toc" aria-label="Insert table of contents" title="Insert table of contents">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 3.5h1M5 3.5h9M2 8h1M7 8h7M2 12.5h1M7 12.5h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+          </button>
+          <button type="button" class="icon-btn" data-command="insert.mermaid" aria-label="Insert Mermaid diagram" title="Insert Mermaid diagram">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><rect x="1.75" y="1.75" width="5" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" /><rect x="9.25" y="10.25" width="5" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M4.25 5.75v3.5a1 1 0 0 0 1 1h4" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+          </button>
+        </div>
+
+        <fieldset class="segmented" id="st-view-modes">
+          <legend class="sr-only">View mode</legend>
+          <button type="button" aria-pressed="false" data-mode="source" data-testid="mode-source">Source</button>
+          <button type="button" aria-pressed="true" data-mode="split" data-testid="mode-split">Split</button>
+          <button type="button" aria-pressed="false" data-mode="preview" data-testid="mode-preview">Preview</button>
+          <button type="button" aria-pressed="false" data-mode="readonly" data-testid="mode-readonly">Read-only</button>
+        </fieldset>
+
+        <div class="tool-group tool-end" role="toolbar" aria-label="App">
+          <button type="button" class="btn btn-commands" data-command="app.palette" aria-keyshortcuts="Control+K Meta+K">
+            Commands <kbd class="kbd" id="st-palette-kbd">Ctrl K</kbd>
+          </button>
+          <button type="button" class="icon-btn" id="st-outline-toggle" aria-pressed="true" aria-controls="st-outline-panel" data-command="view.outline" aria-label="Outline panel" title="Outline panel">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><rect x="1.75" y="2.75" width="12.5" height="10.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M6 2.75v10.5" stroke="currentColor" stroke-width="1.5" /></svg>
+          </button>
+          <button type="button" class="icon-btn" data-testid="focus-mode" data-command="view.focus" aria-label="Focus mode" title="Focus mode">
+            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M1.75 5.5V2.75a1 1 0 0 1 1-1H5.5M10.5 1.75h2.75a1 1 0 0 1 1 1V5.5M14.25 10.5v2.75a1 1 0 0 1-1 1H10.5M5.5 14.25H2.75a1 1 0 0 1-1-1V10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+          </button>
+          <button type="button" class="btn theme-btn" data-testid="theme-toggle" data-command="view.theme" id="st-theme-toggle">
+            <svg class="theme-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor" /></svg>
+            <span id="st-theme-label">Auto</span>
+          </button>
+          <div class="menu-wrap">
+            <button type="button" class="icon-btn" id="st-settings-button" aria-expanded="false" aria-controls="st-settings-panel" aria-label="Settings" title="Settings" data-testid="settings">
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M2 4h6M11 4h3M2 12h2M7 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /><circle cx="9.5" cy="4" r="1.75" fill="none" stroke="currentColor" stroke-width="1.5" /><circle cx="5.5" cy="12" r="1.75" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+            </button>
+            <div class="popover settings" id="st-settings-panel" role="dialog" aria-labelledby="st-settings-title" hidden>
+              <h2 class="popover-title" id="st-settings-title">Settings</h2>
+              <div class="setting-list" id="st-settings-list"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <button type="button" class="btn focus-exit" id="st-focus-exit" data-testid="focus-exit" hidden>Exit focus mode <kbd class="kbd">Esc</kbd></button>
+
+      <div class="workspace">
+        <nav class="outline-panel" id="st-outline-panel" aria-labelledby="st-outline-title" data-testid="outline">
+          <h2 class="panel-title" id="st-outline-title">Outline</h2>
+          <ul class="outline-tree" id="st-outline-tree"></ul>
+          <p class="empty" id="st-outline-empty" hidden>No headings yet.</p>
+        </nav>
+
+        <main class="panes" id="st-panes">
+          <div class="pane-tabs" role="tablist" aria-label="Visible pane">
+            <button type="button" role="tab" id="st-tab-editor" aria-controls="st-editor-pane" aria-selected="true" data-pane="editor">Editor</button>
+            <button type="button" role="tab" id="st-tab-preview" aria-controls="st-preview-pane" aria-selected="false" tabindex="-1" data-pane="preview">Preview</button>
+          </div>
+          <section class="pane editor-pane" id="st-editor-pane" aria-label="Editor" tabindex="-1">
+            <div class="editor-host" id="st-editor" data-testid="editor"></div>
+            <div class="drop-hint" id="st-drop-hint" hidden>Drop a Markdown file to open it</div>
+          </section>
+          <section class="pane preview-pane" id="st-preview-pane" aria-label="Preview">
+            <!-- biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be reachable by keyboard (WCAG 2.1.1) -->
+            <div class="preview-scroll" id="st-preview" data-testid="preview" tabindex="0">
+              <article class="markupme" id="st-preview-article" aria-busy="true"></article>
+            </div>
+          </section>
+        </main>
+
+        <aside class="problems" id="st-problems" aria-labelledby="st-problems-title">
+          <div class="problems-head">
+            <h2 class="panel-title" id="st-problems-title">
+              <button type="button" class="disclosure" id="st-problems-toggle" aria-expanded="true" aria-controls="st-diagnostics-list">
+                <svg class="chev" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M4.4 6.2 8 9.8l3.6-3.6" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+                Problems
+              </button>
+            </h2>
+            <span class="badge" id="st-diagnostics-count" data-testid="diagnostics-count">0</span>
+          </div>
+          <ul class="diagnostics" id="st-diagnostics-list" data-testid="diagnostics"></ul>
+        </aside>
+      </div>
+
+      <footer class="statusbar" data-testid="status">
+        <span id="st-word-count" data-testid="word-count">0 words</span>
+        <span id="st-reading-time">0 min read</span>
+        <span id="st-cursor-pos">Ln 1, Col 1</span>
+        <span class="status-spacer"></span>
+        <span id="st-save-state" class="save-state">Saved</span>
+      </footer>
+      <div class="sr-only" id="st-announcer" role="status" aria-live="polite"></div>
+
+      <dialog class="palette" id="st-command-palette" data-testid="command-palette" aria-modal="true" aria-labelledby="st-palette-title">
+        <h2 class="sr-only" id="st-palette-title">Command palette</h2>
+        <label class="sr-only" for="st-command-input">Search commands</label>
+        <input
+          id="st-command-input"
+          data-testid="command-input"
+          type="text"
+          role="combobox"
+          aria-expanded="true"
+          aria-controls="st-command-list"
+          aria-autocomplete="list"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Type a command"
+        />
+        <div class="palette-list" id="st-command-list" role="listbox" aria-label="Commands"></div>
+        <p class="empty" id="st-command-empty" hidden>No matching commands.</p>
+      </dialog>
+
+      <dialog class="confirm" id="st-confirm-dialog" aria-modal="true" aria-labelledby="st-confirm-title" aria-describedby="st-confirm-message">
+        <h2 class="confirm-title" id="st-confirm-title">Start a new document?</h2>
+        <p id="st-confirm-message">The current document will be replaced. Download it first if you want to keep it.</p>
+        <div class="confirm-actions">
+          <button type="button" class="btn" id="st-confirm-cancel" data-testid="confirm-cancel">Cancel</button>
+          <button type="button" class="btn btn-danger" id="st-confirm-ok" data-testid="confirm-ok">Discard and start new</button>
+        </div>
+      </dialog>
+    </div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
