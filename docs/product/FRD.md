@@ -6,7 +6,7 @@
 Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B document model, C rendering, D editing, E diagrams, F SDK, G CLI. "Shall" is mandatory. Status:
 
 - **built**: in the repository and covered by a unit test.
-- **in progress**: being built in Phase 1 (studio, VS Code extension, React component); no test results yet.
+- **in progress**: being built; no test results yet. (All Phase 1 editor items are now built.)
 - **planned**: later phase; the CLI exits 64 or the API returns 501 where applicable.
 
 ## A. Engine
@@ -71,12 +71,12 @@ Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B doc
 | ID | Requirement | Status |
 | -- | ----------- | ------ |
 | FR-D01 | `markupme serve` shall offer a playground at `/__markupme/playground`: a Markdown textarea, TOC/math/emoji/line-number options, a render button, a live preview and a diagnostics list, all with `data-testid` hooks. | built |
-| FR-D02 | The studio (`apps/studio`) shall provide a CodeMirror 6 source editor with Markdown highlighting. | in progress |
-| FR-D03 | The studio shall offer source, split and preview modes. | in progress |
-| FR-D04 | The studio shall show a document outline from `outline()` and jump to a heading on click. | in progress |
-| FR-D05 | The studio shall have a command palette. | in progress |
-| FR-D06 | The studio shall autosave to local browser storage and restore on reload. | in progress |
-| FR-D07 | The studio shall export HTML and Markdown. | in progress |
+| FR-D02 | The studio (`apps/studio`) shall provide a CodeMirror 6 source editor with Markdown highlighting. | built |
+| FR-D03 | The studio shall offer source, split and preview modes. | built |
+| FR-D04 | The studio shall show a document outline from `outline()` and jump to a heading on click. | built |
+| FR-D05 | The studio shall have a command palette. | built |
+| FR-D06 | The studio shall autosave to local browser storage and restore on reload. | built |
+| FR-D07 | The studio shall export HTML and Markdown. | built |
 | FR-D08 | The VS Code extension shall show a preview in a webview rendered with `@markupme/core`, including diagrams. | built |
 | FR-D09 | The VS Code extension shall offer commands to export HTML, insert a TOC and format the document. | built |
 | FR-D10 | The VS Code extension shall publish `validate` diagnostics to the Problems panel. | built |

@@ -5,7 +5,8 @@ name: release
 # other exactly, so bump them together. Needs the NPM_TOKEN repository secret (written from
 # Yarlis Keep), or trusted publishing (OIDC) on npmjs.com with the repository variable
 # NPM_TRUSTED_PUBLISHING=true. Without either it skips with a notice. The repository is
-# public, so packages carry npm provenance.
+# public, so packages carry npm provenance. Both jobs run only when the repository variable
+# RELEASE_ENABLED is 'true', so merging never publishes by surprise.
 
 on:
   push:
@@ -23,6 +24,8 @@ concurrency:
 
 jobs:
   publish:
+    # Nothing is published until a person sets the repository variable RELEASE_ENABLED=true.
+    if: vars.RELEASE_ENABLED == 'true'
     runs-on: ubuntu-latest
     strategy:
       # Dependency order: each package only depends on the ones before it.
@@ -87,6 +90,7 @@ jobs:
 
   # The VS Code extension is not on npm: each new version becomes a GitHub release with the .vsix.
   vscode:
+    if: vars.RELEASE_ENABLED == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

@@ -443,7 +443,7 @@ Current status of the larger items, as tracked in the [implementation plan](../i
 | HTML, standalone page, Markdown, JSON AST, text, static site | built |
 | Mermaid (browser), Blueprint, Graphviz | built |
 | PlantUML, C4, Structurizr, D2 via Kroki | built, opt-in |
-| Web studio (`apps/studio`) | planned (in progress, Phase 1, branch `feat/studio`) |
+| Web studio (`apps/studio`) | built |
 | VS Code extension (`packages/vscode`) | built |
 | React component (`@markupme/react`) | built |
 | PDF, DOCX, MDX output; rich-text editing; Marketplace listing | planned, Phase 2 |

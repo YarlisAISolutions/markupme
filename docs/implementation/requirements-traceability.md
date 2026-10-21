@@ -11,7 +11,7 @@ Each row links a requirement to the code that implements it, the vitest test tha
   - **verified**: code, a passing unit test and a passing SDODS scenario.
   - **built**: code and a passing unit test (no end-to-end scenario, or not applicable).
   - **built, no test**: code exists, no automated test.
-  - **in progress**: Phase 1 work on `feat/studio` / `feat/vscode`.
+  - **in progress**: work on an open branch (none for Phase 1 now).
   - **planned**: later phase.
 
 ## A. Engine
@@ -76,12 +76,12 @@ Each row links a requirement to the code that implements it, the vitest test tha
 | Req | Package / file | Test | SDODS | Status |
 | --- | -------------- | ---- | ----- | ------ |
 | FR-D01 | cli `src/commands/serve.ts` (`playgroundPage`) | `cli.test.ts::serve API › serves rendered pages and refuses path traversal` (status 200); `cli.test.ts::serve API lint option › adds rule diagnostics to a render when lint is true` | Playground › The playground loads with a rendered sample; › Typing updates the preview; › Problems show up as diagnostics; › The playground is accessible | verified |
-| FR-D02 | `apps/studio` | none yet | Studio (planned) | in progress |
-| FR-D03 | `apps/studio` | none yet | Studio (planned) | in progress |
-| FR-D04 | `apps/studio` | none yet | Studio (planned) | in progress |
-| FR-D05 | `apps/studio` | none yet | Studio (planned) | in progress |
-| FR-D06 | `apps/studio` | none yet | Studio (planned) | in progress |
-| FR-D07 | `apps/studio` | none yet | Studio (planned) | in progress |
+| FR-D02 | `apps/studio/src/editor.ts` | `apps/studio/test/format.test.ts` | MarkupMe Studio › Editing updates the preview, outline and word count | verified |
+| FR-D03 | `apps/studio/src/main.ts` | `apps/studio/test/sync.test.ts` | MarkupMe Studio › View modes switch between source and preview | verified |
+| FR-D04 | `apps/studio/src/outline.ts` | `apps/studio/test/sync.test.ts` | MarkupMe Studio › The studio loads with the welcome document rendered | verified |
+| FR-D05 | `apps/studio/src/palette.ts`, `commands.ts` | `apps/studio/test/commands.test.ts` | MarkupMe Studio › The command palette opens from the keyboard and closes with Escape | verified |
+| FR-D06 | `apps/studio/src/storage.ts` | `apps/studio/test/storage.test.ts` | none (unit + browser check) | verified |
+| FR-D07 | `apps/studio/src/export.ts` | `apps/studio/test/export.test.ts` | MarkupMe Studio › The document exports as Markdown | verified |
 | FR-D08 | `packages/vscode` | `packages/vscode/test/html.test.ts`, `lines.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
 | FR-D09 | `packages/vscode` | `packages/vscode/test/toc.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
 | FR-D10 | `packages/vscode` | `packages/vscode/test/diagnostics.test.ts`; live test `scripts/e2e.mjs` | none (editor) | built |
@@ -171,7 +171,7 @@ Repository `YarlisAISolutions/markupme-qa` (PRs #1 and #2 merged), project `mark
 | `02-validate/validate-api.feature` | Validate and stats API | `@api @validate` | Broken links, skipped headings and missing alt text are reported; A clean document passes; Stats count words, headings, tasks and code languages | PR#1 | passing |
 | `03-playground/playground.feature` | Playground | `@ui @playground` (`@a11y`, `@dark`) | The playground loads with a rendered sample; Typing updates the preview; Problems show up as diagnostics; The playground is accessible; The theme toggle switches to dark mode | PR#1 | passing |
 | `04-pages/rendered-pages.feature` | Rendered pages | `@ui @pages` (`@diagrams`, `@security`, `@a11y`) | The kitchen sink renders every block type; Server-side and browser diagrams render; Raw HTML in the source is sanitized in the page; The page structure is accessible; In-page links navigate to their heading | PR#1 | passing |
-| (to write) | Studio | `@ui @studio` | Modes, outline jump, command palette, autosave restore, export | PR#2 | planned |
+| `06-studio/studio.feature` | MarkupMe Studio | `@ui @studio` | Rendering with diagrams, live editing, outline, problems, sanitizing, view modes, command palette, accessibility, dark mode, export (9 scenarios) | PR#4 | built |
 | (to write) | VS Code extension, React component | n/a (extension and package tests) | Preview, diagnostics, export; React render without script | PR#3 | planned |
 
 Gaps in end-to-end coverage today: HTTP 413, 404 and `BAD_JSON` errors; `/api/render` with `lint: true` (covered indirectly by the playground diagnostics scenario); math and emoji; dark-theme contrast; Kroki.

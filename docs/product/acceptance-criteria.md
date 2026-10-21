@@ -108,7 +108,7 @@ No criterion here is met yet. The studio criteria will be verified by a new SDOD
 
 | ID | Criterion | Requirement | Verified by | Status |
 | -- | --------- | ----------- | ----------- | ------ |
-| AC-090 | The studio loads `examples/kitchen-sink.md`, and its preview HTML equals `markupme render` of the same file (diagrams aside). | FR-D02, FR-D03 | SDODS `@ui` `Studio` (planned) | in progress |
+| AC-090 | The studio loads its welcome document and renders it with Graphviz, Blueprint and Mermaid diagrams; edits update the preview, outline and problems. | FR-D02, FR-D03, FR-D04 | SDODS `MarkupMe Studio › The studio loads with the welcome document rendered`, `› Editing updates the preview, outline and word count`, `› Problems are listed with their rule codes` | met |
 | AC-091 | Clicking an outline entry moves the editor to that heading. | FR-D04 | SDODS `Studio` (planned) | in progress |
 | AC-092 | The command palette opens with a keyboard shortcut and runs "Insert TOC". | FR-D05 | SDODS `Studio` (planned) | in progress |
 | AC-093 | After a reload, the last edited text is restored from local storage. | FR-D06 | SDODS `Studio` (planned) | in progress |
