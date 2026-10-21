@@ -1,9 +1,8 @@
-# Org security suite from YarlisAISolutions/bastion: gitleaks, Semgrep,
-# OSV-Scanner and Trivy (filesystem). Strategy: bastion/docs/security-strategy.md
-#
-# Rollout: enforce is false for the first ~2 weeks, so findings are annotated
-# but don't fail. Fix them or waive them in bastion/policies/exceptions.yaml,
-# then set enforce: true and make the checks required in the org ruleset.
+# Dependency vulnerability scan with OSV-Scanner (public reusable workflows).
+# The org suite in YarlisAISolutions/bastion can't be used here: bastion is private
+# and GitHub does not let a public repository call a private repository's reusable
+# workflow. Secret scanning runs in ci.yml (gitleaks). Switch back to the bastion
+# suite when it is published for public repositories.
 name: Security
 
 on:
@@ -18,16 +17,22 @@ permissions:
   contents: read
 
 jobs:
-  security:
-    # The union of what the nested workflows request; they can only narrow it.
+  osv-scan:
+    if: github.event_name != 'pull_request'
     permissions:
       contents: read
       security-events: write
-      pull-requests: write
-      id-token: write
       actions: read
-    uses: YarlisAISolutions/bastion/.github/workflows/security-suite.yml@f99222d27487e2da44235bf2aab5ef268f17de90 # v0.5.0
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
     with:
-      image-ref: ""        # images are scanned in the build that pushes them
-      run-ai-review: false # true once the repo has a CLAUDE_API_KEY secret
-      enforce: false
+      fail-on-vuln: false
+
+  osv-scan-pr:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@b1d267aea5211fa648d9d442fa64b90dbdcbdd36 # v2.7.0
+    with:
+      fail-on-vuln: false
