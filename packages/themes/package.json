@@ -1,0 +1,48 @@
+{
+  "name": "@markupme/themes",
+  "version": "0.1.0",
+  "description": "MarkupMe themes: accessible light/dark/print CSS and a tiny runtime (copy buttons, theme toggle, Mermaid) plus a standalone HTML document wrapper.",
+  "license": "MIT",
+  "author": "Yarlis AI Solutions",
+  "homepage": "https://github.com/YarlisAISolutions/markupme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarlisAISolutions/markupme.git",
+    "directory": "packages/themes"
+  },
+  "bugs": "https://github.com/YarlisAISolutions/markupme/issues",
+  "keywords": [
+    "markdown",
+    "css",
+    "theme",
+    "dark-mode",
+    "markupme"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./markupme.css": "./dist/markupme.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && node -e \"import('./dist/index.js').then(m=>require('node:fs').writeFileSync('dist/markupme.css',m.markupmeCss.trimStart()))\"",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=22"
+  }
+}

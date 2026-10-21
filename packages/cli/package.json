@@ -1,0 +1,70 @@
+{
+  "name": "@markupme/cli",
+  "version": "0.1.0",
+  "description": "markupme: the MarkupMe command line. Render Markdown to HTML, Markdown, AST or text with diagrams and highlighting, lint, format, build TOCs and static sites, and preview with live reload.",
+  "license": "MIT",
+  "author": "Yarlis AI Solutions",
+  "homepage": "https://github.com/YarlisAISolutions/markupme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarlisAISolutions/markupme.git",
+    "directory": "packages/cli"
+  },
+  "bugs": "https://github.com/YarlisAISolutions/markupme/issues",
+  "keywords": [
+    "markdown",
+    "cli",
+    "html",
+    "lint",
+    "format",
+    "toc",
+    "diagrams",
+    "mermaid",
+    "static-site",
+    "markupme"
+  ],
+  "type": "module",
+  "bin": {
+    "markupme": "dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && chmod +x dist/bin.js",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@markupme/core": "0.1.0",
+    "@markupme/diagrams": "0.1.0",
+    "@markupme/highlight": "0.1.0",
+    "@markupme/themes": "0.1.0",
+    "commander": "15.0.0",
+    "katex": "0.16.47",
+    "mermaid": "12.2.0"
+  },
+  "peerDependencies": {
+    "playwright": ">=1.40"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

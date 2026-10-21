@@ -1,0 +1,33 @@
+# Org security suite from YarlisAISolutions/bastion: gitleaks, Semgrep,
+# OSV-Scanner and Trivy (filesystem). Strategy: bastion/docs/security-strategy.md
+#
+# Rollout: enforce is false for the first ~2 weeks, so findings are annotated
+# but don't fail. Fix them or waive them in bastion/policies/exceptions.yaml,
+# then set enforce: true and make the checks required in the org ruleset.
+name: Security
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "41 6 * * 1" # Mondays 06:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  security:
+    # The union of what the nested workflows request; they can only narrow it.
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+      id-token: write
+      actions: read
+    uses: YarlisAISolutions/bastion/.github/workflows/security-suite.yml@f99222d27487e2da44235bf2aab5ef268f17de90 # v0.5.0
+    with:
+      image-ref: ""        # images are scanned in the build that pushes them
+      run-ai-review: false # true once the repo has a CLAUDE_API_KEY secret
+      enforce: false

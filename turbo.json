@@ -1,0 +1,20 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "type-check": {
+      "dependsOn": ["^build", "build"]
+    },
+    "test": {
+      "dependsOn": ["^build", "build"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  },
+  "globalPassThroughEnv": ["TMPDIR", "GITHUB_ACTIONS", "CI"]
+}

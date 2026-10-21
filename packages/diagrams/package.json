@@ -1,0 +1,59 @@
+{
+  "name": "@markupme/diagrams",
+  "version": "0.1.0",
+  "description": "MarkupMe diagrams: a provider interface with Blueprint, Graphviz, Mermaid and Kroki (PlantUML, Structurizr, C4) adapters, SVG sanitizing and caching.",
+  "license": "MIT",
+  "author": "Yarlis AI Solutions",
+  "homepage": "https://github.com/YarlisAISolutions/markupme#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarlisAISolutions/markupme.git",
+    "directory": "packages/diagrams"
+  },
+  "bugs": "https://github.com/YarlisAISolutions/markupme/issues",
+  "keywords": [
+    "markdown",
+    "diagrams",
+    "mermaid",
+    "graphviz",
+    "plantuml",
+    "structurizr",
+    "c4",
+    "blueprint",
+    "markupme"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.tsbuildinfo"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "prepublishOnly": "bun run build"
+  },
+  "dependencies": {
+    "@bpview/core": "0.1.0",
+    "@types/hast": "3.0.5",
+    "@hpcc-js/wasm-graphviz": "1.29.2",
+    "@markupme/core": "0.1.0",
+    "hast-util-from-html": "2.0.3",
+    "hast-util-to-html": "9.0.5",
+    "unist-util-visit": "5.1.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

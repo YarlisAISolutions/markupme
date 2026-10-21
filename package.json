@@ -1,0 +1,27 @@
+{
+  "name": "markupme",
+  "private": true,
+  "packageManager": "bun@1.4.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "lint": "biome check --write .",
+    "lint:check": "biome ci ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/node": "22.20.5",
+    "turbo": "2.11.10",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5"
+  }
+}

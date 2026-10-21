@@ -1,0 +1,86 @@
+name: release
+
+# Publishes each @markupme/* package whose package.json carries a version npm doesn't have
+# yet, in dependency order. Bump versions in a PR; merging it publishes. Packages pin each
+# other exactly, so bump them together. Needs the NPM_TOKEN repository secret (written from
+# Yarlis Keep), or trusted publishing (OIDC) on npmjs.com with the repository variable
+# NPM_TRUSTED_PUBLISHING=true. Without either it skips with a notice. The repository is
+# public, so packages carry npm provenance.
+
+on:
+  push:
+    branches: [main]
+    paths: ['packages/*/package.json']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      # Dependency order: each package only depends on the ones before it.
+      max-parallel: 1
+      matrix:
+        package: [core, highlight, themes, diagrams, react, cli]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm >= 11.5.1; node 22 bundles npm 10.
+      - run: npm install -g npm@11.5.1
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.4.0
+      - id: check
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          TRUSTED: ${{ vars.NPM_TRUSTED_PUBLISHING }}
+          PKG: ${{ matrix.package }}
+        run: |
+          if [ ! -f "packages/$PKG/package.json" ]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"; echo "packages/$PKG does not exist yet"; exit 0
+          fi
+          cd "packages/$PKG"
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"; echo "$name@$version is already on npm"
+          elif [ -z "$NPM_TOKEN" ] && [ "$TRUSTED" != 'true' ]; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::no NPM_TOKEN and NPM_TRUSTED_PUBLISHING is not true; not publishing $name@$version"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.publish == 'true'
+        run: bun install --frozen-lockfile && bunx turbo run build test --filter="./packages/*"
+      - name: wait for the @markupme versions this package needs
+        if: steps.check.outputs.publish == 'true'
+        working-directory: packages/${{ matrix.package }}
+        run: |
+          for dep in $(node -p "Object.entries(require('./package.json').dependencies ?? {}).filter(([n]) => n.startsWith('@markupme/')).map(([n, v]) => n + '@' + v).join(' ')"); do
+            for _ in $(seq 1 30); do npm view "$dep" version >/dev/null 2>&1 && continue 2; sleep 10; done
+            echo "::error::$dep is not on npm; publish it first"; exit 1
+          done
+      - name: Publish
+        if: steps.check.outputs.publish == 'true'
+        working-directory: packages/${{ matrix.package }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
+      - name: Tag
+        if: steps.check.outputs.publish == 'true'
+        run: |
+          tag="${{ matrix.package }}-v${{ steps.check.outputs.version }}"
+          git tag "$tag"
+          git push origin "$tag"
