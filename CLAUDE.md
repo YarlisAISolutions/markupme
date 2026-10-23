@@ -29,7 +29,7 @@ Rules for agents (and people) working in this repository. Read [README.md](READM
 6. **Stable contracts.** Diagnostic codes (`MMxxx`), exit codes (0/1/2/3/64), the `Diagnostic` shape and `SCHEMA_VERSION` change only on purpose, with a CHANGELOG entry.
 7. **Versions in sync.** `VERSION` in `packages/core/src/version.ts` equals `packages/core/package.json` (a test checks it). Internal dependencies use the same exact version. Bump them together.
 8. **No network by default.** No CDN URLs in output unless the user passes `--mermaid-url`; Kroki only with a configured server.
-9. **Exact dependency versions**, no ranges. Keep the runtime pins (Node 22, Bun 1.4).
+9. **Exact dependency versions**, no ranges. Keep the runtime pins (Node 24.22.1, Bun 1.4).
 10. **Docs stay true.** When you change behaviour, update `docs/guide/*`, the FRD row status and `docs/implementation/requirements-traceability.md`.
 
 ## Before claiming done
