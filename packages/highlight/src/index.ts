@@ -1,4 +1,4 @@
-import type { CodeBlock, CodeBlockHandler } from '@markupme/core'
+import { type CodeBlock, type CodeBlockHandler, escapeHtml } from '@markupme/core'
 import {
   type BundledLanguage,
   type BundledTheme,
@@ -51,9 +51,7 @@ export function parseMeta(meta: string | undefined): CodeMeta {
   return out
 }
 
-export function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
-}
+export { escapeHtml }
 
 const ALIASES: Record<string, string> = {
   sh: 'bash',

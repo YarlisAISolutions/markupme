@@ -4,6 +4,14 @@ import { visit } from 'unist-util-visit'
 
 export { visit }
 
+/**
+ * Escapes `& < > " '` as numeric character references, for text and attribute values in HTML that
+ * code block handlers and page templates build by hand.
+ */
+export function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
+}
+
 /** All nodes of a type (or matching a predicate), in document order. */
 export function query<T extends Nodes['type']>(tree: Root, type: T): Extract<Nodes, { type: T }>[]
 export function query(tree: Root, test: (node: Nodes) => boolean): Nodes[]

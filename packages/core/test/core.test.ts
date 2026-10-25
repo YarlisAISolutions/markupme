@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   createProcessor,
   diff,
+  escapeHtml,
   type MarkupMePlugin,
   outline,
   parse,
@@ -303,4 +304,16 @@ it('runs plugin rehype hooks before sanitizing', async () => {
   }
   const out = (await createProcessor({ plugins: [plugin] }).render('Hello')).output
   expect(out).toBe('<p class="mm-note">Hello</p>')
+})
+
+describe('escapeHtml', () => {
+  it('escapes the five HTML-special characters as numeric references', () => {
+    expect(escapeHtml(`<a href="x" title='y'>&</a>`)).toBe(
+      '&#60;a href=&#34;x&#34; title=&#39;y&#39;&#62;&#38;&#60;/a&#62;',
+    )
+  })
+
+  it('leaves other text alone', () => {
+    expect(escapeHtml('plain text, 1 + 1 = 2 ü')).toBe('plain text, 1 + 1 = 2 ü')
+  })
 })

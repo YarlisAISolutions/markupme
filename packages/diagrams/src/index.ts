@@ -1,4 +1,4 @@
-import type { CodeBlockHandler, Diagnostic } from '@markupme/core'
+import { type CodeBlockHandler, type Diagnostic, escapeHtml } from '@markupme/core'
 import { sanitizeSvg } from './sanitize-svg.js'
 
 export { sanitizeSvg }
@@ -38,10 +38,6 @@ export class DiagramError extends Error {
     super(message)
     this.name = 'DiagramError'
   }
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 }
 
 /** Yarlis Blueprint (`ybp`, `blueprint`, `blueprint-yaml`), deterministic SVG via @bpview/core. */
@@ -245,6 +241,64 @@ export function diagramHandler(options: DiagramOptions = {}): DiagramHandler {
     clearCache: { value: () => cache.clear() },
   })
   return handler
+}
+
+/** Why a provider id from configuration produced no provider. */
+export interface ProviderProblem {
+  id: string
+  /** `unknown`: no provider has this id. `needs-server`: `kroki` listed without a server URL. */
+  reason: 'unknown' | 'needs-server'
+}
+
+export interface ProvidersFromIds {
+  providers: DiagramProvider[]
+  /** In the order the ids were given. */
+  problems: ProviderProblem[]
+}
+
+/**
+ * Turns configured provider ids (`blueprint`, `graphviz`, `mermaid`, `kroki`, `none`) into
+ * providers, in the order given. A Kroki provider is added last whenever `server` is set; listing
+ * `kroki` without a server is reported, as is any id no provider has. Problems are returned, not
+ * thrown, so each caller decides whether one is an error or a warning.
+ */
+export function providersFromIds(ids: readonly string[], server?: string): ProvidersFromIds {
+  const providers: DiagramProvider[] = []
+  const problems: ProviderProblem[] = []
+  for (const id of ids) {
+    if (id === 'blueprint') providers.push(blueprintProvider())
+    else if (id === 'graphviz') providers.push(graphvizProvider())
+    else if (id === 'mermaid') providers.push(mermaidProvider())
+    else if (id === 'kroki') {
+      if (!server) problems.push({ id, reason: 'needs-server' })
+    } else if (id !== 'none') problems.push({ id, reason: 'unknown' })
+  }
+  if (server) providers.push(krokiProvider({ server }))
+  return { providers, problems }
+}
+
+export interface CodeBlockHandlerOptions {
+  providers: DiagramProvider[]
+  theme?: DiagramTheme
+  /**
+   * Builds the handler that runs after diagrams (such as `highlightHandler`), given the fence
+   * languages the diagram handler takes so it can skip them. Omit it for diagrams only.
+   */
+  next?: (skip: string[]) => CodeBlockHandler
+}
+
+/**
+ * The code block handlers in the order MarkupMe runs them: diagrams first (only when there are
+ * providers), then the `next` handler with the diagram languages to skip.
+ */
+export function codeBlockHandlers(options: CodeBlockHandlerOptions): CodeBlockHandler[] {
+  const { providers, theme, next } = options
+  const handlers: CodeBlockHandler[] = []
+  const diagrams =
+    providers.length > 0 ? diagramHandler({ providers, ...(theme ? { theme } : {}) }) : undefined
+  if (diagrams) handlers.push(diagrams)
+  if (next) handlers.push(next(diagrams?.langs ?? []))
+  return handlers
 }
 
 export interface ExtractedDiagram {

@@ -23,6 +23,7 @@ export {
   type BlockChange,
   type DocumentStats,
   diff,
+  escapeHtml,
   query,
   stats,
   stripPositions,

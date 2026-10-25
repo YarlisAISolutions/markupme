@@ -1,5 +1,7 @@
 /** Webview HTML and its Content Security Policy. No `vscode` import, so it can be tested. */
 
+import { escapeHtml } from '@markupme/core'
+
 /** A random nonce for one webview page load. */
 export function createNonce(random: (n: number) => Uint8Array = defaultRandom): string {
   return Buffer.from(random(18))
@@ -29,9 +31,8 @@ export function buildCsp(cspSource: string, nonce: string): string {
   ].join('; ')
 }
 
-export function escapeAttr(s: string): string {
-  return s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
-}
+/** Escapes an attribute value (the shared `escapeHtml` from @markupme/core). */
+export const escapeAttr: (s: string) => string = escapeHtml
 
 export interface PreviewPageOptions {
   cspSource: string
