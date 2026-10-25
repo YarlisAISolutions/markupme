@@ -25,7 +25,7 @@
     "@markupme/diagrams": "0.1.0",
     "@markupme/highlight": "0.1.0",
     "@markupme/themes": "0.1.0",
-    "katex": "0.16.47",
+    "katex": "0.18.11",
     "mermaid": "12.2.0"
   },
   "devDependencies": {

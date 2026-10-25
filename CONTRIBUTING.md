@@ -62,6 +62,17 @@ Every pull request runs `.github/workflows/ci.yml`:
 - `e2e`: starts `markupme serve examples --port 4321` and runs the SDODS api and ui suites from markupme-qa, with a minimum of 15 api and 10 ui scenarios.
 - `gitleaks`: secret scan.
 
+### Dependency overrides
+
+The root `package.json` `overrides` force a patched version of a transitive dependency when the package that pulls it in has not caught up. Each one has a reason and a condition for removing it:
+
+| Override | Advisory | Pulled in by | Remove when |
+| -------- | -------- | ------------ | ----------- |
+| `@azure/msal-node` 7.1.1 | [GHSA-xcx6-jx8p-x3h5](https://github.com/advisories/GHSA-xcx6-jx8p-x3h5) (fixed in 7.1.0, no 6.x fix) | `@vscode/vsce` → `@azure/identity` 4.14.0, which declares `^6.0.0` | `@azure/identity` allows `^7` |
+| `katex` 0.18.11 | [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) (fixed in 0.18.2, no 0.16.x fix) | `rehype-katex` 7.0.1 and `micromark-extension-math` 3.1.0, which declare `^0.16.0`; Mermaid 12.2.0 already uses 0.18 | both declare `^0.18` |
+
+The `@azure/msal-node` override is outside `@azure/identity`'s declared range. `@vscode/vsce` only reaches it for `--azure-credential` publishing, which no test covers and `vscode-publish.yml` does not use (it signs in with `VSCE_PAT`).
+
 `security.yml` runs OSV-Scanner on the dependencies. `release.yml` publishes the npm packages and creates the `.vsix` GitHub release when versions bump, but only while the repository variable `RELEASE_ENABLED` is `true`; do not bump versions in a feature pull request unless you are cutting a release.
 
 ### Publishing the VS Code extension
