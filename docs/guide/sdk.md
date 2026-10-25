@@ -32,9 +32,9 @@ The programmatic API of the MarkupMe packages. Signatures match `packages/*/src`
 
 | Package | Import | Main exports |
 | ------- | ------ | ------------ |
-| `@markupme/core` | `@markupme/core` | `createProcessor`, `parse`, `render`, `transform`, `serialize`, `validate`, `query`, `visit`, `diff`, `stats`, `outline`, `headingId`, `buildToc`, `insertToc`, `stripPositions`, `formatDiagnostic`, `RULES`, `markupmeSchema`, `SCHEMA_VERSION`, `MarkupMeError`, `VERSION`, `ALERT_TYPES`, `ALERT_TITLES`, `CALLOUTS`, `CONTAINERS`, `TEXT_DIRECTIVES`, `LEAF_DIRECTIVES`, all types |
+| `@markupme/core` | `@markupme/core` | `createProcessor`, `parse`, `render`, `transform`, `serialize`, `validate`, `query`, `visit`, `diff`, `stats`, `outline`, `headingId`, `buildToc`, `insertToc`, `stripPositions`, `escapeHtml`, `formatDiagnostic`, `RULES`, `markupmeSchema`, `SCHEMA_VERSION`, `MarkupMeError`, `VERSION`, `ALERT_TYPES`, `ALERT_TITLES`, `CALLOUTS`, `CONTAINERS`, `TEXT_DIRECTIVES`, `LEAF_DIRECTIVES`, all types |
 | `@markupme/highlight` | `@markupme/highlight` | `highlightHandler`, `parseMeta`, `escapeHtml` |
-| `@markupme/diagrams` | `@markupme/diagrams` | `diagramHandler`, `defaultProviders`, `blueprintProvider`, `graphvizProvider`, `mermaidProvider`, `krokiProvider`, `extractDiagrams`, `sanitizeSvg`, `DiagramError`, `KROKI_TYPES`, `MERMAID_LANGS` |
+| `@markupme/diagrams` | `@markupme/diagrams` | `diagramHandler`, `codeBlockHandlers`, `providersFromIds`, `defaultProviders`, `blueprintProvider`, `graphvizProvider`, `mermaidProvider`, `krokiProvider`, `extractDiagrams`, `sanitizeSvg`, `DiagramError`, `KROKI_TYPES`, `MERMAID_LANGS` |
 | `@markupme/themes` | `@markupme/themes` | `wrapDocument`, `markupmeCss`, `runtimeScript`, `escapeHtml` |
 | `@markupme/cli` | `@markupme/cli` | `run`, `startServer`, `createPipeline`, `mergeConfig`, `renderPage`, `CAPABILITIES`, `EXIT`, `CliError` (Node only) |
 | `@markupme/react` | | In progress, Phase 1. Not in the repository yet. |

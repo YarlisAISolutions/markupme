@@ -30,6 +30,7 @@ First version. Not yet published to npm.
 - `@markupme/react`: `<Markdown>`, `useMarkdown` and `renderToReact`, sanitized like the HTML output.
 - MarkupMe Studio (`apps/studio`): browser editor with live preview, diagrams, outline, problems, command palette, autosave, import and export, themes and focus mode.
 - Plugin `rehype` hooks run on the hast tree before sanitizing.
+- Shared helpers instead of copies: `escapeHtml` in `@markupme/core` (re-exported by `@markupme/highlight`); `providersFromIds` (provider ids to providers, with problems reported rather than thrown) and `codeBlockHandlers` (diagrams first, then highlighting) in `@markupme/diagrams`, used by the CLI and the VS Code extension. The VS Code extension now logs a warning for a diagram provider id it skips instead of ignoring it silently.
 - The `TocOptions.title` doc comment now says it sets the TOC's `aria-label` (default "Table of contents").
 
 ### Security
