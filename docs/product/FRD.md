@@ -123,7 +123,7 @@ Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B doc
 | FR-G06 | `markupme format` (`fmt`) shall print, `--write` or `--check` normalized Markdown; `--check` exits 1 when a file would change. | built |
 | FR-G07 | `markupme toc` shall insert or refresh a TOC between `<!-- toc -->` markers; `--write` and `--check`; idempotent. | built |
 | FR-G08 | `markupme build` shall create a static site: one page per Markdown file, `README.md` as `index.html`, `.md` links rewritten to `.html`, sidebar navigation, `search-index.json` with a search box, shared CSS, copied images. | built |
-| FR-G09 | `markupme serve` shall serve rendered pages with live reload (SSE), a diagnostics banner, the playground, local Mermaid and KaTeX assets, and block path traversal (403). | built |
+| FR-G09 | `markupme serve` shall serve rendered pages with live reload (SSE), a diagnostics banner, the playground, local Mermaid and KaTeX assets, and block path traversal (403), dotfiles (404) and a foreign `Host` header (403). | built |
 | FR-G10 | The serve API shall provide `GET /api/health`, `GET /api/capabilities`, `POST /api/render` (with an optional `lint: true` that adds rule diagnostics), `POST /api/validate`, `POST /api/stats` with JSON errors (400, 404, 405, 413, 500, 501). | built |
 | FR-G11 | `markupme diagram` shall list or export diagrams (see FR-E09). | built |
 | FR-G12 | `markupme parse` shall print the JSON document or `--outline`, with `--no-positions`. | built |

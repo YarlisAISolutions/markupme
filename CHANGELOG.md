@@ -31,3 +31,10 @@ First version. Not yet published to npm.
 - MarkupMe Studio (`apps/studio`): browser editor with live preview, diagrams, outline, problems, command palette, autosave, import and export, themes and focus mode.
 - Plugin `rehype` hooks run on the hast tree before sanitizing.
 - The `TocOptions.title` doc comment now says it sets the TOC's `aria-label` (default "Table of contents").
+
+### Security
+
+- `markupme serve` no longer serves dotfiles or dot folders (`.env`, `.git/…`): they return 404, as the file listing already hid them.
+- `markupme serve` refuses requests whose `Host` header is not `localhost`, a `*.localhost` name, an IP address or the `--host` value (403), so a DNS rebinding page cannot read the served folder.
+- `markupme serve` answers 500 for a file it cannot read instead of crashing.
+- KaTeX 0.18.11 (GHSA-238p-pmpm-9mq7), the same version Mermaid uses; `@azure/msal-node` 7.1.1 through a root override (GHSA-xcx6-jx8p-x3h5, pulled in by `@vscode/vsce`). Both fixes apply inside this repository only: root `overrides` are ignored when someone installs a published package, so `@markupme/core` installed from npm would still get KaTeX 0.16 through `rehype-katex` 7.0.1. This must be fixed before the first npm publish.

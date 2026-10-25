@@ -1,6 +1,7 @@
 import { createReadStream, existsSync, watch as fsWatch, readFileSync, statSync } from 'node:fs'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
+import { isIP } from 'node:net'
 import { basename, dirname, extname, join, normalize, relative, resolve, sep } from 'node:path'
 import { stats, VERSION } from '@markupme/core'
 import { escapeHtml, wrapDocument } from '@markupme/themes'
@@ -219,6 +220,31 @@ interface ApiBody {
   lint?: unknown
 }
 
+/** Host names a browser may use for the server: loopback names, IP literals and the bound host. */
+export function isAllowedHost(header: string | undefined, bound?: string): boolean {
+  if (!header) return false
+  let name = header.trim().toLowerCase()
+  if (name.startsWith('[')) {
+    const end = name.indexOf(']')
+    if (end < 0) return false
+    name = name.slice(1, end)
+  } else {
+    const colon = name.lastIndexOf(':')
+    if (colon >= 0) name = name.slice(0, colon)
+  }
+  if (name.endsWith('.')) name = name.slice(0, -1)
+  if (!name) return false
+  // A DNS rebinding attack needs a host name the attacker controls, never an IP literal.
+  if (isIP(name) !== 0) return true
+  if (name === 'localhost' || name.endsWith('.localhost')) return true
+  return !!bound && name === bound.toLowerCase()
+}
+
+/** True when any segment of a path relative to the root is a dotfile or dot folder (.env, .git …). */
+function hasDotSegment(rel: string): boolean {
+  return rel.split(/[\\/]/).some((part) => part.startsWith('.') && part !== '.')
+}
+
 /** Starts the preview server: rendered pages with live reload, a playground and a JSON API. */
 export async function startServer(o: ServeOptions): Promise<RunningServer> {
   const root = resolve(o.root)
@@ -269,6 +295,23 @@ export async function startServer(o: ServeOptions): Promise<RunningServer> {
     const full = normalize(join(baseDir, decoded))
     if (full !== baseDir && !full.startsWith(baseDir + sep)) return undefined
     return full
+  }
+
+  const serveStatic = (file: string, res: ServerResponse) => {
+    const stream = createReadStream(file)
+    res.once('close', () => stream.destroy())
+    stream.on('error', (error) => {
+      log(`error ${relative(baseDir, file)}: ${error.message}`)
+      if (!res.headersSent) send(res, 500, 'Internal error')
+      else res.destroy()
+    })
+    stream.once('open', () => {
+      res.writeHead(200, {
+        'Content-Type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream',
+        ...SECURITY_HEADERS,
+      })
+      stream.pipe(res)
+    })
   }
 
   const renderMarkdownFile = async (file: string, res: ServerResponse) => {
@@ -404,6 +447,9 @@ export async function startServer(o: ServeOptions): Promise<RunningServer> {
     const url = new URL(req.url ?? '/', 'http://localhost')
     const path = url.pathname
     try {
+      // DNS rebinding: a page on evil.example that resolves to 127.0.0.1 still sends its own Host.
+      if (!isAllowedHost(req.headers.host, o.host))
+        return send(res, 403, 'Forbidden: host not allowed')
       if (path.startsWith('/api/')) return await handleApi(req, res, path)
       if (path === '/__markupme/events') {
         res.writeHead(200, {
@@ -443,17 +489,15 @@ export async function startServer(o: ServeOptions): Promise<RunningServer> {
       }
       const file = resolveSafe(path)
       if (!file) return send(res, 403, 'Forbidden')
+      // Dotfiles and dot folders (.env, .git, .npmrc) are never served, like the file listing.
+      if (hasDotSegment(relative(baseDir, file))) return send(res, 404, 'Not found')
       if (!existsSync(file)) return send(res, 404, 'Not found')
       if (statSync(file).isDirectory()) {
         const index = ['index.md', 'README.md'].map((n) => join(file, n)).find((f) => existsSync(f))
         return index ? await renderMarkdownFile(index, res) : send(res, 404, 'Not found')
       }
       if (MARKDOWN_EXT.test(file)) return await renderMarkdownFile(file, res)
-      res.writeHead(200, {
-        'Content-Type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream',
-        ...SECURITY_HEADERS,
-      })
-      createReadStream(file).pipe(res)
+      return serveStatic(file, res)
     } catch (error) {
       log(`error ${path}: ${(error as Error).message}`)
       if (!res.headersSent)
