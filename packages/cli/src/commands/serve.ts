@@ -300,7 +300,7 @@ export async function startServer(o: ServeOptions): Promise<RunningServer> {
   const serveStatic = (file: string, res: ServerResponse) => {
     const stream = createReadStream(file)
     res.once('close', () => stream.destroy())
-    stream.once('error', (error) => {
+    stream.on('error', (error) => {
       log(`error ${relative(baseDir, file)}: ${error.message}`)
       if (!res.headersSent) send(res, 500, 'Internal error')
       else res.destroy()

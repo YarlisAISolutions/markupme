@@ -276,7 +276,7 @@ Live preview of a file or directory (default `.`), a playground and a JSON API.
 
 Plus the feature and render flags.
 
-Every request must carry a `Host` header of `localhost`, a `*.localhost` name, an IP address, or the `--host` value; any other host gets 403. This stops DNS rebinding: a web page on another domain that resolves to `127.0.0.1` cannot read the served folder. To reach the server by a LAN name, start it with `--host <that name>` or use its IP address.
+Every request must carry a `Host` header of `localhost`, a `*.localhost` name, an IP address, or the `--host` value; any other host gets 403. This stops DNS rebinding: a web page on another domain that resolves to `127.0.0.1` cannot read the served folder. To reach the server by a LAN name, start it with `--host <that name>` or use its IP address. The same applies in Docker or Compose: with `--host 0.0.0.0`, another container that calls `http://svc:4321` gets 403, so start the server with `--host svc` (the name the other container uses) or call it by IP address. A request with no `Host` header (some HTTP/1.0 clients and health probes) also gets 403.
 
 On start it prints:
 
@@ -294,7 +294,7 @@ Routes:
 | ----- | ------ | -------- |
 | `/` | GET | `index.md` or `README.md` rendered, else a file listing. For a single file, that file. |
 | `/<path>.md` | GET | The file as a standalone page, with a diagnostics banner (`data-testid="render-diagnostics"`) when it has warnings or errors. |
-| other files | GET | Served as-is with a content type from the extension. Paths outside the root return 403. Dotfiles and dot folders (`.env`, `.git/…`) return 404. A file that cannot be read returns 500. |
+| other files | GET | Served as-is with a content type from the extension. Paths outside the root return 403. Dotfiles and dot folders (`.env`, `.git/…`, also `/.well-known/…`) return 404. A file that cannot be read returns 500. |
 | `/__markupme/playground` | GET | Playground page: textarea, option checkboxes, preview, diagnostics list. |
 | `/__markupme/events` | GET | Server-sent events; sends `reload` when a file changes. |
 | `/__markupme/mermaid.min.js`, `/__markupme/katex/*` | GET | Local browser assets. No CDN. |
