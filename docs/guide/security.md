@@ -13,6 +13,9 @@ MarkupMe renders Markdown that may come from people you do not trust: pull reque
 | Diagram source | Leaking private diagrams to a third party | Network diagram rendering (Kroki) is off unless a server is configured |
 | Pages | Loading code from a CDN | Mermaid and KaTeX are copied next to the output or served locally; a remote URL needs `--mermaid-url` |
 | Preview host | Path traversal through the preview server | Paths are resolved and must stay under the served root (403 otherwise) |
+| Preview host | Reading secrets next to the docs (`.env`, `.git`) | Dotfiles and dot folders are never served (404) |
+| Preview host | DNS rebinding: a web page on another domain that resolves to `127.0.0.1` | The `Host` header must be `localhost`, `*.localhost`, an IP address or the `--host` value (403 otherwise) |
+| Preview host | Crash through an unreadable file | Read errors on a static file answer 500; the server keeps running |
 | Preview host | Exposure on a network | Binds `127.0.0.1` by default; CORS off by default |
 | Preview host | Memory exhaustion through the API | Request bodies over 1 MB get 413 |
 | Preview API | Caller disables sanitizing | `sanitize: false` is ignored unless the server was started with `--unsafe` |

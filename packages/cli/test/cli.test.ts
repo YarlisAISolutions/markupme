@@ -1,7 +1,9 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { request } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { isAllowedHost } from '../src/commands/serve.js'
 import { DEFAULT_CONFIG } from '../src/config.js'
 import { EXIT, type Io, run, startServer } from '../src/index.js'
 
@@ -277,4 +279,94 @@ describe('serve API lint option', () => {
       await server.close()
     }
   })
+})
+
+describe('serve security', () => {
+  let server: Awaited<ReturnType<typeof startServer>>
+  let site: string
+  beforeAll(async () => {
+    site = mkdtempSync(join(tmpdir(), 'markupme-serve-'))
+    writeFileSync(join(site, 'README.md'), '# Site\n')
+    writeFileSync(join(site, 'notes.txt'), 'plain text\n')
+    writeFileSync(join(site, '.env'), 'TOKEN=not-a-real-secret\n')
+    writeFileSync(join(site, '.hidden.md'), '# Hidden\n')
+    mkdirSync(join(site, '.git'))
+    writeFileSync(join(site, '.git', 'config'), '[core]\n')
+    mkdirSync(join(site, 'sub', '.cache'), { recursive: true })
+    writeFileSync(join(site, 'sub', '.cache', 'data.json'), '{}')
+    writeFileSync(join(site, 'locked.txt'), 'no access\n')
+    chmodSync(join(site, 'locked.txt'), 0o000)
+    server = await startServer({ root: site, config: DEFAULT_CONFIG, port: 0, liveReload: false })
+  })
+  afterAll(async () => {
+    chmodSync(join(site, 'locked.txt'), 0o644)
+    await server.close()
+  })
+
+  /** A raw request so the test can set the Host header (fetch does not allow it). */
+  const get = (path: string, host?: string) =>
+    new Promise<{ status: number; body: string }>((done, fail) => {
+      const url = new URL(path, server.url)
+      const req = request(url, { headers: host === undefined ? {} : { host } }, (res) => {
+        let body = ''
+        res.setEncoding('utf8')
+        res.on('data', (c: string) => {
+          body += c
+        })
+        res.on('end', () => done({ status: res.statusCode ?? 0, body }))
+        res.on('error', fail)
+      })
+      req.on('error', fail)
+      req.end()
+    })
+
+  it('refuses dotfiles and dot folders (MM-3)', async () => {
+    expect((await get('/notes.txt')).status).toBe(200)
+    for (const path of [
+      '/.env',
+      '/%2eenv',
+      '/.hidden.md',
+      '/.git/config',
+      '/.git/',
+      '/sub/.cache/data.json',
+      '/sub/%2Ecache/data.json',
+    ]) {
+      const res = await get(path)
+      expect(res.status, path).toBe(404)
+      expect(res.body).not.toContain('not-a-real-secret')
+    }
+  })
+
+  it('refuses a Host header that is not loopback, an IP or the bound host (MM-3)', async () => {
+    const port = new URL(server.url).port
+    expect((await get('/api/health', `evil.example:${port}`)).status).toBe(403)
+    expect((await get('/notes.txt', 'localhost.evil.example')).status).toBe(403)
+    expect((await get('/api/health', `localhost:${port}`)).status).toBe(200)
+    expect((await get('/api/health', `127.0.0.1:${port}`)).status).toBe(200)
+    expect((await get('/api/health', `[::1]:${port}`)).status).toBe(200)
+  })
+
+  it('checks Host names', () => {
+    expect(isAllowedHost(undefined)).toBe(false)
+    expect(isAllowedHost('')).toBe(false)
+    expect(isAllowedHost('rebind.attacker.example:4321')).toBe(false)
+    expect(isAllowedHost('LOCALHOST:4321')).toBe(true)
+    expect(isAllowedHost('app.localhost')).toBe(true)
+    expect(isAllowedHost('localhost.:80')).toBe(true)
+    expect(isAllowedHost('192.168.1.20:4321')).toBe(true)
+    expect(isAllowedHost('[fe80::1]:4321')).toBe(true)
+    expect(isAllowedHost('[::1')).toBe(false)
+    expect(isAllowedHost('docs.lan:4321')).toBe(false)
+    expect(isAllowedHost('docs.lan:4321', 'docs.lan')).toBe(true)
+  })
+
+  it.skipIf(process.getuid?.() === 0)(
+    'answers 500 for an unreadable file and keeps serving (MM-4)',
+    async () => {
+      const res = await get('/locked.txt')
+      expect(res.status).toBe(500)
+      expect(res.body).not.toContain('no access')
+      expect((await get('/api/health')).status).toBe(200)
+    },
+  )
 })
