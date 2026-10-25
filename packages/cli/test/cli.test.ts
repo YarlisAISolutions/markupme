@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { isAllowedHost } from '../src/commands/serve.js'
 import { DEFAULT_CONFIG } from '../src/config.js'
 import { EXIT, type Io, run, startServer } from '../src/index.js'
+import { createPipeline, providersFor } from '../src/pipeline.js'
 
 function harness(cwd: string) {
   const out: string[] = []
@@ -369,4 +370,52 @@ describe('serve security', () => {
       expect((await get('/api/health')).status).toBe(200)
     },
   )
+})
+
+describe('diagram providers', () => {
+  const usage = (fn: () => unknown) => {
+    try {
+      fn()
+    } catch (error) {
+      return {
+        message: (error as Error).message,
+        exitCode: (error as { exitCode?: number }).exitCode,
+      }
+    }
+    return undefined
+  }
+
+  it('builds providers in the configured order and adds Kroki for a server', () => {
+    expect(
+      providersFor({ diagrams: { providers: ['mermaid', 'none', 'graphviz'] } }).map((p) => p.id),
+    ).toEqual(['mermaid', 'graphviz'])
+    expect(
+      providersFor({ diagrams: { providers: ['kroki'], server: 'http://kroki.local/' } }).map(
+        (p) => p.id,
+      ),
+    ).toEqual(['kroki'])
+    expect(providersFor({}).map((p) => p.id)).toEqual(DEFAULT_CONFIG.diagrams?.providers)
+  })
+
+  it('rejects the first bad provider id as a usage error', () => {
+    expect(usage(() => providersFor({ diagrams: { providers: ['nope', 'kroki'] } }))).toEqual({
+      message: 'Unknown diagram provider "nope"',
+      exitCode: EXIT.USAGE,
+    })
+    expect(usage(() => providersFor({ diagrams: { providers: ['kroki', 'nope'] } }))).toEqual({
+      message: 'The kroki provider needs --diagram-server <url>',
+      exitCode: EXIT.USAGE,
+    })
+  })
+
+  it('runs diagrams before highlighting, and drops highlighting when it is off', () => {
+    const on = createPipeline({ diagrams: { providers: ['graphviz'] } }).handlers
+    expect(on).toHaveLength(2)
+    expect((on[0] as { langs?: string[] }).langs).toContain('dot')
+    expect(
+      createPipeline({ diagrams: { providers: ['graphviz'] }, render: { highlight: false } })
+        .handlers,
+    ).toHaveLength(1)
+    expect(createPipeline({ diagrams: { providers: [] } }).handlers).toHaveLength(1)
+  })
 })

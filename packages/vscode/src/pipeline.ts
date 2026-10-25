@@ -7,13 +7,10 @@ import {
   type RenderResult,
 } from '@markupme/core'
 import {
-  blueprintProvider,
+  codeBlockHandlers,
   type DiagramProvider,
   type DiagramTheme,
-  diagramHandler,
-  graphvizProvider,
-  krokiProvider,
-  mermaidProvider,
+  providersFromIds,
 } from '@markupme/diagrams'
 import { highlightHandler } from '@markupme/highlight'
 import { sourceLinePlugin } from './lines.js'
@@ -24,15 +21,22 @@ import {
   renderOptions,
 } from './settings.js'
 
-export function providersFor(s: MarkupMeSettings): DiagramProvider[] {
-  const list: DiagramProvider[] = []
-  for (const id of s.providers) {
-    if (id === 'blueprint') list.push(blueprintProvider())
-    else if (id === 'graphviz') list.push(graphvizProvider())
-    else if (id === 'mermaid') list.push(mermaidProvider())
-  }
-  if (s.server) list.push(krokiProvider({ server: s.server }))
-  return list
+/**
+ * Providers for the settings. An id that gives no provider (unknown, or `kroki`, which VS Code
+ * configures through `markupme.diagrams.server`) is reported to `onWarning` and skipped.
+ */
+export function providersFor(
+  s: MarkupMeSettings,
+  onWarning: (message: string) => void = console.warn,
+): DiagramProvider[] {
+  const { providers, problems } = providersFromIds(s.providers, s.server)
+  for (const p of problems)
+    onWarning(
+      p.reason === 'needs-server'
+        ? 'MarkupMe: the kroki diagram provider needs markupme.diagrams.server; skipped'
+        : `MarkupMe: unknown diagram provider "${p.id}" in markupme.diagrams.providers; skipped`,
+    )
+  return providers
 }
 
 export interface Pipeline {
@@ -51,6 +55,7 @@ export function createPipeline(
   s: MarkupMeSettings,
   theme: DiagramTheme = 'light',
   extraPlugins: MarkupMePlugin[] = [],
+  onWarning: (message: string) => void = console.warn,
 ): Pipeline {
   const opts = processorOptions(s)
   const processor = createProcessor({ ...opts, plugins: extraPlugins })
@@ -59,11 +64,11 @@ export function createPipeline(
     plugins: [...extraPlugins, sourceLinePlugin],
   })
   const formatProcessor = createProcessor({ ...formatOptions(s), plugins: extraPlugins })
-  const handlers: CodeBlockHandler[] = []
-  const providers = providersFor(s)
-  const diagrams = providers.length > 0 ? diagramHandler({ providers, theme }) : undefined
-  if (diagrams) handlers.push(diagrams)
-  handlers.push(highlightHandler({ lineNumbers: s.lineNumbers, skip: diagrams?.langs ?? [] }))
+  const handlers = codeBlockHandlers({
+    providers: providersFor(s, onWarning),
+    theme,
+    next: (skip) => highlightHandler({ lineNumbers: s.lineNumbers, skip }),
+  })
   return { settings: s, processor, previewProcessor, formatProcessor, handlers }
 }
 

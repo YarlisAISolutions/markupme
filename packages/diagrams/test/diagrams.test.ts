@@ -1,6 +1,16 @@
+import type { CodeBlockHandler } from '@markupme/core'
 import { createProcessor } from '@markupme/core'
 import { describe, expect, it } from 'vitest'
-import { diagramHandler, extractDiagrams, krokiProvider, sanitizeSvg } from '../src/index.js'
+import {
+  codeBlockHandlers,
+  type DiagramHandler,
+  type DiagramProvider,
+  diagramHandler,
+  extractDiagrams,
+  krokiProvider,
+  providersFromIds,
+  sanitizeSvg,
+} from '../src/index.js'
 
 const p = createProcessor()
 const render = async (md: string, handler = diagramHandler()) =>
@@ -64,4 +74,89 @@ describe('sanitizeSvg', () => {
 it('extracts diagram blocks', async () => {
   const list = await extractDiagrams('```dot\na\n```\n\n```ts\nx\n```\n\n```mermaid\nb\n```')
   expect(list.map((d) => `${d.provider}:${d.lang}`)).toEqual(['graphviz:dot', 'mermaid:mermaid'])
+})
+
+describe('providersFromIds', () => {
+  it('builds providers in the order given and skips none', () => {
+    const r = providersFromIds(['mermaid', 'none', 'graphviz', 'blueprint'])
+    expect(r.providers.map((x) => x.id)).toEqual(['mermaid', 'graphviz', 'blueprint'])
+    expect(r.problems).toEqual([])
+  })
+
+  it('reports unknown ids and kroki without a server, in order', () => {
+    expect(providersFromIds(['foo', 'kroki']).problems).toEqual([
+      { id: 'foo', reason: 'unknown' },
+      { id: 'kroki', reason: 'needs-server' },
+    ])
+    expect(providersFromIds(['kroki', 'foo']).problems).toEqual([
+      { id: 'kroki', reason: 'needs-server' },
+      { id: 'foo', reason: 'unknown' },
+    ])
+  })
+
+  it('adds Kroki last whenever a server is set', () => {
+    const listed = providersFromIds(['kroki', 'graphviz'], 'http://kroki.local/')
+    expect(listed.providers.map((x) => x.id)).toEqual(['graphviz', 'kroki'])
+    expect(listed.problems).toEqual([])
+    expect(providersFromIds([], 'http://kroki.local/').providers.map((x) => x.id)).toEqual([
+      'kroki',
+    ])
+  })
+})
+
+describe('codeBlockHandlers', () => {
+  const marker: CodeBlockHandler = async () => undefined
+
+  it('puts diagrams first and hands their languages to the next handler', () => {
+    let skip: string[] = []
+    const { providers } = providersFromIds(['graphviz', 'mermaid'])
+    const handlers = codeBlockHandlers({
+      providers,
+      next: (s) => {
+        skip = s
+        return marker
+      },
+    })
+    expect(handlers).toHaveLength(2)
+    expect((handlers[0] as DiagramHandler).langs).toEqual(skip)
+    expect(skip).toContain('dot')
+    expect(skip).toContain('mermaid')
+    expect(handlers[1]).toBe(marker)
+  })
+
+  it('has no diagram handler without providers', () => {
+    let skip: string[] | undefined
+    const handlers = codeBlockHandlers({
+      providers: [],
+      next: (s) => {
+        skip = s
+        return marker
+      },
+    })
+    expect(handlers).toEqual([marker])
+    expect(skip).toEqual([])
+  })
+
+  it('returns diagrams only when next is omitted', () => {
+    expect(codeBlockHandlers({ providers: providersFromIds(['mermaid']).providers })).toHaveLength(
+      1,
+    )
+    expect(codeBlockHandlers({ providers: [] })).toEqual([])
+  })
+
+  it('passes the theme to the diagram handler', async () => {
+    const echo: DiagramProvider = {
+      id: 'echo',
+      langs: ['echo'],
+      mode: 'client',
+      render: async ({ theme }) => ({ kind: 'client', html: `<p>${theme}</p>` }),
+    }
+    const md = '```echo\nx\n```'
+    const out = async (theme?: 'dark') => {
+      const handlers = codeBlockHandlers({ providers: [echo], ...(theme ? { theme } : {}) })
+      return (await p.render(md, { codeBlocks: handlers })).output
+    }
+    expect(await out('dark')).toContain('<p>dark</p>')
+    expect(await out()).toContain('<p>light</p>')
+  })
 })

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { exportPage } from '../src/export.js'
 import { createPipeline, formatMarkdown, renderBody } from '../src/pipeline.js'
 import { DEFAULT_SETTINGS } from '../src/settings.js'
@@ -66,5 +66,25 @@ describe('pipeline', () => {
     expect(page.needs).toEqual({ mermaid: false, math: true })
     expect(page.html).toContain('<link rel="stylesheet" href="assets/katex/katex.min.css">')
     expect(page.html).toContain('class="katex')
+  })
+
+  it('warns about unknown diagram providers instead of ignoring them silently', async () => {
+    const warn = vi.fn()
+    const p = createPipeline(
+      { ...DEFAULT_SETTINGS, providers: ['nope', 'graphviz'] },
+      'light',
+      [],
+      warn,
+    )
+    expect(warn).toHaveBeenCalledTimes(1)
+    expect(warn.mock.calls[0]?.[0]).toContain('"nope"')
+    const r = await renderBody(p, md)
+    expect(r.output).toContain('mm-diagram-graphviz')
+  })
+
+  it('does not warn for the default settings', () => {
+    const warn = vi.fn()
+    createPipeline(DEFAULT_SETTINGS, 'light', [], warn)
+    expect(warn).not.toHaveBeenCalled()
   })
 })

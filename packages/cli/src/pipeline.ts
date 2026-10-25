@@ -10,14 +10,7 @@ import {
   query,
   type RenderFormat,
 } from '@markupme/core'
-import {
-  blueprintProvider,
-  type DiagramProvider,
-  diagramHandler,
-  graphvizProvider,
-  krokiProvider,
-  mermaidProvider,
-} from '@markupme/diagrams'
+import { codeBlockHandlers, type DiagramProvider, providersFromIds } from '@markupme/diagrams'
 import { highlightHandler } from '@markupme/highlight'
 import { type NavItem, type ThemeMode, wrapDocument } from '@markupme/themes'
 import { DEFAULT_CONFIG, type MarkupMeConfig, processorOptions } from './config.js'
@@ -56,18 +49,12 @@ export const mdLinksToHtml: MarkupMePlugin = {
 
 export function providersFor(config: MarkupMeConfig): DiagramProvider[] {
   const ids = config.diagrams?.providers ?? DEFAULT_CONFIG.diagrams?.providers ?? []
-  const list: DiagramProvider[] = []
-  for (const id of ids) {
-    if (id === 'blueprint') list.push(blueprintProvider())
-    else if (id === 'graphviz') list.push(graphvizProvider())
-    else if (id === 'mermaid') list.push(mermaidProvider())
-    else if (id === 'kroki') {
-      if (!config.diagrams?.server)
-        throw new CliError('The kroki provider needs --diagram-server <url>', EXIT.USAGE)
-    } else if (id !== 'none') throw new CliError(`Unknown diagram provider "${id}"`, EXIT.USAGE)
-  }
-  if (config.diagrams?.server) list.push(krokiProvider({ server: config.diagrams.server }))
-  return list
+  const { providers, problems } = providersFromIds(ids, config.diagrams?.server)
+  const first = problems[0]
+  if (first?.reason === 'needs-server')
+    throw new CliError('The kroki provider needs --diagram-server <url>', EXIT.USAGE)
+  if (first) throw new CliError(`Unknown diagram provider "${first.id}"`, EXIT.USAGE)
+  return providers
 }
 
 export interface Pipeline {
@@ -85,17 +72,13 @@ export function createPipeline(
     ...opts,
     plugins: [...(opts.plugins ?? []), ...extraPlugins],
   })
-  const handlers: CodeBlockHandler[] = []
-  const providers = providersFor(config)
-  const diagrams = providers.length > 0 ? diagramHandler({ providers }) : undefined
-  if (diagrams) handlers.push(diagrams)
-  if (config.render?.highlight !== false)
-    handlers.push(
-      highlightHandler({
-        lineNumbers: config.render?.lineNumbers === true,
-        skip: diagrams?.langs ?? [],
-      }),
-    )
+  const lineNumbers = config.render?.lineNumbers === true
+  const handlers = codeBlockHandlers({
+    providers: providersFor(config),
+    ...(config.render?.highlight !== false
+      ? { next: (skip: string[]) => highlightHandler({ lineNumbers, skip }) }
+      : {}),
+  })
   return { config, processor, handlers }
 }
 
