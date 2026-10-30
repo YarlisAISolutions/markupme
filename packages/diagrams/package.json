@@ -50,7 +50,7 @@
     "@hpcc-js/wasm-graphviz": "1.30.0",
     "@markupme/core": "0.1.0",
     "hast-util-from-html": "2.0.3",
-    "hast-util-to-html": "9.0.5",
+    "hast-util-to-html": "9.0.6",
     "unist-util-visit": "5.2.0"
   },
   "engines": {

@@ -5,6 +5,9 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { htmlToReact, Markdown, renderToReact, renderToTree } from '../src/index.js'
 
+const A = (props: { href?: string; children?: ReactNode }) =>
+  createElement('a', { href: props.href, 'data-custom': 'yes' }, props.children)
+
 const html = async (md: string, o?: Parameters<typeof renderToReact>[1]) =>
   renderToStaticMarkup(await renderToReact(md, o))
 
@@ -23,8 +26,6 @@ describe('renderToReact', () => {
   })
 
   it('lets components override elements', async () => {
-    const A = (props: { href?: string; children?: ReactNode }) =>
-      createElement('a', { href: props.href, 'data-custom': 'yes' }, props.children)
     const out = await html('[docs](https://example.com/docs)', { components: { a: A } })
     expect(out).toBe('<p><a href="https://example.com/docs" data-custom="yes">docs</a></p>')
   })

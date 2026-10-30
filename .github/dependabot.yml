@@ -20,4 +20,7 @@ updates:
       # Node 24.22.1 is the runtime pin (CLAUDE.md rule 9); its types follow it.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # vsce refuses to package when @types/vscode is newer than engines.vscode (^1.82.0) in
+      # packages/vscode. Raise both together, by hand.
+      - dependency-name: "@types/vscode"
     commit-message: { prefix: "chore(deps)" }

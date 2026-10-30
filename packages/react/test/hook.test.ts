@@ -24,10 +24,20 @@ function mount(element: ReturnType<typeof createElement>) {
   return container
 }
 
+const Em = (p: { children?: unknown }) =>
+  createElement('i', { className: 'em' }, p.children as never)
+
+let setSource: (s: string) => void = () => {}
+let renders = 0
+function App() {
+  const [source, set] = useState('first')
+  setSource = set
+  renders++
+  return useMarkdown(source, { options: { emoji: true }, render: { anchors: false } })
+}
+
 describe('<Markdown> and useMarkdown in the browser', () => {
   it('renders after the first effect, with component overrides', async () => {
-    const Em = (p: { children?: unknown }) =>
-      createElement('i', { className: 'em' }, p.children as never)
     const container = mount(
       createElement(Markdown, {
         source: '# Hi\n\nSome *text*.',
@@ -41,14 +51,7 @@ describe('<Markdown> and useMarkdown in the browser', () => {
   })
 
   it('re-renders when the source changes, with inline options', async () => {
-    let setSource: (s: string) => void = () => {}
-    let renders = 0
-    function App() {
-      const [source, set] = useState('first')
-      setSource = set
-      renders++
-      return useMarkdown(source, { options: { emoji: true }, render: { anchors: false } })
-    }
+    renders = 0
     const container = mount(createElement(App))
     await vi.waitFor(() => expect(container.textContent).toBe('first'))
     await act(async () => setSource('second :tada:'))
