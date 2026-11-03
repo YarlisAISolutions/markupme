@@ -113,7 +113,7 @@ Exit criteria: AC-095 to AC-097 met; the extension packages as a `.vsix` and ins
 | unified, remark-*, rehype-*, micromark, mdast/hast utilities | core | MIT (general knowledge) |
 | github-slugger, gemoji | core | ISC / MIT (general knowledge; re-check before release) |
 | yaml, smol-toml | core | ISC / BSD-3-Clause (assumption; re-check) |
-| KaTeX | core (`rehype-katex`), cli (assets) | MIT (general knowledge) |
+| KaTeX | core (direct `katex`; in-tree math plugins from `remark-math`, `micromark-extension-math` and `rehype-katex`, all MIT), cli (assets) | MIT (general knowledge) |
 | Shiki | highlight | MIT (general knowledge) |
 | `@bpview/core` | diagrams | Yarlis, same org |
 | `@hpcc-js/wasm-graphviz` | diagrams | Apache-2.0 (assumption; Graphviz itself is EPL; re-check) |

@@ -284,7 +284,7 @@ Any other name is kept, never dropped. It renders as `<div class="mm-directive m
 
 ## Math
 
-Off by default. Turn on with `math: true` or `--math`. Uses `remark-math` and KaTeX.
+Off by default. Turn on with `math: true` or `--math`. Uses `remark-math` syntax (`$…$`, `$$…$$`, ` ```math `) and KaTeX 0.19, both in `@markupme/core` (see the 0.1.1 CHANGELOG).
 
 ```markdown
 Inline $e^{i\pi} + 1 = 0$.

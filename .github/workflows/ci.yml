@@ -54,6 +54,33 @@ jobs:
           for p in core highlight diagrams themes react cli; do
             (cd "packages/$p" && npm pack --dry-run 2>&1 | tail -6)
           done
+      # Root `overrides` don't reach npm consumers (MKP-7): install every packed package the way
+      # a consumer would (npm resolves the internal pins to these tarballs) and fail if any KaTeX
+      # in the tree is older than 0.18.2 (GHSA-238p-pmpm-9mq7).
+      - name: packed packages install a patched KaTeX
+        run: |
+          consumer=$(mktemp -d)
+          tarballs=()
+          for p in core highlight themes diagrams react cli; do
+            tarballs+=("./$(cd "packages/$p" && npm pack --pack-destination "$consumer" --silent)")
+          done
+          cd "$consumer"
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund "${tarballs[@]}" >/dev/null
+          npm ls katex --all
+          npm ls katex --all --json | node -e '
+            const found = []
+            const walk = (deps) => {
+              for (const [name, d] of Object.entries(deps ?? {})) {
+                if (name === "katex" && d.version) found.push(d.version)
+                walk(d.dependencies)
+              }
+            }
+            walk(JSON.parse(require("fs").readFileSync(0, "utf8")).dependencies)
+            const old = found.filter((v) => { const [a, b, c] = v.split(".").map(Number); return a === 0 && (b < 18 || (b === 18 && c < 2)) })
+            if (found.length === 0) { console.error("katex is not in the tree"); process.exit(1) }
+            if (old.length) { console.error("vulnerable katex: " + old.join(", ")); process.exit(1) }
+            console.log("katex " + [...new Set(found)].join(", ") + ": patched")'
 
   # End-to-end: the SDODS suites in YarlisAISolutions/markupme-qa against this build. The check is
   # named `qa-smoke` because release.yml runs the same job before publishing (MKP-4); it runs the

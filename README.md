@@ -68,7 +68,7 @@ Status as reported by `markupme capabilities`. Work in progress is listed as pla
 
 ```bash
 npm i -g @markupme/cli
-markupme --version        # 0.1.0
+markupme --version        # 0.1.1
 ```
 
 ### From source
@@ -100,7 +100,7 @@ next: markupme serve docs
 
 ```console
 $ markupme serve docs
-markupme 0.1.0 serving docs at http://127.0.0.1:4321
+markupme 0.1.1 serving docs at http://127.0.0.1:4321
   playground  http://127.0.0.1:4321/__markupme/playground
   api         http://127.0.0.1:4321/api/health · POST /api/render · POST /api/validate
 ```
@@ -447,7 +447,7 @@ Pick providers with `--diagrams blueprint,graphviz`, or `--diagrams none`. Merma
 
 ```console
 $ curl -s localhost:4321/api/health
-{"status":"ok","name":"markupme","version":"0.1.0"}
+{"status":"ok","name":"markupme","version":"0.1.1"}
 
 $ curl -s localhost:4321/api/render -H 'Content-Type: application/json' \
     -d '{"markdown":"# Hi\n\n> [!TIP]\n> Works"}'
@@ -518,15 +518,15 @@ const page = wrapDocument({ body: result.output, title: result.title, theme: 'au
 | [`@markupme/themes`](packages/themes) | CSS (light, dark, print), page runtime, `wrapDocument` | built |
 | [`@markupme/cli`](packages/cli) | The `markupme` command and preview server | built |
 | `apps/studio` | Web studio (Vite + CodeMirror 6), a static app | built |
-| `packages/vscode` | VS Code extension (`markupme-vscode-0.1.0.vsix`, attached to GitHub releases) | built |
+| `packages/vscode` | VS Code extension (`markupme-vscode-<version>.vsix`, attached to GitHub releases) | built |
 | `@markupme/react` | `<Markdown>`, `useMarkdown`, `renderToReact` | built |
 
-All packages are version 0.1.0, ESM-only, MIT, and publishable on their own.
+All packages are version 0.1.1, ESM-only, MIT, and publishable on their own.
 
 ## Security
 
 - HTML is sanitized by default with GitHub's schema plus a small allowlist of MarkupMe tags, ARIA attributes and classes. Scripts, styles, iframes, forms, event handlers and `javascript:` URLs are removed.
-- Highlighting, diagrams and KaTeX are added after sanitizing through placeholders with a random nonce, so they cannot be forged by the document.
+- Highlighting and diagrams are added after sanitizing through placeholders with a random nonce, so they cannot be forged by the document. KaTeX renders math on the already sanitized tree.
 - Ids written by authors keep the `user-content-` prefix (DOM clobbering protection); only ids MarkupMe generated lose it.
 - Diagram SVG goes through its own sanitizer.
 - No network by default: no CDN, no Kroki unless you configure it.

@@ -1,6 +1,6 @@
 {
   "name": "@markupme/highlight",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MarkupMe syntax highlighting: Shiki with light/dark themes, titles, line numbers, line highlights and copy buttons as a MarkupMe code block handler.",
   "license": "MIT",
   "author": "Yarlis AI Solutions",
@@ -40,7 +40,7 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@markupme/core": "0.1.0",
+    "@markupme/core": "0.1.1",
     "shiki": "4.5.0"
   },
   "engines": {
