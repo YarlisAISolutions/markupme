@@ -37,7 +37,7 @@ The programmatic API of the MarkupMe packages. Signatures match `packages/*/src`
 | `@markupme/diagrams` | `@markupme/diagrams` | `diagramHandler`, `codeBlockHandlers`, `providersFromIds`, `defaultProviders`, `blueprintProvider`, `graphvizProvider`, `mermaidProvider`, `krokiProvider`, `extractDiagrams`, `sanitizeSvg`, `DiagramError`, `KROKI_TYPES`, `MERMAID_LANGS`, types `ProviderProblem`, `ProvidersFromIds`, `CodeBlockHandlerOptions` |
 | `@markupme/themes` | `@markupme/themes` | `wrapDocument`, `markupmeCss`, `runtimeScript`, `escapeHtml` |
 | `@markupme/cli` | `@markupme/cli` | `run`, `startServer`, `createPipeline`, `mergeConfig`, `renderPage`, `CAPABILITIES`, `EXIT`, `CliError` (Node only) |
-| `@markupme/react` | | In progress, Phase 1. Not in the repository yet. |
+| `@markupme/react` | `@markupme/react` | `Markdown`, `useMarkdown`, `renderToReact`; experimental: `renderToTree`, `treeToReact`, `htmlToReact` |
 
 All packages are ESM-only (`"type": "module"`), ship `.d.ts` files and set `"sideEffects": false`.
 

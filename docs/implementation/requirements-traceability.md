@@ -134,7 +134,7 @@ Each row links a requirement to the code that implements it, the vitest test tha
 | FR-G12 | cli `src/commands/info.ts` (`runParse`) | `cli.test.ts::info commands › parse --outline, stats, diff and capabilities` | none | built |
 | FR-G13 | cli `src/config.ts`, `src/flags.ts`, `src/pipeline.ts` (`mergeConfig`) | `cli.test.ts::validate › passes clean docs, respects --rule and --strict, and emits JSON` (flags); config file precedence has no dedicated test | none | built |
 | FR-G14 | cli `src/commands/info.ts` (`runStats`, `runDiff`) | `cli.test.ts::info commands › parse --outline, stats, diff and capabilities` | none | built |
-| FR-G15 | cli `src/commands/info.ts` (`CAPABILITIES`) | `cli.test.ts::info commands › parse --outline, stats, diff and capabilities` | Preview server health › Capabilities list built and planned features honestly | verified (studio, VS Code, React listed as planned, in progress) |
+| FR-G15 | cli `src/commands/info.ts` (`CAPABILITIES`) | `cli.test.ts::info commands › parse --outline, stats, diff and capabilities`, `cli.test.ts::info commands › capabilities marks experimental features as experimental` | Preview server health › Capabilities list built and planned features honestly | verified (statuses built, experimental, opt-in, planned; Structural diff and the studio are experimental, see docs/api-stability.md) |
 | FR-G16 | cli `src/commands/info.ts` (`runInit`) | `cli.test.ts::info commands › init writes a config and a sample` | none | built |
 | FR-G17 | cli `src/exit.ts`, `src/index.ts` (`run`) | `cli.test.ts::render › reports planned formats with exit 64 and unknown ones as usage errors`; `::format and toc › checks and writes formatting` | none | built (exit 3 untested) |
 

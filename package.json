@@ -13,9 +13,10 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "type-check": "turbo run type-check",
-    "test": "turbo run test",
+    "test": "turbo run test && vitest run",
     "lint": "biome check --write .",
-    "lint:check": "biome ci ."
+    "lint:check": "biome ci .",
+    "api:update": "UPDATE_API_SNAPSHOT=1 vitest run && biome format --write api/exports.snapshot.json"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",

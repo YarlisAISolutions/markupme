@@ -155,7 +155,12 @@ export function runDiff(
   return changes.length === 0 ? EXIT.OK : EXIT.INVALID
 }
 
-type Status = 'built' | 'opt-in' | 'planned'
+/**
+ * `built`: done, tested and covered by the 1.0 compatibility promise (docs/api-stability.md).
+ * `experimental`: built and tested, but its shape may change in a minor release.
+ * `opt-in`: built, off by default, turned on with the flag in `note`. `planned`: not built.
+ */
+type Status = 'built' | 'experimental' | 'opt-in' | 'planned'
 
 export const CAPABILITIES: { area: string; feature: string; status: Status; note?: string }[] = [
   { area: 'syntax', feature: 'CommonMark', status: 'built' },
@@ -215,11 +220,17 @@ export const CAPABILITIES: { area: string; feature: string; status: Status; note
   { area: 'tools', feature: 'Formatter', status: 'built' },
   { area: 'tools', feature: 'TOC insert / refresh', status: 'built' },
   { area: 'tools', feature: 'Live preview server with render API', status: 'built' },
-  { area: 'tools', feature: 'Structural diff', status: 'built' },
+  {
+    area: 'tools',
+    feature: 'Structural diff',
+    status: 'experimental',
+    note: 'output may change in a minor release',
+  },
   {
     area: 'editor',
     feature: 'Web studio (CodeMirror 6, split preview)',
-    status: 'built',
+    status: 'experimental',
+    note: 'not published; not covered by the 1.0 promise',
   },
   { area: 'editor', feature: 'VS Code extension', status: 'built' },
   { area: 'editor', feature: 'Rich-text (WYSIWYG) editing', status: 'planned' },
@@ -253,7 +264,14 @@ export function runCapabilities(io: Io, flags: { json?: boolean }): number {
       area = c.area
       io.out(`\n${area}`)
     }
-    const mark = c.status === 'built' ? '✓' : c.status === 'opt-in' ? '+' : '·'
+    const mark =
+      c.status === 'built'
+        ? '✓'
+        : c.status === 'experimental'
+          ? '~'
+          : c.status === 'opt-in'
+            ? '+'
+            : '·'
     io.out(
       `  ${mark} ${c.feature}${c.status !== 'built' ? ` [${c.status}${c.note ? `: ${c.note}` : ''}]` : c.note ? ` (${c.note})` : ''}`,
     )

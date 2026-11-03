@@ -1,0 +1,1114 @@
+{
+  "major": 0,
+  "packages": {
+    "@markupme/core": {
+      "ALERT_TITLES": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "ALERT_TYPES": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "AlertType": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "BlockChange": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "BuiltinTransform": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "CALLOUTS": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "CONTAINERS": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "CodeBlock": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "CodeBlockHandler": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "CodeBlockResult": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "Diagnostic": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "DocumentStats": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "LEAF_DIRECTIVES": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "MarkupMeDocument": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "MarkupMeError": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "MarkupMePlugin": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "OutlineItem": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "ParseOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "PluginContext": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "Processor": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "ProcessorOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "RULES": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "RenderFormat": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "RenderOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "RenderResult": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "Rule": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "RuleContext": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "RuleSetting": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "SCHEMA_VERSION": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "SerializeFormat": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "SerializeOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "Severity": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "TEXT_DIRECTIVES": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "TocNode": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "TocOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "Toml": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "TransformOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "TransformResult": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "VERSION": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "ValidateOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "buildToc": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "createProcessor": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "diff": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "escapeHtml": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "formatDiagnostic": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "headingId": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "insertToc": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "markupmeSchema": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "outline": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "parse": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "query": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "render": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "serialize": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "stats": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "stripPositions": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "transform": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "validate": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "visit": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/highlight": {
+      "CodeMeta": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "HighlightOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "escapeHtml": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "highlightHandler": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "parseMeta": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/diagrams": {
+      "CodeBlockHandlerOptions": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "DiagramError": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "DiagramHandler": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "DiagramOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "DiagramOutput": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "DiagramProvider": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "DiagramRequest": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "DiagramTheme": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "ExtractedDiagram": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "KROKI_TYPES": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "KrokiOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "MERMAID_LANGS": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "ProviderProblem": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "ProvidersFromIds": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "blueprintProvider": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "codeBlockHandlers": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "defaultProviders": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "diagramHandler": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "extractDiagrams": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "graphvizProvider": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "krokiProvider": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "mermaidProvider": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "providersFromIds": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "sanitizeSvg": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/themes": {
+      "DocumentOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "NavItem": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "ThemeMode": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "escapeHtml": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "markupmeCss": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "runtimeScript": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "wrapDocument": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/react": {
+      "Markdown": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "MarkdownComponents": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "MarkdownOptions": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "MarkdownProps": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "MarkdownTree": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "htmlToReact": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "renderToReact": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "renderToTree": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "treeToReact": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "useMarkdown": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/cli": {
+      "CAPABILITIES": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "CliError": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "EXIT": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "Io": {
+        "status": "stable",
+        "kind": "type"
+      },
+      "createPipeline": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "mergeConfig": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "renderPage": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "run": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "startServer": {
+        "status": "experimental",
+        "kind": "value"
+      }
+    }
+  },
+  "cli": {
+    "commands": {
+      "markupme": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": [],
+        "options": {
+          "-v, --version": {
+            "status": "stable"
+          }
+        }
+      },
+      "init": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": [],
+        "options": {
+          "--force": {
+            "status": "stable"
+          },
+          "--no-sample": {
+            "status": "stable"
+          }
+        }
+      },
+      "render": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": ["[inputs...]"],
+        "options": {
+          "-f, --format <format>": {
+            "status": "stable",
+            "default": "html"
+          },
+          "-o, --output <path>": {
+            "status": "stable"
+          },
+          "-s, --standalone": {
+            "status": "stable"
+          },
+          "--assets-dir <dir>": {
+            "status": "stable"
+          },
+          "--inline-assets": {
+            "status": "stable"
+          },
+          "--mermaid-url <url>": {
+            "status": "stable"
+          },
+          "-w, --watch": {
+            "status": "stable"
+          },
+          "--strict": {
+            "status": "stable"
+          },
+          "--json": {
+            "status": "stable"
+          },
+          "-q, --quiet": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          },
+          "--theme <mode>": {
+            "status": "stable"
+          },
+          "--no-sanitize": {
+            "status": "stable"
+          },
+          "--no-html": {
+            "status": "stable"
+          },
+          "--no-anchors": {
+            "status": "stable"
+          },
+          "--no-highlight": {
+            "status": "stable"
+          },
+          "--line-numbers": {
+            "status": "stable"
+          },
+          "--diagrams <list>": {
+            "status": "stable"
+          },
+          "--diagram-server <url>": {
+            "status": "stable"
+          },
+          "--base-url <url>": {
+            "status": "stable"
+          },
+          "--external-new-tab": {
+            "status": "stable"
+          }
+        }
+      },
+      "validate": {
+        "status": "stable",
+        "aliases": ["lint"],
+        "arguments": ["[inputs...]"],
+        "options": {
+          "--strict": {
+            "status": "stable"
+          },
+          "--json": {
+            "status": "stable"
+          },
+          "--no-check-links": {
+            "status": "stable"
+          },
+          "--check-diagrams": {
+            "status": "stable"
+          },
+          "--diagrams <list>": {
+            "status": "stable"
+          },
+          "--diagram-server <url>": {
+            "status": "stable"
+          },
+          "-r, --rule <name=level>": {
+            "status": "stable"
+          },
+          "-q, --quiet": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          }
+        }
+      },
+      "format": {
+        "status": "stable",
+        "aliases": ["fmt"],
+        "arguments": ["[inputs...]"],
+        "options": {
+          "--write": {
+            "status": "stable"
+          },
+          "--check": {
+            "status": "stable"
+          },
+          "--bullet <char>": {
+            "status": "stable"
+          },
+          "--emphasis <char>": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          }
+        }
+      },
+      "toc": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": ["<file>"],
+        "options": {
+          "--write": {
+            "status": "stable"
+          },
+          "--check": {
+            "status": "stable"
+          },
+          "--position <where>": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          }
+        }
+      },
+      "build": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": ["[dir]"],
+        "options": {
+          "-o, --output <dir>": {
+            "status": "stable",
+            "default": "site"
+          },
+          "--name <name>": {
+            "status": "stable"
+          },
+          "--no-clean": {
+            "status": "stable"
+          },
+          "--strict": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          },
+          "--theme <mode>": {
+            "status": "stable"
+          },
+          "--no-sanitize": {
+            "status": "stable"
+          },
+          "--no-html": {
+            "status": "stable"
+          },
+          "--no-anchors": {
+            "status": "stable"
+          },
+          "--no-highlight": {
+            "status": "stable"
+          },
+          "--line-numbers": {
+            "status": "stable"
+          },
+          "--diagrams <list>": {
+            "status": "stable"
+          },
+          "--diagram-server <url>": {
+            "status": "stable"
+          },
+          "--base-url <url>": {
+            "status": "stable"
+          },
+          "--external-new-tab": {
+            "status": "stable"
+          }
+        }
+      },
+      "serve": {
+        "status": "stable",
+        "aliases": ["preview"],
+        "arguments": ["[path]"],
+        "options": {
+          "-p, --port <port>": {
+            "status": "stable"
+          },
+          "--host <host>": {
+            "status": "stable"
+          },
+          "--cors <origin>": {
+            "status": "stable"
+          },
+          "--unsafe": {
+            "status": "stable"
+          },
+          "--no-live-reload": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          },
+          "--theme <mode>": {
+            "status": "stable"
+          },
+          "--no-sanitize": {
+            "status": "stable"
+          },
+          "--no-html": {
+            "status": "stable"
+          },
+          "--no-anchors": {
+            "status": "stable"
+          },
+          "--no-highlight": {
+            "status": "stable"
+          },
+          "--line-numbers": {
+            "status": "stable"
+          },
+          "--diagrams <list>": {
+            "status": "stable"
+          },
+          "--diagram-server <url>": {
+            "status": "stable"
+          },
+          "--base-url <url>": {
+            "status": "stable"
+          },
+          "--external-new-tab": {
+            "status": "stable"
+          }
+        }
+      },
+      "diagram": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": ["<file>"],
+        "options": {
+          "-o, --output <dir>": {
+            "status": "stable"
+          },
+          "--list": {
+            "status": "stable"
+          },
+          "--diagrams <list>": {
+            "status": "stable"
+          },
+          "--diagram-server <url>": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          }
+        }
+      },
+      "parse": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": ["[file]"],
+        "options": {
+          "--outline": {
+            "status": "stable"
+          },
+          "--no-positions": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          }
+        }
+      },
+      "stats": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": ["[inputs...]"],
+        "options": {
+          "--json": {
+            "status": "stable"
+          },
+          "-c, --config <file>": {
+            "status": "stable"
+          },
+          "--no-gfm": {
+            "status": "stable"
+          },
+          "--no-frontmatter": {
+            "status": "stable"
+          },
+          "--no-directives": {
+            "status": "stable"
+          },
+          "--no-alerts": {
+            "status": "stable"
+          },
+          "--math": {
+            "status": "stable"
+          },
+          "--emoji": {
+            "status": "stable"
+          },
+          "--no-heading-ids": {
+            "status": "stable"
+          },
+          "--toc [position]": {
+            "status": "stable"
+          },
+          "--toc-depth <range>": {
+            "status": "stable"
+          }
+        }
+      },
+      "diff": {
+        "status": "experimental",
+        "aliases": [],
+        "arguments": ["<a>", "<b>"],
+        "options": {
+          "--json": {
+            "status": "experimental"
+          },
+          "-c, --config <file>": {
+            "status": "experimental"
+          },
+          "--no-gfm": {
+            "status": "experimental"
+          },
+          "--no-frontmatter": {
+            "status": "experimental"
+          },
+          "--no-directives": {
+            "status": "experimental"
+          },
+          "--no-alerts": {
+            "status": "experimental"
+          },
+          "--math": {
+            "status": "experimental"
+          },
+          "--emoji": {
+            "status": "experimental"
+          },
+          "--no-heading-ids": {
+            "status": "experimental"
+          },
+          "--toc [position]": {
+            "status": "experimental"
+          },
+          "--toc-depth <range>": {
+            "status": "experimental"
+          }
+        }
+      },
+      "capabilities": {
+        "status": "stable",
+        "aliases": [],
+        "arguments": [],
+        "options": {
+          "--json": {
+            "status": "stable"
+          }
+        }
+      }
+    },
+    "exitCodes": {
+      "OK": 0,
+      "INVALID": 1,
+      "USAGE": 2,
+      "FAILURE": 3,
+      "UNSUPPORTED": 64
+    }
+  },
+  "diagnosticCodes": [
+    "MM001",
+    "MM002",
+    "MM004",
+    "MM005",
+    "MM006",
+    "MM008",
+    "MM012",
+    "MM013",
+    "MM015",
+    "MM016"
+  ],
+  "schemaVersion": 1
+}

@@ -162,7 +162,7 @@ Every command takes `--help`. The full reference, with every flag, is [docs/guid
 | `parse` | Print the document model (JSON AST) or the heading outline. |
 | `stats` | Word count, reading time and structure. |
 | `diff` | Block-level diff of two Markdown files. |
-| `capabilities` | What is built, opt-in and planned; the lint rules. |
+| `capabilities` | What is built, experimental, opt-in and planned; the lint rules. |
 
 ### Shared flags
 
@@ -506,7 +506,7 @@ const result = await processor.render(doc, {
 const page = wrapDocument({ body: result.output, title: result.title, theme: 'auto' })
 ```
 
-`parse`, `transform`, `serialize` and `validate` are synchronous; `render` is async. Each processor is isolated (no global plugin registry). Also available: `transform(doc, { plugins: ['toc'] })`, `serialize(doc)`, `processor.roundTrip(doc)`, `query`, `visit`, `outline`, `diff`, `stats`. Full API: [docs/guide/sdk.md](docs/guide/sdk.md).
+`parse`, `transform`, `serialize` and `validate` are synchronous; `render` is async. Each processor is isolated (no global plugin registry). Also available: `transform(doc, { plugins: ['toc'] })`, `serialize(doc)`, `processor.roundTrip(doc)`, `query`, `visit`, `outline`, `diff`, `stats`. Full API: [docs/guide/sdk.md](docs/guide/sdk.md); what is stable and what is experimental: [docs/api-stability.md](docs/api-stability.md).
 
 ## Packages
 
@@ -602,6 +602,7 @@ markupme-qa also runs the suites on its own pull requests and nightly.
 | [docs/guide/cli.md](docs/guide/cli.md) | Full CLI reference |
 | [docs/guide/syntax.md](docs/guide/syntax.md) | Every supported syntax feature |
 | [docs/guide/sdk.md](docs/guide/sdk.md) | Programmatic API |
+| [docs/api-stability.md](docs/api-stability.md) | What 1.0 keeps stable: exports, commands, flags, exit codes, config keys |
 | [docs/guide/security.md](docs/guide/security.md) | Threat model and sanitizing |
 | [docs/product/PRD.md](docs/product/PRD.md) | Product requirements |
 | [docs/product/BRD.md](docs/product/BRD.md) | Business requirements |

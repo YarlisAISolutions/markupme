@@ -185,6 +185,16 @@ describe('info commands', () => {
     )
   })
 
+  it('capabilities marks experimental features as experimental', async () => {
+    let h = harness(dir)
+    await h.exec('capabilities', '--json')
+    const caps: { feature: string; status: string }[] = JSON.parse(h.out.join('\n')).capabilities
+    expect(caps.find((c) => c.feature === 'Structural diff')?.status).toBe('experimental')
+    h = harness(dir)
+    await h.exec('capabilities')
+    expect(h.out.join('\n')).toContain('~ Structural diff [experimental')
+  })
+
   it('init writes a config and a sample', async () => {
     const empty = mkdtempSync(join(tmpdir(), 'markupme-init-'))
     expect(await harness(empty).exec('init')).toBe(EXIT.OK)

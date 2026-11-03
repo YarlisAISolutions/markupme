@@ -129,6 +129,6 @@ Requirement IDs are `FR-<module><nn>`. Modules follow the brief: A engine, B doc
 | FR-G12 | `markupme parse` shall print the JSON document or `--outline`, with `--no-positions`. | built |
 | FR-G13 | All commands shall share `markupme.config.json` and the feature flags; precedence is defaults < file < flags the user typed. | built |
 | FR-G14 | `markupme stats` and `markupme diff` shall print human or `--json` output; `diff` exits 1 when files differ. | built |
-| FR-G15 | `markupme capabilities` shall list every feature as built, opt-in or planned, plus the lint rules, as text or `--json`. Work in progress is listed as planned with an `in progress` note. | built |
+| FR-G15 | `markupme capabilities` shall list every feature as built, experimental, opt-in or planned, plus the lint rules, as text or `--json`. Work in progress is listed as planned with an `in progress` note. | built |
 | FR-G16 | `markupme init` shall write a config and a sample document, refusing to overwrite without `--force`. | built |
 | FR-G17 | Exit codes shall be 0 OK, 1 invalid, 2 usage, 3 failure, 64 unsupported, and stable across releases. | built |
