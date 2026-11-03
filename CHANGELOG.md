@@ -4,9 +4,24 @@ All notable changes to the `@markupme/*` packages. The format follows [Keep a Ch
 
 ## [Unreleased]
 
+The next release from `main` is 0.2.0: the experimental-subpath move below is breaking for 0.1.x consumers.
+
 ### Changed
 
 - **Breaking for experimental exports only:** the exports `docs/api-stability.md` marks experimental moved from the package roots to an `experimental` subpath, so an import says what it relies on. Update imports: `diff` and `BlockChange` to `@markupme/core/experimental`; `providersFromIds`, `codeBlockHandlers`, `extractDiagrams` and their types to `@markupme/diagrams/experimental`; `renderToTree`, `treeToReact`, `htmlToReact` and `MarkdownTree` to `@markupme/react/experimental`; `createPipeline`, `mergeConfig`, `renderPage`, `startServer` and `CAPABILITIES` to `@markupme/cli/experimental`. Stable exports are unchanged, and CLI commands stay where they are (`markupme diff`). The API surface test now covers the subpaths and fails when an experimental export sits in a package root (MKP-6).
+
+## [0.1.1] - 2026-11-03
+
+Security release for 0.1.x. It does not include the experimental-subpath move on `main` (MKP-6), which is breaking for experimental exports and will ship in 0.2.0.
+
+### Security
+
+- `@markupme/core` installed from npm no longer gets KaTeX 0.16 (GHSA-238p-pmpm-9mq7). 0.1.0 had no direct `katex` dependency: `rehype-katex` 7.0.1 and `remark-math` 6.0.0 (through `micromark-extension-math` 3.1.0) declare `katex ^0.16.0`, and the root `overrides` that pinned 0.19.1 here do not apply to consumers. Core now depends on `katex` 0.19.1 directly and does the same work in-tree: `render/katex.ts` (from `rehype-katex` 7.0.1) and `plugins/math.ts` with `plugins/math-syntax.ts` (the `remark-math` plugin and the `micromark-extension-math` tokenizers, MIT). Rendered HTML, the AST, diagnostics and serialized Markdown are unchanged. A clean `npm i @markupme/core` now resolves only `katex@0.19.1` (MKP-7).
+- CI packs all six packages, installs them into an empty project and fails if any KaTeX in the tree is older than 0.18.2; a core test checks the dependency list. The ported files' MIT notices are in `packages/core/THIRD-PARTY-NOTICES.md`.
+
+### Changed
+
+- All packages are 0.1.1 and pin each other at 0.1.1, so `@markupme/cli`, `@markupme/react`, `@markupme/diagrams` and `@markupme/highlight` pull the fixed core. `@markupme/themes` has no code change.
 
 ## [0.1.0] - 2026-11-03
 
@@ -46,4 +61,4 @@ First version, published to npm.
 - `markupme serve` no longer serves dotfiles or dot folders (`.env`, `.git/…`): they return 404, as the file listing already hid them.
 - `markupme serve` refuses requests whose `Host` header is not `localhost`, a `*.localhost` name, an IP address or the `--host` value (403), so a DNS rebinding page cannot read the served folder.
 - `markupme serve` answers 500 for a file it cannot read instead of crashing.
-- KaTeX 0.18.11 (GHSA-238p-pmpm-9mq7), the same version Mermaid uses; `@azure/msal-node` 7.1.1 through a root override (GHSA-xcx6-jx8p-x3h5, pulled in by `@vscode/vsce`). Both fixes apply inside this repository only: root `overrides` are ignored when someone installs a published package, so `@markupme/core` installed from npm still gets KaTeX 0.16 through `rehype-katex` 7.0.1. Known issue in the published 0.1.0, tracked as MKP-7.
+- KaTeX 0.18.11 (GHSA-238p-pmpm-9mq7), the same version Mermaid uses; `@azure/msal-node` 7.1.1 through a root override (GHSA-xcx6-jx8p-x3h5, pulled in by `@vscode/vsce`). Both fixes apply inside this repository only: root `overrides` are ignored when someone installs a published package, so `@markupme/core` installed from npm still gets KaTeX 0.16 through `rehype-katex` 7.0.1. Known issue in the published 0.1.0, fixed in 0.1.1 (MKP-7).
