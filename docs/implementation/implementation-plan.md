@@ -19,7 +19,7 @@ Merged to `main` (markupme PR #1, branch `feat/core-cli`). End-to-end suites mer
 | CSS, runtime, page wrapper | `packages/themes` | Merged; 3 tests |
 | CLI: 12 commands, config, exit codes, serve API (with `lint` option), playground | `packages/cli` | Merged; 18 tests |
 | Kitchen-sink example | `examples/kitchen-sink.md` | Merged |
-| CI: `ci.yml` (jobs `test`, `e2e`, `gitleaks`), `security.yml`, `release.yml` | `.github/workflows/` | Merged |
+| CI: `ci.yml` (jobs `test`, `qa-smoke`, `gitleaks`), `security.yml`, `release.yml` | `.github/workflows/` | Merged |
 | SDODS api suite (health, render, validate/stats: 17 scenarios) and ui suite (playground, rendered pages: 10 scenarios) | `YarlisAISolutions/markupme-qa` `projects/markupme/features/` | Merged; api 17/17 and ui 10/10 pass locally and in GitHub Actions; `sdods lint --strict` clean |
 | Documentation set | `docs/`, `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `CLAUDE.md` | This change |
 
@@ -34,10 +34,10 @@ Follow-ups in flight (not yet on `main`):
 | Workflow | What it does |
 | -------- | ------------ |
 | `ci.yml` job `test` | `bun run lint:check` (Biome CI), `build`, `type-check`, `test`; `validate examples --strict --check-diagrams`; determinism check (renders `examples` standalone, the kitchen-sink AST and a `build` twice, then `diff -r`); `npm pack --dry-run` for each package. Node 22, Bun 1.4.0. |
-| `ci.yml` job `e2e` | Builds markupme, starts `markupme serve examples --port 4321`, checks out markupme-qa (`vars.QA_REF` or `main`), runs `sdods lint -p markupme --strict`, the api suite and the ui suite (Chromium), each followed by `scripts/qa-gate.mjs` with at least 15 api / 10 ui scenarios. Uploads the SDODS evidence. |
+| `ci.yml` job `qa-smoke` | The composite action `.github/actions/qa-smoke`: builds markupme, starts `markupme serve examples --port 4321`, checks out markupme-qa (`vars.QA_REF` or `main`), runs `sdods lint -p markupme --strict`, the api suite and the ui suite (Chromium, every `@smoke` scenario included), each followed by `scripts/qa-gate.mjs` with at least 15 api / 23 ui scenarios. Uploads the SDODS evidence. Named `e2e` before MKP-4. |
 | `ci.yml` job `gitleaks` | Secret scan of the full history. |
 | `security.yml` | The org security suite from YarlisAISolutions/bastion; also weekly (Mondays 06:41 UTC). |
-| `release.yml` | When package versions bump, builds and tests, then publishes the `@markupme/*` packages in dependency order with npm provenance and tags them. Needs the `NPM_TOKEN` secret (SDO-48). |
+| `release.yml` | When package versions bump and `RELEASE_ENABLED` is `true`, runs the same `qa-smoke` job; `publish` and `vscode` need it, so a red markupme-qa suite blocks the release. Then builds and tests, publishes the `@markupme/*` packages in dependency order with npm provenance and tags them. Needs the `NPM_TOKEN` secret (SDO-48). |
 | markupme-qa `e2e.yml` | The same SDODS suites from the QA repository, on its pull requests and nightly. |
 
 ### YCadence
@@ -102,7 +102,7 @@ Exit criteria: AC-095 to AC-097 met; the extension packages as a `.vsix` and ins
 | R9 | Performance is too slow for live preview on large documents. | Medium | Medium | Targets in NFR-020 to NFR-024; add benchmarks; debounce in the playground (250 ms) and studio; caching for diagrams and highlighters. |
 | R10 | Rich-text editor cannot keep MarkupMe syntax. | Medium | Medium | Defer behind measurable criteria (ADR 0007); source mode stays the reference. |
 | R11 | The `@markupme` npm scope or the name is unavailable. | Low | High | Check scope and trademark before the first tag (PRD open question 1). |
-| R12 | SDODS suite lags behind the API. | Medium | Medium | The `e2e` job runs markupme-qa on every markupme pull request (paired branches via `vars.QA_REF`); `qa-gate.mjs` fails a run with too few scenarios. |
+| R12 | SDODS suite lags behind the API. | Medium | Medium | The `qa-smoke` job runs markupme-qa on every markupme pull request (paired branches via `vars.QA_REF`) and before every release; `qa-gate.mjs` fails a run with too few scenarios. |
 | R13 | Browser use of the core is untested (the ui suite tests the server-rendered pages, not the core in a browser). | Medium | Medium | PR#2 (studio) exercises it; add a grep check for `node:` imports in CI. |
 | R14 | The npm token leaks or expires before the first publish. | Low | High | Rotate before the first publish (SDO-48); `release.yml` uses provenance and can move to trusted publishing (`NPM_TRUSTED_PUBLISHING`). |
 

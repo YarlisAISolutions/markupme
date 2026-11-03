@@ -588,10 +588,10 @@ bun run test:ui       # sdods run -p markupme -e local -l ui -b chromium -t @smo
 | Workflow | What it runs |
 | -------- | ------------ |
 | `.github/workflows/ci.yml` › `test` | Biome CI, build, type-check, unit tests, `validate examples --strict --check-diagrams`, a determinism diff of render, AST and build output, `npm pack --dry-run` |
-| `.github/workflows/ci.yml` › `e2e` | Builds MarkupMe, starts `markupme serve examples --port 4321`, runs the markupme-qa SDODS lint, api and ui suites, and fails below 15 api / 10 ui scenarios |
+| `.github/workflows/ci.yml` › `qa-smoke` | Builds MarkupMe, starts `markupme serve examples --port 4321`, runs the markupme-qa SDODS lint, api and ui suites, and fails below 15 api / 23 ui scenarios |
 | `.github/workflows/ci.yml` › `gitleaks` | Secret scan |
 | `.github/workflows/security.yml` | Org security suite (Yarlis Bastion), also weekly |
-| `.github/workflows/release.yml` | Publishes `@markupme/*` in dependency order with npm provenance when versions bump |
+| `.github/workflows/release.yml` | Publishes `@markupme/*` in dependency order with npm provenance when versions bump, after its own `qa-smoke` job passes |
 
 markupme-qa also runs the suites on its own pull requests and nightly.
 
