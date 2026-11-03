@@ -79,7 +79,7 @@ Overrides only apply when this repository is installed. A person who installs a 
 
 The `@azure/msal-node` override is outside `@azure/identity`'s declared range. `@vscode/vsce` only reaches it for `--azure-credential` publishing, which no test covers and `vscode-publish.yml` does not use (it signs in with `VSCE_PAT`).
 
-`security.yml` runs OSV-Scanner on the dependencies. `release.yml` publishes the npm packages and creates the `.vsix` GitHub release when versions bump, but only while the repository variable `RELEASE_ENABLED` is `true`, and only after its `qa-smoke` job (the markupme-qa suites) passes; do not bump versions in a feature pull request unless you are cutting a release.
+`security.yml` runs OSV-Scanner on the dependencies. `release.yml` publishes the npm packages and creates the `.vsix` GitHub release when versions bump, but only while the repository variable `RELEASE_ENABLED` is `true`, and only after its `qa-smoke` job (the markupme-qa suites) passes; do not bump versions in a feature pull request unless you are cutting a release. From any branch but `release/*` it refuses to publish a version below 0.2.0, because `main` carries the experimental-subpath move that breaks 0.1.x consumers; 0.1.x patches are released from `release/0.1.x` (MKP-8).
 
 ### Publishing the VS Code extension
 
