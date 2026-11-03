@@ -628,7 +628,7 @@ markupme-qa also runs the suites on its own pull requests and nightly.
 | Phase 1 | VS Code extension on the VS Code Marketplace and Open VSX | Published |
 | Phase 2 | PDF, DOCX, MDX output; rich-text editing | Planned |
 
-Full plan: [docs/implementation/implementation-plan.md](docs/implementation/implementation-plan.md). The first npm publish waits on rotating the npm token (SDO-48); the release workflow only runs when the repository variable `RELEASE_ENABLED` is `true`.
+Full plan: [docs/implementation/implementation-plan.md](docs/implementation/implementation-plan.md). The release workflow only runs when the repository variable `RELEASE_ENABLED` is `true`.
 
 ## Contributing and licence
 
