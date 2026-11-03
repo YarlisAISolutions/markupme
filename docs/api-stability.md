@@ -10,7 +10,7 @@ Not covered at all: anything not listed here, such as files under `dist/` other 
 
 | Check | Where | Fails when |
 | ----- | ----- | ---------- |
-| API surface snapshot | [`test/api-surface.test.ts`](../test/api-surface.test.ts) against [`api/exports.snapshot.json`](../api/exports.snapshot.json), in `bun run test` | A stable export, command, alias, argument or flag (or a flag's default) is removed or renamed without a major version bump; an exit code, diagnostic code or `SCHEMA_VERSION` changes; a new export or flag is not classified yet. The message names the item. |
+| API surface snapshot | [`test/api-surface.test.ts`](../test/api-surface.test.ts) against [`api/exports.snapshot.json`](../api/exports.snapshot.json), in `bun run test` | A stable export, command, alias, argument or flag (or a flag's default) is removed or renamed without a major version bump; an exit code, diagnostic code or `SCHEMA_VERSION` changes; a new export or flag is not classified yet; an experimental export sits in a package root, or a stable one in an `experimental` entry. The message names the item. |
 | Doc and snapshot agree | the same test file | An export or command in the snapshot has no row below, or its row has a different status. |
 | Type contract | each package's `test/contract.test.ts`, in `bun run type-check` and `bun run test` | A stable type is removed or loses the property its row relies on. |
 | Capabilities | [`packages/cli/test/cli.test.ts`](../packages/cli/test/cli.test.ts) › capabilities marks experimental features as experimental | `markupme capabilities` stops marking experimental features. |
@@ -118,7 +118,7 @@ Status per item. Types are checked at compile time by each package's `contract.t
 
 | Export | Status | Kind | Test |
 | ------ | ------ | ---- | ---- |
-| `BlockChange` | experimental | type | [contract.test.ts › exports the stable types](../packages/core/test/contract.test.ts) |
+| `BlockChange` | experimental | type | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
 | `diff` | experimental | value | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
 
 ### `@markupme/highlight`
@@ -157,10 +157,10 @@ Status per item. Types are checked at compile time by each package's `contract.t
 
 | Export | Status | Kind | Test |
 | ------ | ------ | ---- | ---- |
-| `CodeBlockHandlerOptions` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
-| `ExtractedDiagram` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
-| `ProviderProblem` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
-| `ProvidersFromIds` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
+| `CodeBlockHandlerOptions` | experimental | type | [diagrams.test.ts › puts diagrams first and hands their languages to the next handler](../packages/diagrams/test/diagrams.test.ts) |
+| `ExtractedDiagram` | experimental | type | [diagrams.test.ts › extracts diagram blocks](../packages/diagrams/test/diagrams.test.ts) |
+| `ProviderProblem` | experimental | type | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
+| `ProvidersFromIds` | experimental | type | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
 | `codeBlockHandlers` | experimental | value | [diagrams.test.ts › puts diagrams first and hands their languages to the next handler](../packages/diagrams/test/diagrams.test.ts) |
 | `extractDiagrams` | experimental | value | [diagrams.test.ts › extracts diagram blocks](../packages/diagrams/test/diagrams.test.ts) |
 | `providersFromIds` | experimental | value | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
@@ -192,7 +192,7 @@ Status per item. Types are checked at compile time by each package's `contract.t
 
 | Export | Status | Kind | Test |
 | ------ | ------ | ---- | ---- |
-| `MarkdownTree` | experimental | type | [contract.test.ts › exports the stable types](../packages/react/test/contract.test.ts) |
+| `MarkdownTree` | experimental | type | [render.test.ts › returns the tree with diagnostics and title](../packages/react/test/render.test.ts) |
 | `htmlToReact` | experimental | value | [render.test.ts › converts trusted HTML strings](../packages/react/test/render.test.ts) |
 | `renderToTree` | experimental | value | [render.test.ts › returns the tree with diagnostics and title](../packages/react/test/render.test.ts) |
 | `treeToReact` | experimental | value | [render.test.ts › returns the tree with diagnostics and title](../packages/react/test/render.test.ts) |
