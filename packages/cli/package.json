@@ -1,6 +1,6 @@
 {
   "name": "@markupme/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "markupme: the MarkupMe command line. Render Markdown to HTML, Markdown, AST or text with diagrams and highlighting, lint, format, build TOCs and static sites, and preview with live reload.",
   "license": "MIT",
   "author": "Yarlis AI Solutions",
@@ -48,10 +48,10 @@
     "prepublishOnly": "bun run build"
   },
   "dependencies": {
-    "@markupme/core": "0.1.0",
-    "@markupme/diagrams": "0.1.0",
-    "@markupme/highlight": "0.1.0",
-    "@markupme/themes": "0.1.0",
+    "@markupme/core": "0.1.1",
+    "@markupme/diagrams": "0.1.1",
+    "@markupme/highlight": "0.1.1",
+    "@markupme/themes": "0.1.1",
     "commander": "15.0.0",
     "katex": "0.19.1",
     "mermaid": "12.2.0"

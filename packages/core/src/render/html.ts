@@ -1,6 +1,5 @@
 import type { Element, ElementContent, RootContent as HastContent, Root as HastRoot } from 'hast'
 import type { Root } from 'mdast'
-import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
 import rehypeSanitize from 'rehype-sanitize'
 import rehypeStringify from 'rehype-stringify'
@@ -18,6 +17,7 @@ import type {
   ProcessorOptions,
   RenderOptions,
 } from '../types.js'
+import { rehypeKatex } from './katex.js'
 import { markupmeSchema } from './schema.js'
 
 const CLOBBER = 'user-content-'
@@ -219,10 +219,7 @@ export async function renderHtml(
     }
   })
 
-  if (opts.math === true)
-    out = (await unified()
-      .use(rehypeKatex, { throwOnError: false } as never)
-      .run(out)) as HastRoot
+  if (opts.math === true) out = (await unified().use(rehypeKatex).run(out)) as HastRoot
 
   // Fill slots with trusted HTML.
   visit(out, 'element', (el: Element, i, parent) => {

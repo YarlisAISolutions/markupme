@@ -73,9 +73,9 @@ The root `package.json` `overrides` force a patched version of a transitive depe
 | Override | Advisory | Pulled in by | Remove when |
 | -------- | -------- | ------------ | ----------- |
 | `@azure/msal-node` 7.1.2 | [GHSA-xcx6-jx8p-x3h5](https://github.com/advisories/GHSA-xcx6-jx8p-x3h5) (fixed in 7.1.0, no 6.x fix) | `@vscode/vsce` → `@azure/identity` 4.14.0, which declares `^6.0.0` | `@azure/identity` allows `^7` |
-| `katex` 0.19.1 | [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) (fixed in 0.18.2, no 0.16.x fix) | `rehype-katex` 7.0.1 and `micromark-extension-math` 3.1.0, which declare `^0.16.0`; Mermaid 12.2.0 already uses 0.18 | both declare `^0.18` |
+| `katex` 0.19.1 | [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) (fixed in 0.18.2, no 0.16.x fix) | Mermaid 12.2.0 (`^0.18.0`), deduped here to the 0.19.1 that core, cli, studio and vscode pin directly | Mermaid allows `^0.19` |
 
-Overrides only apply when this repository is installed. A person who installs a published package gets the ranges its dependencies declare, so `npm i @markupme/core` (or `@markupme/cli`) would still install KaTeX 0.16 through `rehype-katex`, and `markupme serve` would render with 0.16 while serving 0.18 CSS and fonts. Replace `rehype-katex` in core with a plugin that calls KaTeX 0.18 directly before the first npm publish.
+Overrides only apply when this repository is installed. A person who installs a published package gets the ranges its dependencies declare, so a security fix that consumers need must be a direct dependency of the published package, never only an override. That is why core pins `katex` itself and carries in-tree ports of `rehype-katex`, `remark-math` and the `micromark-extension-math` tokenizers (all declare `katex ^0.16.0`; see `packages/core/THIRD-PARTY-NOTICES.md`) since 0.1.1 (MKP-7). CI installs the packed packages into an empty project and fails on any KaTeX older than 0.18.2.
 
 The `@azure/msal-node` override is outside `@azure/identity`'s declared range. `@vscode/vsce` only reaches it for `--azure-credential` publishing, which no test covers and `vscode-publish.yml` does not use (it signs in with `VSCE_PAT`).
 
