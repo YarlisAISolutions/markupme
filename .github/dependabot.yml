@@ -6,7 +6,7 @@ updates:
     directory: /
     schedule: { interval: weekly }
     groups:
-      actions: { patterns: ["*"] }
+      actions: { patterns: ["*"], update-types: [minor, patch] } # majors arrive one PR each
     commit-message: { prefix: "chore(deps)" }
 
   - package-ecosystem: bun
