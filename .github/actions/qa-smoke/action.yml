@@ -1,0 +1,62 @@
+# The markupme-qa SDODS suites against this checkout. Used by the `qa-smoke` job in ci.yml (every
+# pull request and push to main) and in release.yml (before anything is published), so a release
+# cannot go out while the suites are red. The caller checks this repository out first.
+#
+# It runs `sdods lint`, then the whole api and ui suites (Chromium), which include every @smoke
+# scenario; `scripts/qa-gate.mjs` fails a run that is red or has too few scenarios.
+name: markupme-qa suites
+description: Build markupme, serve the examples and run the markupme-qa SDODS suites against them.
+
+inputs:
+  qa-ref:
+    description: markupme-qa ref to test with (the caller passes vars.QA_REF for paired pull requests)
+    required: false
+    default: main
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      with:
+        repository: YarlisAISolutions/markupme-qa
+        ref: ${{ inputs.qa-ref }}
+        path: qa
+    - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      with:
+        bun-version: 1.4.0
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+      with:
+        node-version: '24.22.1'
+    - name: build markupme
+      shell: bash
+      run: bun install --frozen-lockfile && bun run build
+    - name: start markupme serve
+      shell: bash
+      run: |
+        node packages/cli/dist/bin.js build examples -o examples/site
+        cp -R apps/studio/dist examples/studio
+        nohup node packages/cli/dist/bin.js serve examples --port 4321 --no-live-reload > serve.log 2>&1 &
+        for _ in $(seq 1 30); do curl -sf http://127.0.0.1:4321/api/health && exit 0; sleep 1; done
+        cat serve.log; exit 1
+    - name: install SDODS
+      shell: bash
+      working-directory: qa
+      run: bun install --frozen-lockfile && npx playwright install --with-deps chromium
+    - name: sdods lint
+      shell: bash
+      working-directory: qa
+      run: npx sdods lint -p markupme --strict
+    - name: sdods api
+      shell: bash
+      working-directory: qa
+      run: npx sdods run -p markupme -e local -l api --workers 2 && node scripts/qa-gate.mjs --suite api --min-scenarios 15
+    - name: sdods ui
+      shell: bash
+      working-directory: qa
+      run: npx sdods run -p markupme -e local -l ui -b chromium --workers 2 && node scripts/qa-gate.mjs --suite ui --min-scenarios 23
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      if: always()
+      with:
+        name: sdods-evidence
+        path: qa/.sdods/runs
+        retention-days: 14
