@@ -47,7 +47,7 @@ The split, accepted on 2026-11-03 (MKP-3):
 - **`@markupme/cli` programmatic API** (`createPipeline`, `mergeConfig`, `renderPage`, `startServer`, `CAPABILITIES`): the command line is the CLI's contract; these Node functions follow its internals. `run`, `EXIT`, `CliError` and `Io` are stable.
 - **MarkupMe Studio** shows as experimental in `markupme capabilities`; it is not published.
 
-Since the release after 0.1.0, experimental exports live behind each package's `experimental` subpath (`@markupme/core/experimental`, `@markupme/diagrams/experimental`, `@markupme/react/experimental`, `@markupme/cli/experimental`), so an import says what it relies on. The package roots export stable items only, and the API surface test fails when an item sits in the wrong one. CLI commands and flags stay top-level (`markupme diff`); they are marked in `markupme capabilities` and below (MKP-6).
+Since 0.2.0 (unreleased; 0.1.1 is a security patch without this change), experimental exports live behind each package's `experimental` subpath (`@markupme/core/experimental`, `@markupme/diagrams/experimental`, `@markupme/react/experimental`, `@markupme/cli/experimental`), so an import says what it relies on. The package roots export stable items only, and the API surface test fails when an item sits in the wrong one. CLI commands and flags stay top-level (`markupme diff`); they are marked in `markupme capabilities` and below (MKP-6).
 
 ## Exports and commands
 

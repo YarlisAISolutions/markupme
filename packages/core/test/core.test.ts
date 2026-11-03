@@ -170,6 +170,11 @@ describe('math (MKP-7)', () => {
     for (const dep of ['rehype-katex', 'remark-math', 'micromark-extension-math']) {
       expect(pkg.dependencies).not.toHaveProperty(dep)
     }
+    // Dependabot bumps the direct pin but not the root override; keep them together.
+    const root = JSON.parse(
+      readFileSync(new URL('../../../package.json', import.meta.url), 'utf8'),
+    ) as { overrides?: Record<string, string> }
+    expect(root.overrides?.katex).toBe(katex)
   })
 })
 

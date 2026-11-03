@@ -1,6 +1,6 @@
 # SDK guide
 
-The programmatic API of the MarkupMe packages. Signatures match `packages/*/src` at version 0.1.0. The examples were run against the built packages.
+The programmatic API of the MarkupMe packages. Signatures match `packages/*/src` on `main` (0.2.0, unreleased; the experimental exports moved to subpaths since 0.1.x). The examples were run against the built packages.
 
 > [!NOTE]
 > The packages are not on npm yet. Until the first release is tagged, use them from a checkout of the monorepo (workspace dependencies).
