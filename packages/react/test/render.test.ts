@@ -3,7 +3,8 @@ import { diagramHandler } from '@markupme/diagrams'
 import { createElement, type ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
-import { htmlToReact, Markdown, renderToReact, renderToTree } from '../src/index.js'
+import { htmlToReact, renderToTree } from '../src/experimental.js'
+import { Markdown, renderToReact } from '../src/index.js'
 
 const A = (props: { href?: string; children?: ReactNode }) =>
   createElement('a', { href: props.href, 'data-custom': 'yes' }, props.children)

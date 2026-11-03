@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join, resolve } from 'node:path'
-import { extractDiagrams, sanitizeSvg } from '@markupme/diagrams'
+import { sanitizeSvg } from '@markupme/diagrams'
+import { extractDiagrams } from '@markupme/diagrams/experimental'
 import { DEFAULT_CONFIG, loadConfig } from '../config.js'
 import { CliError, EXIT } from '../exit.js'
 import { display, expandInputs, MARKDOWN_EXT, readInput } from '../files.js'

@@ -1,12 +1,9 @@
 import { CommanderError } from 'commander'
-import { startServer } from './commands/serve.js'
 import { CliError, EXIT } from './exit.js'
 import { type Io, processIo } from './io.js'
 import { program } from './program.js'
 
-export { CAPABILITIES } from './commands/info.js'
-export { createPipeline, mergeConfig, renderPage } from './pipeline.js'
-export { CliError, EXIT, type Io, startServer }
+export { CliError, EXIT, type Io }
 
 /** Runs the CLI and returns the exit code. Never calls process.exit, so tests can run it in-process. */
 export async function run(argv: string[], io: Io = processIo): Promise<number> {

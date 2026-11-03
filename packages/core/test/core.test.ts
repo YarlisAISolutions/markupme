@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { diff } from '../src/experimental.js'
 import {
   createProcessor,
-  diff,
   escapeHtml,
   type MarkupMePlugin,
   outline,
