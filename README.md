@@ -506,7 +506,7 @@ const result = await processor.render(doc, {
 const page = wrapDocument({ body: result.output, title: result.title, theme: 'auto' })
 ```
 
-`parse`, `transform`, `serialize` and `validate` are synchronous; `render` is async. Each processor is isolated (no global plugin registry). Also available: `transform(doc, { plugins: ['toc'] })`, `serialize(doc)`, `processor.roundTrip(doc)`, `query`, `visit`, `outline`, `diff`, `stats`. Full API: [docs/guide/sdk.md](docs/guide/sdk.md); what is stable and what is experimental: [docs/api-stability.md](docs/api-stability.md).
+`parse`, `transform`, `serialize` and `validate` are synchronous; `render` is async. Each processor is isolated (no global plugin registry). Also available: `transform(doc, { plugins: ['toc'] })`, `serialize(doc)`, `processor.roundTrip(doc)`, `query`, `visit`, `outline`, `stats`, and `diff` from `@markupme/core/experimental`. Full API: [docs/guide/sdk.md](docs/guide/sdk.md); what is stable and what is experimental: [docs/api-stability.md](docs/api-stability.md).
 
 ## Packages
 

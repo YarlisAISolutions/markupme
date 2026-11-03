@@ -1,14 +1,12 @@
 import type { CodeBlockHandler } from '@markupme/core'
 import { createProcessor } from '@markupme/core'
 import { describe, expect, it } from 'vitest'
+import { codeBlockHandlers, extractDiagrams, providersFromIds } from '../src/experimental.js'
 import {
-  codeBlockHandlers,
   type DiagramHandler,
   type DiagramProvider,
   diagramHandler,
-  extractDiagrams,
   krokiProvider,
-  providersFromIds,
   sanitizeSvg,
 } from '../src/index.js'
 

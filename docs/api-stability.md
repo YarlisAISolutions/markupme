@@ -10,7 +10,7 @@ Not covered at all: anything not listed here, such as files under `dist/` other 
 
 | Check | Where | Fails when |
 | ----- | ----- | ---------- |
-| API surface snapshot | [`test/api-surface.test.ts`](../test/api-surface.test.ts) against [`api/exports.snapshot.json`](../api/exports.snapshot.json), in `bun run test` | A stable export, command, alias, argument or flag (or a flag's default) is removed or renamed without a major version bump; an exit code, diagnostic code or `SCHEMA_VERSION` changes; a new export or flag is not classified yet. The message names the item. |
+| API surface snapshot | [`test/api-surface.test.ts`](../test/api-surface.test.ts) against [`api/exports.snapshot.json`](../api/exports.snapshot.json), in `bun run test` | A stable export, command, alias, argument or flag (or a flag's default) is removed or renamed without a major version bump; an exit code, diagnostic code or `SCHEMA_VERSION` changes; a new export or flag is not classified yet; an experimental export sits in a package root, or a stable one in an `experimental` entry. The message names the item. |
 | Doc and snapshot agree | the same test file | An export or command in the snapshot has no row below, or its row has a different status. |
 | Type contract | each package's `test/contract.test.ts`, in `bun run type-check` and `bun run test` | A stable type is removed or loses the property its row relies on. |
 | Capabilities | [`packages/cli/test/cli.test.ts`](../packages/cli/test/cli.test.ts) › capabilities marks experimental features as experimental | `markupme capabilities` stops marking experimental features. |
@@ -19,8 +19,8 @@ The snapshot lists everything each package's entry point exports (values from th
 
 ### Changing the API
 
-- **Adding** an export, command or flag: run `bun run api:update` after `bun run build`. The new item is recorded as `experimental`. Add its row below. To make it stable straight away, change its status in `api/exports.snapshot.json` and in its row, and link a test.
-- **Promoting** an experimental item to stable: change the status in both places and link its test. Allowed in a minor release.
+- **Adding** an export, command or flag: run `bun run api:update` after `bun run build`. The new item is recorded as `experimental`. Add its row below. A new export belongs in the package root only when it is stable: change its status in `api/exports.snapshot.json` and in its row, and link a test. An experimental export goes in the package's `src/experimental.ts` (`<package>/experimental`).
+- **Promoting** an experimental export to stable: export it from the package root as well, run `bun run api:update`, change its root status in both places and link its test. You may keep the `experimental` export for one more minor release so existing imports keep working; removing it after that is an experimental removal. Allowed in a minor release.
 - **Removing or renaming** an experimental item: run `bun run api:update` and update the row. Allowed in a minor release; say so in the CHANGELOG.
 - **Removing or renaming** a stable item: only with a major version bump. Bump the versions first (they are pinned together, see `CLAUDE.md`), then run `bun run api:update`; before the bump it refuses and lists what was removed.
 
@@ -35,11 +35,11 @@ The snapshot lists everything each package's entry point exports (values from th
 | `markupme.config.json` keys: `gfm`, `frontmatter`, `directives`, `alerts`, `math`, `emoji`, `headingIds`, `toc`, `render.{sanitize, allowHtml, anchors, highlight, lineNumbers, theme, baseUrl, externalLinksNewTab}`, `diagrams.{providers, server}`, `rules`, `site.{name, exclude}` | stable | [`packages/cli/src/config.ts`](../packages/cli/src/config.ts), [CLI guide](guide/cli.md#configuration-file) | [cli.test.ts › init writes a config and a sample](../packages/cli/test/cli.test.ts) |
 | Serve API: `GET /api/health`, `GET /api/capabilities`, `POST /api/render` (with `lint`), `POST /api/validate`, `POST /api/stats`; planned formats answer 501 | stable | [`packages/cli/src/commands/serve.ts`](../packages/cli/src/commands/serve.ts) | [cli.test.ts › renders sanitized HTML with diagrams and stats](../packages/cli/test/cli.test.ts), and the markupme-qa api suite |
 | `markupme capabilities --json` shape `{ name, version, capabilities: [{ area, feature, status, note? }], rules }`; `status` is one of `built`, `experimental`, `opt-in`, `planned` | stable | [`packages/cli/src/commands/info.ts`](../packages/cli/src/commands/info.ts) | [cli.test.ts › capabilities marks experimental features as experimental](../packages/cli/test/cli.test.ts) |
-| Structural diff output (`diff()`, `markupme diff`) | experimental | [`packages/core/src/util.ts`](../packages/core/src/util.ts) | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
+| Structural diff output (`diff()` from `@markupme/core/experimental`, `markupme diff`) | experimental | [`packages/core/src/util.ts`](../packages/core/src/util.ts) | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
 
 ## Why these are experimental
 
-The proposed split, for review before 1.0:
+The split, accepted on 2026-11-03 (MKP-3):
 
 - **`diff` and `BlockChange` in core, `markupme diff`**: the block-level change model (`added`, `removed`, `changed` with line numbers) is young, and a word-level or move-aware diff would change its shape.
 - **`@markupme/diagrams` plumbing** (`providersFromIds`, `codeBlockHandlers`, `extractDiagrams` and their types): helpers the CLI and the VS Code extension share. Their option objects are still growing. `diagramHandler` and the providers are the stable way in.
@@ -47,7 +47,7 @@ The proposed split, for review before 1.0:
 - **`@markupme/cli` programmatic API** (`createPipeline`, `mergeConfig`, `renderPage`, `startServer`, `CAPABILITIES`): the command line is the CLI's contract; these Node functions follow its internals. `run`, `EXIT`, `CliError` and `Io` are stable.
 - **MarkupMe Studio** shows as experimental in `markupme capabilities`; it is not published.
 
-Experimental exports are marked here, in the snapshot and in `markupme capabilities`; they are not moved under an `experimental` namespace yet. Moving them would be a breaking change for in-repo callers (`packages/cli`, `packages/vscode`, `apps/studio`), so it waits until this split is agreed.
+Since the release after 0.1.0, experimental exports live behind each package's `experimental` subpath (`@markupme/core/experimental`, `@markupme/diagrams/experimental`, `@markupme/react/experimental`, `@markupme/cli/experimental`), so an import says what it relies on. The package roots export stable items only, and the API surface test fails when an item sits in the wrong one. CLI commands and flags stay top-level (`markupme diff`); they are marked in `markupme capabilities` and below (MKP-6).
 
 ## Exports and commands
 
@@ -60,7 +60,6 @@ Status per item. Types are checked at compile time by each package's `contract.t
 | `ALERT_TITLES` | stable | value | [contract.test.ts › alert constants list the five GitHub alert types with titles](../packages/core/test/contract.test.ts) |
 | `ALERT_TYPES` | stable | value | [contract.test.ts › alert constants list the five GitHub alert types with titles](../packages/core/test/contract.test.ts) |
 | `AlertType` | stable | type | [contract.test.ts › exports the stable types](../packages/core/test/contract.test.ts) |
-| `BlockChange` | experimental | type | [contract.test.ts › exports the stable types](../packages/core/test/contract.test.ts) |
 | `BuiltinTransform` | stable | type | [contract.test.ts › exports the stable types](../packages/core/test/contract.test.ts) |
 | `CALLOUTS` | stable | value | [contract.test.ts › directive constants name the built-in directives](../packages/core/test/contract.test.ts) |
 | `CONTAINERS` | stable | value | [contract.test.ts › directive constants name the built-in directives](../packages/core/test/contract.test.ts) |
@@ -99,7 +98,6 @@ Status per item. Types are checked at compile time by each package's `contract.t
 | `ValidateOptions` | stable | type | [contract.test.ts › exports the stable types](../packages/core/test/contract.test.ts) |
 | `buildToc` | stable | value | [contract.test.ts › buildToc, insertToc and headingId work on a parsed tree](../packages/core/test/contract.test.ts) |
 | `createProcessor` | stable | value | [core.test.ts › is isolated per processor](../packages/core/test/core.test.ts) |
-| `diff` | experimental | value | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
 | `escapeHtml` | stable | value | [core.test.ts › escapes the five HTML-special characters as numeric references](../packages/core/test/core.test.ts) |
 | `formatDiagnostic` | stable | value | [contract.test.ts › formatDiagnostic prints file, line, code and message](../packages/core/test/contract.test.ts) |
 | `headingId` | stable | value | [contract.test.ts › buildToc, insertToc and headingId work on a parsed tree](../packages/core/test/contract.test.ts) |
@@ -116,6 +114,13 @@ Status per item. Types are checked at compile time by each package's `contract.t
 | `validate` | stable | value | [core.test.ts › finds structural, link and accessibility problems](../packages/core/test/core.test.ts) |
 | `visit` | stable | value | [contract.test.ts › stripPositions and visit walk the tree](../packages/core/test/contract.test.ts) |
 
+### `@markupme/core/experimental`
+
+| Export | Status | Kind | Test |
+| ------ | ------ | ---- | ---- |
+| `BlockChange` | experimental | type | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
+| `diff` | experimental | value | [core.test.ts › diffs block structure](../packages/core/test/core.test.ts) |
+
 ### `@markupme/highlight`
 
 | Export | Status | Kind | Test |
@@ -130,7 +135,6 @@ Status per item. Types are checked at compile time by each package's `contract.t
 
 | Export | Status | Kind | Test |
 | ------ | ------ | ---- | ---- |
-| `CodeBlockHandlerOptions` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
 | `DiagramError` | stable | value | [contract.test.ts › DiagramError carries the source line](../packages/diagrams/test/contract.test.ts) |
 | `DiagramHandler` | stable | type | [diagrams.test.ts › puts diagrams first and hands their languages to the next handler](../packages/diagrams/test/diagrams.test.ts) |
 | `DiagramOptions` | stable | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
@@ -138,22 +142,28 @@ Status per item. Types are checked at compile time by each package's `contract.t
 | `DiagramProvider` | stable | type | [diagrams.test.ts › passes the theme to the diagram handler](../packages/diagrams/test/diagrams.test.ts) |
 | `DiagramRequest` | stable | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
 | `DiagramTheme` | stable | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
-| `ExtractedDiagram` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
 | `KROKI_TYPES` | stable | value | [contract.test.ts › KROKI_TYPES maps fence languages to Kroki types](../packages/diagrams/test/contract.test.ts) |
 | `KrokiOptions` | stable | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
 | `MERMAID_LANGS` | stable | value | [contract.test.ts › the built-in providers have fixed ids, languages and modes](../packages/diagrams/test/contract.test.ts) |
-| `ProviderProblem` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
-| `ProvidersFromIds` | experimental | type | [contract.test.ts › exports the stable types](../packages/diagrams/test/contract.test.ts) |
 | `blueprintProvider` | stable | value | [contract.test.ts › the built-in providers have fixed ids, languages and modes](../packages/diagrams/test/contract.test.ts) |
-| `codeBlockHandlers` | experimental | value | [diagrams.test.ts › puts diagrams first and hands their languages to the next handler](../packages/diagrams/test/diagrams.test.ts) |
 | `defaultProviders` | stable | value | [contract.test.ts › the built-in providers have fixed ids, languages and modes](../packages/diagrams/test/contract.test.ts) |
 | `diagramHandler` | stable | value | [diagrams.test.ts › renders Blueprint to deterministic SVG](../packages/diagrams/test/diagrams.test.ts) |
-| `extractDiagrams` | experimental | value | [diagrams.test.ts › extracts diagram blocks](../packages/diagrams/test/diagrams.test.ts) |
 | `graphvizProvider` | stable | value | [contract.test.ts › the built-in providers have fixed ids, languages and modes](../packages/diagrams/test/contract.test.ts) |
 | `krokiProvider` | stable | value | [diagrams.test.ts › uses Kroki only when configured, and sanitizes its SVG](../packages/diagrams/test/diagrams.test.ts) |
 | `mermaidProvider` | stable | value | [contract.test.ts › mermaid renders a client placeholder with escaped source](../packages/diagrams/test/contract.test.ts) |
-| `providersFromIds` | experimental | value | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
 | `sanitizeSvg` | stable | value | [diagrams.test.ts › removes scripts, handlers, foreignObject and unsafe links](../packages/diagrams/test/diagrams.test.ts) |
+
+### `@markupme/diagrams/experimental`
+
+| Export | Status | Kind | Test |
+| ------ | ------ | ---- | ---- |
+| `CodeBlockHandlerOptions` | experimental | type | [diagrams.test.ts › puts diagrams first and hands their languages to the next handler](../packages/diagrams/test/diagrams.test.ts) |
+| `ExtractedDiagram` | experimental | type | [diagrams.test.ts › extracts diagram blocks](../packages/diagrams/test/diagrams.test.ts) |
+| `ProviderProblem` | experimental | type | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
+| `ProvidersFromIds` | experimental | type | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
+| `codeBlockHandlers` | experimental | value | [diagrams.test.ts › puts diagrams first and hands their languages to the next handler](../packages/diagrams/test/diagrams.test.ts) |
+| `extractDiagrams` | experimental | value | [diagrams.test.ts › extracts diagram blocks](../packages/diagrams/test/diagrams.test.ts) |
+| `providersFromIds` | experimental | value | [diagrams.test.ts › reports unknown ids and kroki without a server, in order](../packages/diagrams/test/diagrams.test.ts) |
 
 ### `@markupme/themes`
 
@@ -175,25 +185,35 @@ Status per item. Types are checked at compile time by each package's `contract.t
 | `MarkdownComponents` | stable | type | [contract.test.ts › exports the stable types](../packages/react/test/contract.test.ts) |
 | `MarkdownOptions` | stable | type | [contract.test.ts › exports the stable types](../packages/react/test/contract.test.ts) |
 | `MarkdownProps` | stable | type | [contract.test.ts › exports the stable types](../packages/react/test/contract.test.ts) |
-| `MarkdownTree` | experimental | type | [contract.test.ts › exports the stable types](../packages/react/test/contract.test.ts) |
-| `htmlToReact` | experimental | value | [render.test.ts › converts trusted HTML strings](../packages/react/test/render.test.ts) |
 | `renderToReact` | stable | value | [render.test.ts › renders GFM](../packages/react/test/render.test.ts) |
+| `useMarkdown` | stable | value | [hook.test.ts › re-renders when the source changes, with inline options](../packages/react/test/hook.test.ts) |
+
+### `@markupme/react/experimental`
+
+| Export | Status | Kind | Test |
+| ------ | ------ | ---- | ---- |
+| `MarkdownTree` | experimental | type | [render.test.ts › returns the tree with diagnostics and title](../packages/react/test/render.test.ts) |
+| `htmlToReact` | experimental | value | [render.test.ts › converts trusted HTML strings](../packages/react/test/render.test.ts) |
 | `renderToTree` | experimental | value | [render.test.ts › returns the tree with diagnostics and title](../packages/react/test/render.test.ts) |
 | `treeToReact` | experimental | value | [render.test.ts › returns the tree with diagnostics and title](../packages/react/test/render.test.ts) |
-| `useMarkdown` | stable | value | [hook.test.ts › re-renders when the source changes, with inline options](../packages/react/test/hook.test.ts) |
 
 ### `@markupme/cli`
 
 | Export | Status | Kind | Test |
 | ------ | ------ | ---- | ---- |
-| `CAPABILITIES` | experimental | value | [cli.test.ts › capabilities marks experimental features as experimental](../packages/cli/test/cli.test.ts) |
 | `CliError` | stable | value | [contract.test.ts › CliError carries an exit code](../packages/cli/test/contract.test.ts) |
 | `EXIT` | stable | value | [contract.test.ts › EXIT codes are fixed](../packages/cli/test/contract.test.ts) |
 | `Io` | stable | type | [contract.test.ts › exports the stable types](../packages/cli/test/contract.test.ts) |
+| `run` | stable | value | [cli.test.ts › renders to stdout as html, md, ast and text](../packages/cli/test/cli.test.ts) |
+
+### `@markupme/cli/experimental`
+
+| Export | Status | Kind | Test |
+| ------ | ------ | ---- | ---- |
+| `CAPABILITIES` | experimental | value | [cli.test.ts › capabilities marks experimental features as experimental](../packages/cli/test/cli.test.ts) |
 | `createPipeline` | experimental | value | none yet |
 | `mergeConfig` | experimental | value | none yet |
 | `renderPage` | experimental | value | none yet |
-| `run` | stable | value | [cli.test.ts › renders to stdout as html, md, ast and text](../packages/cli/test/cli.test.ts) |
 | `startServer` | experimental | value | [cli.test.ts › reports health](../packages/cli/test/cli.test.ts) |
 
 ### `markupme`

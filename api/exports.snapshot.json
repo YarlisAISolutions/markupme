@@ -14,10 +14,6 @@
         "status": "stable",
         "kind": "type"
       },
-      "BlockChange": {
-        "status": "experimental",
-        "kind": "type"
-      },
       "BuiltinTransform": {
         "status": "stable",
         "kind": "type"
@@ -170,10 +166,6 @@
         "status": "stable",
         "kind": "value"
       },
-      "diff": {
-        "status": "experimental",
-        "kind": "value"
-      },
       "escapeHtml": {
         "status": "stable",
         "kind": "value"
@@ -235,6 +227,16 @@
         "kind": "value"
       }
     },
+    "@markupme/core/experimental": {
+      "BlockChange": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "diff": {
+        "status": "experimental",
+        "kind": "value"
+      }
+    },
     "@markupme/highlight": {
       "CodeMeta": {
         "status": "stable",
@@ -258,10 +260,6 @@
       }
     },
     "@markupme/diagrams": {
-      "CodeBlockHandlerOptions": {
-        "status": "experimental",
-        "kind": "type"
-      },
       "DiagramError": {
         "status": "stable",
         "kind": "value"
@@ -290,10 +288,6 @@
         "status": "stable",
         "kind": "type"
       },
-      "ExtractedDiagram": {
-        "status": "experimental",
-        "kind": "type"
-      },
       "KROKI_TYPES": {
         "status": "stable",
         "kind": "value"
@@ -306,20 +300,8 @@
         "status": "stable",
         "kind": "value"
       },
-      "ProviderProblem": {
-        "status": "experimental",
-        "kind": "type"
-      },
-      "ProvidersFromIds": {
-        "status": "experimental",
-        "kind": "type"
-      },
       "blueprintProvider": {
         "status": "stable",
-        "kind": "value"
-      },
-      "codeBlockHandlers": {
-        "status": "experimental",
         "kind": "value"
       },
       "defaultProviders": {
@@ -328,10 +310,6 @@
       },
       "diagramHandler": {
         "status": "stable",
-        "kind": "value"
-      },
-      "extractDiagrams": {
-        "status": "experimental",
         "kind": "value"
       },
       "graphvizProvider": {
@@ -346,12 +324,38 @@
         "status": "stable",
         "kind": "value"
       },
-      "providersFromIds": {
+      "sanitizeSvg": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/diagrams/experimental": {
+      "CodeBlockHandlerOptions": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "ExtractedDiagram": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "ProviderProblem": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "ProvidersFromIds": {
+        "status": "experimental",
+        "kind": "type"
+      },
+      "codeBlockHandlers": {
         "status": "experimental",
         "kind": "value"
       },
-      "sanitizeSvg": {
-        "status": "stable",
+      "extractDiagrams": {
+        "status": "experimental",
+        "kind": "value"
+      },
+      "providersFromIds": {
+        "status": "experimental",
         "kind": "value"
       }
     },
@@ -402,16 +406,22 @@
         "status": "stable",
         "kind": "type"
       },
+      "renderToReact": {
+        "status": "stable",
+        "kind": "value"
+      },
+      "useMarkdown": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/react/experimental": {
       "MarkdownTree": {
         "status": "experimental",
         "kind": "type"
       },
       "htmlToReact": {
         "status": "experimental",
-        "kind": "value"
-      },
-      "renderToReact": {
-        "status": "stable",
         "kind": "value"
       },
       "renderToTree": {
@@ -421,17 +431,9 @@
       "treeToReact": {
         "status": "experimental",
         "kind": "value"
-      },
-      "useMarkdown": {
-        "status": "stable",
-        "kind": "value"
       }
     },
     "@markupme/cli": {
-      "CAPABILITIES": {
-        "status": "experimental",
-        "kind": "value"
-      },
       "CliError": {
         "status": "stable",
         "kind": "value"
@@ -444,6 +446,16 @@
         "status": "stable",
         "kind": "type"
       },
+      "run": {
+        "status": "stable",
+        "kind": "value"
+      }
+    },
+    "@markupme/cli/experimental": {
+      "CAPABILITIES": {
+        "status": "experimental",
+        "kind": "value"
+      },
       "createPipeline": {
         "status": "experimental",
         "kind": "value"
@@ -454,10 +466,6 @@
       },
       "renderPage": {
         "status": "experimental",
-        "kind": "value"
-      },
-      "run": {
-        "status": "stable",
         "kind": "value"
       },
       "startServer": {

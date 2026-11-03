@@ -5,7 +5,8 @@ import { join } from 'node:path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { isAllowedHost } from '../src/commands/serve.js'
 import { DEFAULT_CONFIG } from '../src/config.js'
-import { EXIT, type Io, run, startServer } from '../src/index.js'
+import { startServer } from '../src/experimental.js'
+import { EXIT, type Io, run } from '../src/index.js'
 import { createPipeline, providersFor } from '../src/pipeline.js'
 
 function harness(cwd: string) {

@@ -20,9 +20,7 @@ export { markupmeSchema } from './render/schema.js'
 export type { SerializeFormat, SerializeOptions } from './serialize.js'
 export * from './types.js'
 export {
-  type BlockChange,
   type DocumentStats,
-  diff,
   escapeHtml,
   query,
   stats,

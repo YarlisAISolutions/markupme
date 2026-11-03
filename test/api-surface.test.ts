@@ -8,6 +8,8 @@
  * - A new item fails until it is classified: run `bun run api:update` (after `bun run build`), which adds
  *   it as experimental, then mark it stable in the snapshot and the doc if it should be.
  * - Every snapshot item has a row in docs/api-stability.md with the same status.
+ * - Experimental exports live behind each package's `experimental` subpath (`@markupme/core/experimental`);
+ *   the package roots export only stable items.
  *
  * Runs after `turbo run test`, so the packages are built (`dist/`).
  */
@@ -91,10 +93,19 @@ function declarationExports(file: string, seen = new Set<string>()): Map<string,
   return names
 }
 
-async function packageExports(pkg: string): Promise<Map<string, Kind>> {
-  const dist = join(root, 'packages', pkg, 'dist', 'index.js')
+/** A package's public entry points: the root, plus `experimental` when its `exports` map has one. */
+function entryPoints(pkg: string): { name: string; file: string }[] {
+  const manifest = JSON.parse(readFileSync(join(root, 'packages', pkg, 'package.json'), 'utf8'))
+  const entries = [{ name: `@markupme/${pkg}`, file: 'index' }]
+  if (manifest.exports?.['./experimental'])
+    entries.push({ name: `@markupme/${pkg}/experimental`, file: 'experimental' })
+  return entries
+}
+
+async function packageExports(pkg: string, file: string): Promise<Map<string, Kind>> {
+  const dist = join(root, 'packages', pkg, 'dist', `${file}.js`)
   if (!existsSync(dist)) throw new Error(`${dist} is missing: build first (bun run build)`)
-  const names = declarationExports(join(root, 'packages', pkg, 'dist', 'index.d.ts'))
+  const names = declarationExports(join(root, 'packages', pkg, 'dist', `${file}.d.ts`))
   // Runtime exports are the truth for values; the declarations add the types.
   const runtime = Object.keys(await import(dist))
   for (const n of runtime) names.set(n, 'value')
@@ -134,13 +145,15 @@ async function current(previous: Snapshot | undefined) {
   const top: Command = program(io, () => {})
 
   const packages: Snapshot['packages'] = {}
-  for (const pkg of PACKAGES) {
-    const name = `@markupme/${pkg}`
-    const before = previous?.packages[name] ?? {}
-    packages[name] = {}
-    for (const [n, kind] of [...(await packageExports(pkg))].sort(([a], [b]) => (a < b ? -1 : 1)))
-      packages[name][n] = { status: before[n]?.status ?? 'experimental', kind }
-  }
+  for (const pkg of PACKAGES)
+    for (const { name, file } of entryPoints(pkg)) {
+      const before = previous?.packages[name] ?? {}
+      packages[name] = {}
+      for (const [n, kind] of [...(await packageExports(pkg, file))].sort(([a], [b]) =>
+        a < b ? -1 : 1,
+      ))
+        packages[name][n] = { status: before[n]?.status ?? 'experimental', kind }
+    }
 
   const commands: Snapshot['cli']['commands'] = {
     markupme: commandEntry(top, previous?.cli.commands.markupme),
@@ -249,7 +262,7 @@ describe('public API surface', () => {
     const rows = new Map<string, string>()
     let section = ''
     for (const line of doc.split('\n')) {
-      const heading = /^### `(@markupme\/[a-z]+|markupme)`/.exec(line)
+      const heading = /^### `(@markupme\/[a-z]+(?:\/experimental)?|markupme)`/.exec(line)
       if (heading) section = heading[1] as string
       const row = /^\| `([^`]+)` \| (stable|experimental) \|/.exec(line)
       if (row && section) rows.set(`${section} ${row[1]}`, row[2] as string)
@@ -272,4 +285,22 @@ describe('public API surface', () => {
     }
     expect(problems).toEqual([])
   })
+
+  // Skipped by api:update, which records new items as experimental wherever they are; classify them after.
+  it.skipIf(UPDATE)(
+    'keeps experimental exports behind the experimental subpath and stable ones in the root',
+    () => {
+      expect(previous, 'api/exports.snapshot.json is missing').toBeDefined()
+      const misplaced: string[] = []
+      for (const [entry, names] of Object.entries((previous as Snapshot).packages)) {
+        const want: Status = entry.endsWith('/experimental') ? 'experimental' : 'stable'
+        for (const [n, e] of Object.entries(names))
+          if (e.status !== want) misplaced.push(`${entry} › ${n} is ${e.status}`)
+      }
+      expect(
+        misplaced,
+        'the package root exports stable items only and `<package>/experimental` experimental ones: mark the item stable, or move it to src/experimental.ts and run bun run api:update',
+      ).toEqual([])
+    },
+  )
 })
