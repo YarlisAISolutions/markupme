@@ -79,6 +79,6 @@ See the [implementation plan](../implementation/implementation-plan.md#risks-and
 
 ## Open questions
 
-1. Do we publish under `@markupme` from the first tag, and who owns the npm scope? The release workflow exists; the npm token must be rotated first (YCadence SDO-48).
+1. Do we publish under `@markupme` from the first tag, and who owns the npm scope? Yes: 0.1.0 was published under `@markupme` on 2026-11-03 by the release workflow, after the npm token was rotated (YCadence SDO-48).
 2. Which Phase 2 export path for PDF: browser print through Playwright, or Pandoc as an external tool? (Pandoc is GPL; calling it as a separate program is fine, bundling is not.)
 3. Milkdown or Tiptap for rich text: decided by the spike criteria in [ADR 0007](../architecture/architecture-decision-records/0007-codemirror-studio-editor.md).

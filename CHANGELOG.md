@@ -8,9 +8,9 @@ All notable changes to the `@markupme/*` packages. The format follows [Keep a Ch
 
 - **Breaking for experimental exports only:** the exports `docs/api-stability.md` marks experimental moved from the package roots to an `experimental` subpath, so an import says what it relies on. Update imports: `diff` and `BlockChange` to `@markupme/core/experimental`; `providersFromIds`, `codeBlockHandlers`, `extractDiagrams` and their types to `@markupme/diagrams/experimental`; `renderToTree`, `treeToReact`, `htmlToReact` and `MarkdownTree` to `@markupme/react/experimental`; `createPipeline`, `mergeConfig`, `renderPage`, `startServer` and `CAPABILITIES` to `@markupme/cli/experimental`. Stable exports are unchanged, and CLI commands stay where they are (`markupme diff`). The API surface test now covers the subpaths and fails when an experimental export sits in a package root (MKP-6).
 
-## [0.1.0] - Unreleased
+## [0.1.0] - 2026-11-03
 
-First version. Not yet published to npm.
+First version, published to npm.
 
 ### Added
 
@@ -46,4 +46,4 @@ First version. Not yet published to npm.
 - `markupme serve` no longer serves dotfiles or dot folders (`.env`, `.git/…`): they return 404, as the file listing already hid them.
 - `markupme serve` refuses requests whose `Host` header is not `localhost`, a `*.localhost` name, an IP address or the `--host` value (403), so a DNS rebinding page cannot read the served folder.
 - `markupme serve` answers 500 for a file it cannot read instead of crashing.
-- KaTeX 0.18.11 (GHSA-238p-pmpm-9mq7), the same version Mermaid uses; `@azure/msal-node` 7.1.1 through a root override (GHSA-xcx6-jx8p-x3h5, pulled in by `@vscode/vsce`). Both fixes apply inside this repository only: root `overrides` are ignored when someone installs a published package, so `@markupme/core` installed from npm would still get KaTeX 0.16 through `rehype-katex` 7.0.1. This must be fixed before the first npm publish.
+- KaTeX 0.18.11 (GHSA-238p-pmpm-9mq7), the same version Mermaid uses; `@azure/msal-node` 7.1.1 through a root override (GHSA-xcx6-jx8p-x3h5, pulled in by `@vscode/vsce`). Both fixes apply inside this repository only: root `overrides` are ignored when someone installs a published package, so `@markupme/core` installed from npm still gets KaTeX 0.16 through `rehype-katex` 7.0.1. Known issue in the published 0.1.0, tracked as MKP-7.

@@ -45,7 +45,7 @@ Follow-ups in flight (not yet on `main`):
 | Key | Item |
 | --- | ---- |
 | SDO-50 | Epic: MarkupMe Phase 1 |
-| SDO-48 | Rotate the npm token before the first publish (needed by `release.yml`) |
+| SDO-48 | Rotate the npm token before the first publish (needed by `release.yml`). Done: 0.1.0 published 2026-11-03 |
 | SDO-49 | Create a MarkupMe project in YCadence (until then MarkupMe items live in the SDO project) |
 
 ### PR#2: web studio and SDODS UI suite
@@ -71,7 +71,7 @@ Exit criteria: AC-095 to AC-097 met; the extension packages as a `.vsix` and ins
 ### First release (after PR#3)
 
 1. Make sure `capabilities` matches the real state.
-2. Rotate the npm token and store it as `NPM_TOKEN` (SDO-48).
+2. Rotate the npm token and store it as `NPM_TOKEN` (SDO-48). Done; 0.1.0 published 2026-11-03.
 3. Set every `VERSION` and `package.json` to the release version and merge to `main`; `release.yml` publishes the `@markupme/*` packages in dependency order with provenance and tags them.
 4. Announce through Yarlis Relay (`release.published` is sent automatically by the org webhook).
 
@@ -104,7 +104,7 @@ Exit criteria: AC-095 to AC-097 met; the extension packages as a `.vsix` and ins
 | R11 | The `@markupme` npm scope or the name is unavailable. | Low | High | Check scope and trademark before the first tag (PRD open question 1). |
 | R12 | SDODS suite lags behind the API. | Medium | Medium | The `qa-smoke` job runs markupme-qa on every markupme pull request (paired branches via `vars.QA_REF`) and before every release; `qa-gate.mjs` fails a run with too few scenarios. |
 | R13 | Browser use of the core is untested (the ui suite tests the server-rendered pages, not the core in a browser). | Medium | Medium | PR#2 (studio) exercises it; add a grep check for `node:` imports in CI. |
-| R14 | The npm token leaks or expires before the first publish. | Low | High | Rotate before the first publish (SDO-48); `release.yml` uses provenance and can move to trusted publishing (`NPM_TRUSTED_PUBLISHING`). |
+| R14 | The npm token leaks or expires. | Low | High | Rotated before the first publish (SDO-48, 0.1.0 published 2026-11-03); rotate on schedule with Yarlis Keep; `release.yml` uses provenance and can move to trusted publishing (`NPM_TRUSTED_PUBLISHING`). |
 
 ## Dependencies
 
