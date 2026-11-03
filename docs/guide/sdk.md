@@ -32,14 +32,20 @@ The programmatic API of the MarkupMe packages. Signatures match `packages/*/src`
 
 | Package | Import | Main exports |
 | ------- | ------ | ------------ |
-| `@markupme/core` | `@markupme/core` | `createProcessor`, `parse`, `render`, `transform`, `serialize`, `validate`, `query`, `visit`, `diff`, `stats`, `outline`, `headingId`, `buildToc`, `insertToc`, `stripPositions`, `escapeHtml`, `formatDiagnostic`, `RULES`, `markupmeSchema`, `SCHEMA_VERSION`, `MarkupMeError`, `VERSION`, `ALERT_TYPES`, `ALERT_TITLES`, `CALLOUTS`, `CONTAINERS`, `TEXT_DIRECTIVES`, `LEAF_DIRECTIVES`, all types |
+| `@markupme/core` | `@markupme/core` | `createProcessor`, `parse`, `render`, `transform`, `serialize`, `validate`, `query`, `visit`, `stats`, `outline`, `headingId`, `buildToc`, `insertToc`, `stripPositions`, `escapeHtml`, `formatDiagnostic`, `RULES`, `markupmeSchema`, `SCHEMA_VERSION`, `MarkupMeError`, `VERSION`, `ALERT_TYPES`, `ALERT_TITLES`, `CALLOUTS`, `CONTAINERS`, `TEXT_DIRECTIVES`, `LEAF_DIRECTIVES`, all types |
+| `@markupme/core` (experimental) | `@markupme/core/experimental` | `diff`, type `BlockChange` |
 | `@markupme/highlight` | `@markupme/highlight` | `highlightHandler`, `parseMeta`, `escapeHtml` |
-| `@markupme/diagrams` | `@markupme/diagrams` | `diagramHandler`, `codeBlockHandlers`, `providersFromIds`, `defaultProviders`, `blueprintProvider`, `graphvizProvider`, `mermaidProvider`, `krokiProvider`, `extractDiagrams`, `sanitizeSvg`, `DiagramError`, `KROKI_TYPES`, `MERMAID_LANGS`, types `ProviderProblem`, `ProvidersFromIds`, `CodeBlockHandlerOptions` |
+| `@markupme/diagrams` | `@markupme/diagrams` | `diagramHandler`, `defaultProviders`, `blueprintProvider`, `graphvizProvider`, `mermaidProvider`, `krokiProvider`, `sanitizeSvg`, `DiagramError`, `KROKI_TYPES`, `MERMAID_LANGS` |
+| `@markupme/diagrams` (experimental) | `@markupme/diagrams/experimental` | `codeBlockHandlers`, `providersFromIds`, `extractDiagrams`, types `ProviderProblem`, `ProvidersFromIds`, `CodeBlockHandlerOptions`, `ExtractedDiagram` |
 | `@markupme/themes` | `@markupme/themes` | `wrapDocument`, `markupmeCss`, `runtimeScript`, `escapeHtml` |
-| `@markupme/cli` | `@markupme/cli` | `run`, `startServer`, `createPipeline`, `mergeConfig`, `renderPage`, `CAPABILITIES`, `EXIT`, `CliError` (Node only) |
-| `@markupme/react` | `@markupme/react` | `Markdown`, `useMarkdown`, `renderToReact`; experimental: `renderToTree`, `treeToReact`, `htmlToReact` |
+| `@markupme/cli` | `@markupme/cli` | `run`, `EXIT`, `CliError`, type `Io` (Node only) |
+| `@markupme/cli` (experimental) | `@markupme/cli/experimental` | `startServer`, `createPipeline`, `mergeConfig`, `renderPage`, `CAPABILITIES` (Node only) |
+| `@markupme/react` | `@markupme/react` | `Markdown`, `useMarkdown`, `renderToReact` |
+| `@markupme/react` (experimental) | `@markupme/react/experimental` | `renderToTree`, `treeToReact`, `htmlToReact`, type `MarkdownTree` |
 
 All packages are ESM-only (`"type": "module"`), ship `.d.ts` files and set `"sideEffects": false`.
+
+The `/experimental` entry points hold exports that may change in a minor release; pin the exact version when you import from one. [API stability](../api-stability.md) lists what is stable.
 
 ## Quick start
 
@@ -244,7 +250,8 @@ const toc = outline(doc.tree)
 ## diff
 
 ```ts
-import { diff, parse } from '@markupme/core'
+import { parse } from '@markupme/core'
+import { diff } from '@markupme/core/experimental'
 
 diff(parse('a').tree, parse('b').tree)
 // [{ kind: 'changed', index: 0, type: 'paragraph', before: 'a', after: 'b', line: 1 }]
@@ -428,7 +435,7 @@ type DiagramOutput = { kind: 'svg'; svg: string } | { kind: 'client'; html: stri
 - SVG output is passed through `sanitizeSvg` before it is used. Client output (Mermaid's `<pre class="mermaid">`) is HTML the provider builds and escapes itself.
 - Throw `new DiagramError(message, line)` to report a line inside the diagram; the handler adds the fence line.
 - The handler caches results by SHA-256 of provider id, theme, language and source. `diagrams.clearCache()` empties it.
-- `extractDiagrams(markdown, providers?)` lists diagram blocks: `{ index, lang, provider, source, line }`.
+- `extractDiagrams(markdown, providers?)` (from `@markupme/diagrams/experimental`) lists diagram blocks: `{ index, lang, provider, source, line }`.
 
 ## Standalone pages
 

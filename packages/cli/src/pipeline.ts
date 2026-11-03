@@ -10,7 +10,8 @@ import {
   query,
   type RenderFormat,
 } from '@markupme/core'
-import { codeBlockHandlers, type DiagramProvider, providersFromIds } from '@markupme/diagrams'
+import type { DiagramProvider } from '@markupme/diagrams'
+import { codeBlockHandlers, providersFromIds } from '@markupme/diagrams/experimental'
 import { highlightHandler } from '@markupme/highlight'
 import { type NavItem, type ThemeMode, wrapDocument } from '@markupme/themes'
 import { DEFAULT_CONFIG, type MarkupMeConfig, processorOptions } from './config.js'

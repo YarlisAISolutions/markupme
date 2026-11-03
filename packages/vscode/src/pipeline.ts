@@ -6,12 +6,8 @@ import {
   type Processor,
   type RenderResult,
 } from '@markupme/core'
-import {
-  codeBlockHandlers,
-  type DiagramProvider,
-  type DiagramTheme,
-  providersFromIds,
-} from '@markupme/diagrams'
+import type { DiagramProvider, DiagramTheme } from '@markupme/diagrams'
+import { codeBlockHandlers, providersFromIds } from '@markupme/diagrams/experimental'
 import { highlightHandler } from '@markupme/highlight'
 import { sourceLinePlugin } from './lines.js'
 import {

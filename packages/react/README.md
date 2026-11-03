@@ -87,6 +87,11 @@ Graphviz and Blueprint diagrams become inline SVG. Mermaid blocks become `<pre c
 | `renderToReact(source, options?)` | `Promise<ReactElement>` for SSR and Server Components. |
 | `useMarkdown(source, options?)` | Hook. `ReactElement \| null`. |
 | `<Markdown source … />` | Component on top of `useMarkdown`, with `fallback` and `className`. |
+
+Experimental, from `@markupme/react/experimental` (they expose the hast tree, so they may change in a minor release; pin the exact version):
+
+| Export | What it does |
+| --- | --- |
 | `renderToTree(source, options?)` | The hast tree, diagnostics and title. |
 | `treeToReact(tree, components?)` | hast to React elements. |
 | `htmlToReact(html, components?)` | Trusted HTML string to React elements. |

@@ -2,6 +2,12 @@
 
 All notable changes to the `@markupme/*` packages. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking for experimental exports only:** the exports `docs/api-stability.md` marks experimental moved from the package roots to an `experimental` subpath, so an import says what it relies on. Update imports: `diff` and `BlockChange` to `@markupme/core/experimental`; `providersFromIds`, `codeBlockHandlers`, `extractDiagrams` and their types to `@markupme/diagrams/experimental`; `renderToTree`, `treeToReact`, `htmlToReact` and `MarkdownTree` to `@markupme/react/experimental`; `createPipeline`, `mergeConfig`, `renderPage`, `startServer` and `CAPABILITIES` to `@markupme/cli/experimental`. Stable exports are unchanged, and CLI commands stay where they are (`markupme diff`). The API surface test now covers the subpaths and fails when an experimental export sits in a package root (MKP-6).
+
 ## [0.1.0] - Unreleased
 
 First version. Not yet published to npm.

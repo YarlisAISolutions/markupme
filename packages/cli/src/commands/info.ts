@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { diff, outline, RULES, stats, VERSION } from '@markupme/core'
+import { outline, RULES, stats, VERSION } from '@markupme/core'
+import { diff } from '@markupme/core/experimental'
 import { CONFIG_FILE, DEFAULT_CONFIG, loadConfig } from '../config.js'
 import { CliError, EXIT } from '../exit.js'
 import { display, expandInputs, readInput } from '../files.js'
