@@ -64,6 +64,11 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           TRUSTED: ${{ vars.NPM_TRUSTED_PUBLISHING }}
           PKG: ${{ matrix.package }}
+          # The lowest version a release from main may publish (MKP-8). main has the
+          # experimental-subpath move (#22, MKP-6), which breaks 0.1.x consumers, so
+          # main publishes 0.2.0 or later; 0.1.x patches come from release/0.1.x.
+          # Raise it when main takes on the next breaking change.
+          MAIN_MIN_VERSION: 0.2.0
         run: |
           if [ ! -f "packages/$PKG/package.json" ]; then
             echo "publish=false" >> "$GITHUB_OUTPUT"; echo "packages/$PKG does not exist yet"; exit 0
@@ -75,6 +80,13 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           if npm view "$name@$version" version >/dev/null 2>&1; then
             echo "publish=false" >> "$GITHUB_OUTPUT"; echo "$name@$version is already on npm"
+          elif [ "$GITHUB_REF" = refs/heads/main ] && ! node -e '
+              const mm = (s) => s.split(/[.+-]/).slice(0, 2).map(Number);
+              const [a, b] = mm(process.argv[1]), [x, y] = mm(process.env.MAIN_MIN_VERSION);
+              process.exit(a > x || (a === x && b >= y) ? 0 : 1);
+            ' "$version"; then
+            echo "::error::$name@$version is below $MAIN_MIN_VERSION, the lowest version main may publish. main carries breaking changes for 0.1.x (MKP-6), so bump every package to $MAIN_MIN_VERSION or later, or release 0.1.x from release/0.1.x (MKP-8)."
+            exit 1
           elif [ -z "$NPM_TOKEN" ] && [ "$TRUSTED" != 'true' ]; then
             echo "publish=false" >> "$GITHUB_OUTPUT"
             echo "::notice::no NPM_TOKEN and NPM_TRUSTED_PUBLISHING is not true; not publishing $name@$version"
