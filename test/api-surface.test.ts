@@ -172,7 +172,8 @@ function stableItems(s: Snapshot): Map<string, string> {
           `opt:${name}:${flags}:${JSON.stringify(o.default)}`,
         )
     for (const a of c.aliases)
-      if (c.status === 'stable') items.set(`alias \`${a}\` of \`markupme ${name}\``, `alias:${a}`)
+      if (c.status === 'stable')
+        items.set(`alias \`${a}\` of \`markupme ${name}\``, `alias:${name}:${a}`)
     if (c.status === 'stable')
       items.set(
         `arguments ${c.arguments.join(' ') || '(none)'} of \`markupme ${name}\``,
@@ -225,6 +226,12 @@ describe('public API surface', () => {
       writeFileSync(SNAPSHOT, `${JSON.stringify(now, null, 2)}\n`)
       return
     }
+    // A major bump must be recorded in the snapshot by the change that makes it, or every later
+    // run would read `now.major > previous.major` and let a stable item go without a major bump.
+    expect(
+      now.major,
+      `the package major changed (snapshot ${previous.major}, packages ${now.major}): run bun run api:update so the snapshot records it; the removal exemption applies to that run only`,
+    ).toBe(previous.major)
     expect(
       unclassified,
       'new or changed API is not in api/exports.snapshot.json: run bun run api:update (new items start as experimental), then classify them there and in docs/api-stability.md',
