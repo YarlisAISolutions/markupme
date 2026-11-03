@@ -26,6 +26,7 @@ First version. Not yet published to npm.
 
 ### Changed
 
+- CI: the `e2e` job is now `qa-smoke` (a composite action shared with `release.yml`); the release workflow's `publish` and `vscode` jobs need it, so nothing is published while the markupme-qa suites are red (MKP-4).
 - VS Code extension (`markupme-vscode`): live preview with diagrams under a strict CSP, export HTML, insert/update TOC, opt-in formatter, diagnostics in the Problems panel.
 - `@markupme/react`: `<Markdown>`, `useMarkdown` and `renderToReact`, sanitized like the HTML output.
 - MarkupMe Studio (`apps/studio`): browser editor with live preview, diagrams, outline, problems, command palette, autosave, import and export, themes and focus mode.
