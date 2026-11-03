@@ -1,0 +1,48 @@
+# Dependabot cannot break main (BST-20). Docs: https://github.com/YarlisAISolutions/bastion/blob/main/docs/dependabot.md
+#   lockfile  on a Dependabot PR, regenerate the lockfile with the repo's package manager and
+#             push it to the bot branch when it drifted.
+#   revert    when a bot merge turns `ci` red on main, open a revert PR and send Relay
+#             ci.failed linked to it.
+# The PIN_BOT_APP_* secrets and RELAY_WIF_PROVIDER / RELAY_SA variables are optional; without
+# them the lockfile push asks for a re-run and the revert goes out as a compare link.
+name: Dependabot guard
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths: ["**/package.json"]
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  lockfile:
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.user.login == 'dependabot[bot]'
+    uses: YarlisAISolutions/bastion/.github/workflows/dependabot-lockfile.yml@aa336fea441ecb633efa49860b9d2eda6ba4807b # aa336fe bastion#49 (BST-20, ahead of v0.8.0)
+    permissions:
+      contents: write # push the regenerated lockfile to the bot branch
+      pull-requests: write # ask for a re-run when no App token is available
+    with:
+      package-manager: bun
+    # Dependabot-triggered runs see Dependabot secrets only.
+    secrets:
+      app-id: ${{ secrets.PIN_BOT_APP_ID }}
+      app-key: ${{ secrets.PIN_BOT_APP_KEY }}
+
+  revert:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.event == 'push'
+    uses: YarlisAISolutions/bastion/.github/workflows/dependabot-revert.yml@aa336fea441ecb633efa49860b9d2eda6ba4807b # aa336fe bastion#49 (BST-20, ahead of v0.8.0)
+    permissions:
+      contents: write # the revert branch
+      pull-requests: write # the revert PR and a comment on the bot PR
+      actions: read # the parent commit's run
+      id-token: write # Relay's keyless sign-in
+    with:
+      relay-wif-provider: ${{ vars.RELAY_WIF_PROVIDER }}
+      relay-service-account: ${{ vars.RELAY_SA }}
+    secrets:
+      app-id: ${{ secrets.PIN_BOT_APP_ID }}
+      app-key: ${{ secrets.PIN_BOT_APP_KEY }}
