@@ -50,6 +50,10 @@ Useful commands:
 - **Small public API.** New exports need a reason and a doc entry in [docs/guide/sdk.md](docs/guide/sdk.md).
 - **Plain docs.** Short sentences, concrete examples, no marketing words.
 
+## Public API
+
+Every export, `markupme` command and flag is stable or experimental: see [docs/api-stability.md](docs/api-stability.md). `bun run test` compares them with `api/exports.snapshot.json` and fails, naming the item, when a stable one disappears without a major version bump or a new one is not classified. After adding an export, command or flag, run `bun run build && bun run api:update`, then add its row to `docs/api-stability.md`.
+
 ## Architecture decisions
 
 Larger changes (a new package, a new dependency with wide reach, a change to the document model) need an ADR in `docs/architecture/architecture-decision-records/`. Copy the closest one and open it as `Proposed`.

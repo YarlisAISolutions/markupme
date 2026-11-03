@@ -16,5 +16,5 @@
       "persistent": true
     }
   },
-  "globalPassThroughEnv": ["TMPDIR", "GITHUB_ACTIONS", "CI"]
+  "globalPassThroughEnv": ["TMPDIR", "GITHUB_ACTIONS", "CI", "UPDATE_API_SNAPSHOT"]
 }

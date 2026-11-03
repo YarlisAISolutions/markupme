@@ -434,7 +434,7 @@ Lines start with `+` (added), `-` (removed) or `~` (changed). Exit 1 when they d
 markupme capabilities [--json]
 ```
 
-Prints what is built, opt-in and planned, and the lint rules with codes and severities. The JSON form is `{ name, version, capabilities: [{ area, feature, status, note? }], rules: [...] }`. The serve API returns the same table at `GET /api/capabilities`.
+Prints what is built, experimental, opt-in and planned, and the lint rules with codes and severities. The JSON form is `{ name, version, capabilities: [{ area, feature, status, note? }], rules: [...] }`. The serve API returns the same table at `GET /api/capabilities`.
 
 Current status of the larger items, as tracked in the [implementation plan](../implementation/implementation-plan.md):
 
@@ -445,9 +445,10 @@ Current status of the larger items, as tracked in the [implementation plan](../i
 | HTML, standalone page, Markdown, JSON AST, text, static site | built |
 | Mermaid (browser), Blueprint, Graphviz | built |
 | PlantUML, C4, Structurizr, D2 via Kroki | built, opt-in |
-| Web studio (`apps/studio`) | built |
+| Web studio (`apps/studio`) | experimental (not published) |
 | VS Code extension (`packages/vscode`) | built |
 | React component (`@markupme/react`) | built |
+| Structural diff (`markupme diff`) | experimental |
 | PDF, DOCX, MDX output; rich-text editing | planned, Phase 2 |
 
 The three in-progress items appear as `planned` with the note `in progress, Phase 1` until their pull requests merge. The SDODS scenario `Preview server health › Capabilities list built and planned features honestly` checks this table over the API.

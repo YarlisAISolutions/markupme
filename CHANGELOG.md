@@ -26,6 +26,7 @@ First version. Not yet published to npm.
 
 ### Changed
 
+- Public API frozen for 1.0: `docs/api-stability.md` marks every export, command, flag, exit code and config key stable or experimental, `test/api-surface.test.ts` checks the built packages against `api/exports.snapshot.json`, and `markupme capabilities` has an `experimental` status (Structural diff, MarkupMe Studio) (MKP-3).
 - CI: the `e2e` job is now `qa-smoke` (a composite action shared with `release.yml`); the release workflow's `publish` and `vscode` jobs need it, so nothing is published while the markupme-qa suites are red (MKP-4).
 - VS Code extension (`markupme-vscode`): live preview with diagrams under a strict CSP, export HTML, insert/update TOC, opt-in formatter, diagnostics in the Problems panel.
 - `@markupme/react`: `<Markdown>`, `useMarkdown` and `renderToReact`, sanitized like the HTML output.
