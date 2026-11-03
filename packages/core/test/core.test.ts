@@ -130,6 +130,49 @@ describe('render html', () => {
   })
 })
 
+describe('math (MKP-7)', () => {
+  const p = createProcessor({ math: true })
+  const out = async (md: string) => (await p.render(md)).output
+
+  it('renders $$ flow math and ```math fences in display mode', async () => {
+    expect(await out('$$\n\\int_0^1 x\\,dx\n$$')).toContain('class="katex-display"')
+    const fence = await out('```math\nE = mc^2\n```')
+    expect(fence).toContain('class="katex-display"')
+    expect(fence).not.toContain('<pre')
+  })
+
+  it('renders invalid TeX in KaTeX error style instead of throwing', async () => {
+    expect(await out('Bad $\\frac{a}{$ here')).toContain('katex-error')
+  })
+
+  it('leaves escaped and code dollars alone', async () => {
+    const html = await out('Costs \\$5 and `$x$`')
+    expect(html).not.toContain('class="katex"')
+    expect(html).toContain('<code>$x$</code>')
+  })
+
+  it('round-trips math through serialize', async () => {
+    const md = '$$\nx^2\n$$\n\nand $a$\n'
+    expect(await p.serialize(p.parse(md))).toBe(md)
+  })
+
+  // Root `overrides` do not reach npm consumers, so the published package must not depend on
+  // anything that declares a vulnerable KaTeX range (GHSA-238p-pmpm-9mq7, fixed in 0.18.2).
+  // CI also installs the packed tarball and checks `npm ls katex`.
+  it('pins a patched KaTeX directly and drops the packages that pulled KaTeX 0.16', () => {
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as {
+      dependencies: Record<string, string>
+    }
+    const katex = pkg.dependencies.katex ?? ''
+    expect(katex).toMatch(/^\d+\.\d+\.\d+$/)
+    const [major = 0, minor = 0, patch = 0] = katex.split('.').map(Number)
+    expect(major > 0 || minor > 18 || (minor === 18 && patch >= 2)).toBe(true)
+    for (const dep of ['rehype-katex', 'remark-math', 'micromark-extension-math']) {
+      expect(pkg.dependencies).not.toHaveProperty(dep)
+    }
+  })
+})
+
 describe('security', () => {
   const attacks = [
     '<script>alert(1)</script>',

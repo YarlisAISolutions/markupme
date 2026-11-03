@@ -1,6 +1,6 @@
 {
   "name": "@markupme/themes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MarkupMe themes: accessible light/dark/print CSS and a tiny runtime (copy buttons, theme toggle, Mermaid) plus a standalone HTML document wrapper.",
   "license": "MIT",
   "author": "Yarlis AI Solutions",

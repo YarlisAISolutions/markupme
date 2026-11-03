@@ -236,7 +236,7 @@ describe('serve API', () => {
 
   it('reports health', async () => {
     const res = await fetch(`${server.url}/api/health`)
-    expect(await res.json()).toEqual({ status: 'ok', name: 'markupme', version: '0.1.0' })
+    expect(await res.json()).toEqual({ status: 'ok', name: 'markupme', version: '0.1.1' })
   })
 
   it('renders sanitized HTML with diagrams and stats', async () => {
