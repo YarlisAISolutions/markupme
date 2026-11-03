@@ -1,7 +1,8 @@
 /**
  * Math syntax for micromark (`$$` flow math and `$` text math), ported to TypeScript from
  * micromark-extension-math 3.1.0 (`lib/syntax.js`, `lib/math-flow.js`, `lib/math-text.js`).
- * MIT licence, (c) 2020 Titus Wormer: https://github.com/micromark/micromark-extension-math
+ * Copyright (c) 2020 Titus Wormer <tituswormer@gmail.com>, MIT; full notice in THIRD-PARTY-NOTICES.md.
+ * https://github.com/micromark/micromark-extension-math
  *
  * Why it lives here: micromark-extension-math (and remark-math, which depends on it) declares
  * `katex ^0.16.0` for its HTML compiler, which MarkupMe never uses. npm ignores our root

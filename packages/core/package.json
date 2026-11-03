@@ -34,6 +34,7 @@
   },
   "files": [
     "dist",
+    "THIRD-PARTY-NOTICES.md",
     "!dist/**/*.tsbuildinfo"
   ],
   "publishConfig": {

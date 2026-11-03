@@ -16,6 +16,8 @@ Use the unified ecosystem:
 - `remark-stringify` to serialize, with the same extension list as the parser (`syntaxPlugins` in `packages/core/src/parse.ts`), so every construct the parser reads can be written back.
 - `remark-rehype`, `rehype-raw`, `rehype-sanitize`, `rehype-katex` and `rehype-stringify` for HTML.
 
+Update (0.1.1, MKP-7): `remark-math` and `rehype-katex` are no longer dependencies. Both, through `micromark-extension-math`, declare `katex ^0.16.0`, which npm consumers would install despite our root override, so core carries in-tree ports of them and pins `katex` directly.
+
 MarkupMe's own code is the layer on top: the document wrapper, heading ids, TOC, alerts, directive mapping, lint rules, the safe HTML pipeline, diff and stats.
 
 ## Alternatives

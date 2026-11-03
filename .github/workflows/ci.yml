@@ -54,16 +54,19 @@ jobs:
           for p in core highlight diagrams themes react cli; do
             (cd "packages/$p" && npm pack --dry-run 2>&1 | tail -6)
           done
-      # Root `overrides` don't reach npm consumers (MKP-7): install the packed @markupme/core the
-      # way a consumer would and fail if any KaTeX in its tree is older than 0.18.2
-      # (GHSA-238p-pmpm-9mq7).
-      - name: packed core installs a patched KaTeX
+      # Root `overrides` don't reach npm consumers (MKP-7): install every packed package the way
+      # a consumer would (npm resolves the internal pins to these tarballs) and fail if any KaTeX
+      # in the tree is older than 0.18.2 (GHSA-238p-pmpm-9mq7).
+      - name: packed packages install a patched KaTeX
         run: |
           consumer=$(mktemp -d)
-          tarball=$(cd packages/core && npm pack --pack-destination "$consumer" --silent)
+          tarballs=()
+          for p in core highlight themes diagrams react cli; do
+            tarballs+=("./$(cd "packages/$p" && npm pack --pack-destination "$consumer" --silent)")
+          done
           cd "$consumer"
           npm init -y >/dev/null
-          npm install --no-audit --no-fund "./$tarball" >/dev/null
+          npm install --no-audit --no-fund "${tarballs[@]}" >/dev/null
           npm ls katex --all
           npm ls katex --all --json | node -e '
             const found = []

@@ -1,6 +1,7 @@
 /**
  * rehype plugin that renders math with KaTeX: the in-tree equivalent of rehype-katex 7.0.1 (MIT,
  * https://github.com/remarkjs/remark-math), calling the `katex` version this package pins.
+ * Copyright (c) Junyoung Choi <fluke8259@gmail.com>, MIT; full notice in THIRD-PARTY-NOTICES.md.
  * rehype-katex declares `katex ^0.16.0`, and npm ignores our root `overrides` for installed
  * packages, so depending on it gave every consumer a vulnerable KaTeX (GHSA-238p-pmpm-9mq7,
  * MKP-7). Behaviour is unchanged: elements with a `language-math`, `math-display` or
