@@ -68,7 +68,7 @@ Status as reported by `markupme capabilities`. Work in progress is listed as pla
 
 ```bash
 npm i -g @markupme/cli
-markupme --version        # 0.1.1
+markupme --version        # 0.2.0
 ```
 
 ### From source
@@ -100,7 +100,7 @@ next: markupme serve docs
 
 ```console
 $ markupme serve docs
-markupme 0.1.1 serving docs at http://127.0.0.1:4321
+markupme 0.2.0 serving docs at http://127.0.0.1:4321
   playground  http://127.0.0.1:4321/__markupme/playground
   api         http://127.0.0.1:4321/api/health · POST /api/render · POST /api/validate
 ```
@@ -447,7 +447,7 @@ Pick providers with `--diagrams blueprint,graphviz`, or `--diagrams none`. Merma
 
 ```console
 $ curl -s localhost:4321/api/health
-{"status":"ok","name":"markupme","version":"0.1.1"}
+{"status":"ok","name":"markupme","version":"0.2.0"}
 
 $ curl -s localhost:4321/api/render -H 'Content-Type: application/json' \
     -d '{"markdown":"# Hi\n\n> [!TIP]\n> Works"}'
@@ -521,7 +521,7 @@ const page = wrapDocument({ body: result.output, title: result.title, theme: 'au
 | `packages/vscode` | VS Code extension (`markupme-vscode-<version>.vsix`, attached to GitHub releases) | built |
 | `@markupme/react` | `<Markdown>`, `useMarkdown`, `renderToReact` | built |
 
-All packages are version 0.1.1, ESM-only, MIT, and publishable on their own.
+All six `@markupme/*` npm packages are version 0.2.0, ESM-only, MIT, and publishable on their own.
 
 ## Security
 

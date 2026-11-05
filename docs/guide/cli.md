@@ -19,7 +19,7 @@ The `markupme` command comes from `@markupme/cli` (`packages/cli`). This page is
 
 ```bash
 npm i -g @markupme/cli      # after the first release
-markupme --version          # prints 0.1.1
+markupme --version          # prints 0.2.0
 ```
 
 Requirements: Node.js 22 or later (`engines.node: ">=22"`). Bun works for development. Mermaid SVG export also needs the optional peer dependency `playwright` (`npm i -D playwright && npx playwright install chromium`).
@@ -281,7 +281,7 @@ Every request must carry a `Host` header of `localhost`, a `*.localhost` name, a
 On start it prints:
 
 ```text
-markupme 0.1.1 serving docs at http://127.0.0.1:4321
+markupme 0.2.0 serving docs at http://127.0.0.1:4321
   playground  http://127.0.0.1:4321/__markupme/playground
   api         http://127.0.0.1:4321/api/health · POST /api/render · POST /api/validate
 ```
@@ -298,7 +298,7 @@ Routes:
 | `/__markupme/playground` | GET | Playground page: textarea, option checkboxes, preview, diagnostics list. |
 | `/__markupme/events` | GET | Server-sent events; sends `reload` when a file changes. |
 | `/__markupme/mermaid.min.js`, `/__markupme/katex/*` | GET | Local browser assets. No CDN. |
-| `/api/health` | GET | `{ "status": "ok", "name": "markupme", "version": "0.1.1" }`. Other methods: 405. |
+| `/api/health` | GET | `{ "status": "ok", "name": "markupme", "version": "0.2.0" }`. Other methods: 405. |
 | `/api/capabilities` | GET | `{ version, capabilities }`. |
 | `/api/render` | POST | `{ format, title, output, diagnostics, stats }`. |
 | `/api/validate` | POST | `{ ok, errors, warnings, diagnostics }`. `ok` is false when any error exists. |

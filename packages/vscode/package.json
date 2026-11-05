@@ -420,10 +420,10 @@
     "test:e2e": "node scripts/e2e.mjs"
   },
   "devDependencies": {
-    "@markupme/core": "0.1.1",
-    "@markupme/diagrams": "0.1.1",
-    "@markupme/highlight": "0.1.1",
-    "@markupme/themes": "0.1.1",
+    "@markupme/core": "0.2.0",
+    "@markupme/diagrams": "0.2.0",
+    "@markupme/highlight": "0.2.0",
+    "@markupme/themes": "0.2.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/mdast": "4.0.4",
     "@types/vscode": "1.82.0",
