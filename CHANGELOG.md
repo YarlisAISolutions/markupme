@@ -4,9 +4,13 @@ All notable changes to the `@markupme/*` packages. The format follows [Keep a Ch
 
 ## [Unreleased]
 
-The next release from `main` is 0.2.0: the experimental-subpath move below is breaking for 0.1.x consumers.
+## [0.2.0] - 2026-11-05
+
+First release from `main` after 0.1.1. It is a minor version because the experimental-subpath move below breaks 0.1.x consumers that import experimental exports from a package root. It also carries the 0.1.1 KaTeX fix (MKP-7). `release.yml` refuses to publish anything below 0.2.0 from `main` (MKP-8).
 
 ### Changed
+
+- All six `@markupme/*` npm packages are 0.2.0 and pin each other at 0.2.0. Migrating from 0.1.x only matters if you import an experimental export; stable exports are unchanged (MKP-8).
 
 - **Breaking for experimental exports only:** the exports `docs/api-stability.md` marks experimental moved from the package roots to an `experimental` subpath, so an import says what it relies on. Update imports: `diff` and `BlockChange` to `@markupme/core/experimental`; `providersFromIds`, `codeBlockHandlers`, `extractDiagrams` and their types to `@markupme/diagrams/experimental`; `renderToTree`, `treeToReact`, `htmlToReact` and `MarkdownTree` to `@markupme/react/experimental`; `createPipeline`, `mergeConfig`, `renderPage`, `startServer` and `CAPABILITIES` to `@markupme/cli/experimental`. Stable exports are unchanged, and CLI commands stay where they are (`markupme diff`). The API surface test now covers the subpaths and fails when an experimental export sits in a package root (MKP-6).
 

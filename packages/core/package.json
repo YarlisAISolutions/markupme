@@ -1,6 +1,6 @@
 {
   "name": "@markupme/core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "MarkupMe core: standards-first Markdown (CommonMark + GFM) parsing, a typed document model, safe HTML rendering, Markdown serialization, linting and TOC on unified/remark.",
   "license": "MIT",
   "author": "Yarlis AI Solutions",
