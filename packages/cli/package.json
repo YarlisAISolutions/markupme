@@ -56,9 +56,9 @@
     "@markupme/diagrams": "0.2.0",
     "@markupme/highlight": "0.2.0",
     "@markupme/themes": "0.2.0",
-    "commander": "15.0.0",
+    "commander": "15.1.0",
     "katex": "0.19.1",
-    "mermaid": "12.2.0"
+    "mermaid": "12.3.0"
   },
   "peerDependencies": {
     "playwright": ">=1.40"
