@@ -19,7 +19,7 @@
     "api:update": "UPDATE_API_SNAPSHOT=1 vitest run && biome format --write api/exports.snapshot.json"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.6.4",
+    "@biomejs/biome": "2.6.6",
     "@types/node": "22.20.5",
     "turbo": "2.11.10",
     "typescript": "7.0.2",
